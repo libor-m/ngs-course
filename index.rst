@@ -3,20 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to NGS Course Nove Hrady's documentation!
-=================================================
-
-Contents:
+NGS Course Nove Hrady
+=====================
+Installation instructions: 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   
+   install
+
+Course contents:
+
+.. toctree::
+   :maxdepth: 1
 
 
+Supplemental information:
 
-Indices and tables
-==================
+.. toctree::
+   :maxdepth: 1
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+   prepare
