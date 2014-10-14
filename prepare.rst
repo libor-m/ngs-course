@@ -8,7 +8,7 @@ Online documentation
 Login to https://github.com. Create a new project called `ngs-course-nhrady`, with a default readme file.
 
 
-Clone the project to local machine and initialize `sphinx` docs.
+Clone the project to local machine and initialize `sphinx` docs. Choose ``SSH`` clone link in GitHub.
 
 .. code-block:: bash
 
@@ -21,7 +21,8 @@ Clone the project to local machine and initialize `sphinx` docs.
   sphinx-quickstart
 
 
-Now track everything new with `git` and publish 
+Now track all files created by `sphinx-quickstart` in current directory with `git` and publish 
+to GitHub.
 
 .. code-block:: bash
   
@@ -39,7 +40,8 @@ Now track everything new with `git` and publish
   
 To get live view of the documents, login to https://readthedocs.org. Your `GitHub` account can be paired with 
 `Read the Docs` account in `Edit Profile/Social Accounts`, then you can simply 'import' new projects 
-from your GitHub with one click. Import the new project and wait for it to build.
+from your GitHub with one click. Import the new project and wait for it to build. After the build
+the docs can be found at http://ngs-course-nhrady.readthedocs.org (or click the ``View`` button).
   
 Now write the docs, commit and push. Rinse and repeat. Try to keep the commits small, just one change a time.
 
