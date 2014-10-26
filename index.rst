@@ -15,8 +15,11 @@ Installation instructions:
 Course contents:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
+   practical
+   reference
+   formats
 
 Supplemental information:
 
@@ -24,3 +27,4 @@ Supplemental information:
    :maxdepth: 1
 
    prepare
+   
