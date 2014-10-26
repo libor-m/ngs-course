@@ -1,5 +1,5 @@
-Reference manual to UNIX introduction
-=====================================
+Reference manual for UNIX introduction
+======================================
 
 Basic orientation in UNIX
 -------------------------
