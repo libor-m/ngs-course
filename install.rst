@@ -53,6 +53,6 @@ Mac OS X and Linux
 ------------------
 Ssh should be built into your system. Start the terminal, and type::
 
-  ssh -p 2222 localhost
+  ssh -p 2222 user@localhost
 
 For copying of files `lftp` is the best option. Mac users can use `CyberDuck`, if they prefer clickable tools.  
