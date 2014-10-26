@@ -114,6 +114,9 @@ This is what it takes to create a basic usable system in VirtualBox.
 We can shut it down now with ``sudo shutdown -h now`` and take a snapshot of the machine.
 If any installation goes haywire from now on, it's easy to revert to this basic system.
 
+Now click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
+service, and use the `goo.gl` url shortener to track the downloads.
+
 Install additional software
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
