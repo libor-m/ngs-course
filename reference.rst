@@ -6,7 +6,7 @@ Basic orientation in UNIX
 
 **Multiple windows (screen)**
 
-  You're all used to work with multiple windows (in MS Windows;). You can have them in (remote) UNIX as well. The main benefit, however, is that you can log off and your programs keep running.
+  You're all used to work with multiple windows (in MS Windows;). You can have them in UNIX as well. The main benefit, however, is that you can log off and your programs keep running.
 
   To go into a screen mode type:
 
@@ -14,13 +14,13 @@ Basic orientation in UNIX
   
     screen
 
-  Once in a screen mode you can control it after you press the master key: ``ctrl+a key``. To create a new window within the screen mode, press ``ctrl+a c`` (create). To flip among your windows press ``ctrl+a space`` (you flip windows often, it's the biggest key available). To detach screen (i.e. keep your programs running and go home), press ``ctrl+a d`` (detach).
+  Once in screen you can control screen itself after you press the master key (and then a command): ``ctrl+a key``. To create a new window within the screen mode, press ``ctrl+a c`` (create). To flip among your windows press ``ctrl+a space`` (you flip windows often, it's the biggest key available). To detach screen (i.e. keep your programs running and go home), press ``ctrl+a d`` (detach).
 
-  Once outside the screen mode, to restore screen type:
+  To open a detached screen type:
   
   .. code-block:: bash
   
-    screen -r
+    screen -r  # -r means restore
 
   To list running screens, type:
   
@@ -30,12 +30,15 @@ Basic orientation in UNIX
 
 **Controlling processes (htop/top)**
 
-  ``htop`` or ``top`` serve to see actual memory burden for each running process.
+  ``htop`` or ``top`` serve to see actual resource burden for each running process. Htop is much nicer variant of standard ``top``. 
+  You can sort the processes by memory usage, CPU usage and few other things.
 
 
 **Getting help (man)**
 
-  Type man and name of the command:
+  Just any time you're not sure about program option while building a command line, just
+  flip to next screen window (you're always using screen for serious work), and type ``man`` 
+  and name of the command you want to know more about.
 
   .. code-block:: bash
   
@@ -220,7 +223,7 @@ Exploring and basic manipulation with data
 
   *grep*
 
-  This utility enables you to search text file(s) for lines matching text patterns. To match given pattern it uses either specific string or regular expressions. Regular expressions enable for certain amount of character variability in searched strings (similar to globbing).
+  This utility enables you to search text file(s) for lines matching text patterns. To match given pattern it uses either specific string or regular expressions. Regular expressions enable for a more generic pattern rather than a fixed string (e. g. search for ``a`` followed by 4 numbers followed by any capital letter - ``a[0-9]{4}[A-Z]``).
 
   To obtain one file with list of sequence IDs in multiple fasta files type:
   
@@ -320,10 +323,10 @@ Building commands
   
   .. code-block:: bash
   
-    :~$ ls
-    a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
-    :~$ ls *.fasta
-    seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls
+    # a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls *.fasta
+    # seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
 
 
   Character ``*`` in previous example replaces any number of any characters and it indicates to ``ls`` command to list any file ending with ".fasta".
@@ -332,34 +335,34 @@ Building commands
   
   .. code-block:: bash
   
-    :~$ ls *.fastq
-    :~$
+    ls *.fastq
+    # 
 
 
   Character ``?`` in following example replaces just right the one character (a/b) and it indicates to ls functions to list files containing `seq2_` at the beginning, any single character in the middle (a/b) and ending with ".fasta"
 
   .. code-block:: bash
 
-    :~$ ls
-    a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
-    :~$ ls seq2_?.fasta
-    seq2_a.fasta seq2_b.fasta
+    ls
+    # a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls seq2_?.fasta
+    # seq2_a.fasta seq2_b.fasta
     
   .. code-block:: bash
     
-    :~$ ls
-    a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
-    :~$ ls seq2_[ab].fasta
-    seq2_a.fasta seq2_b.fasta
+    ls
+    # a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls seq2_[ab].fasta
+    # seq2_a.fasta seq2_b.fasta
 
   One can specifically list altering characters (a,b) using brackets ``[]``. One may also be more general and list all files having any alphabetical character ``[a-z]`` or any numerical character ``[0-9]``:
 
   .. code-block:: bash
 
-    :~$ ls
-    a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
-    :~$ ls seq[0-9]_[a-z].fasta
-    seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls
+    # a.bed b.bed seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
+    ls seq[0-9]_[a-z].fasta
+    # seq1_a.fasta seq1_b.fasta seq2_a.fasta seq2_b.fasta
     
 
 **TAB completition**
@@ -379,9 +382,9 @@ Building commands
   
   .. code-block:: bash
   
-    :~$ PRIMER1=GATACGCTACGTGC
-    :~$ echo $PRIMER1
-    GATACGCTACGTGC
+    PRIMER1=GATACGCTACGTGC
+    echo $PRIMER1
+    # GATACGCTACGTGC
 
 .. note:: It is good habit in UNIX to use capitalized names for variables: ``PRIMER1`` not ``primer1``.
 
@@ -391,11 +394,11 @@ Building commands
 
   .. code-block:: bash
   
-    ls | head -n 20
+    ls | head -n 5
 
 **Subshell**
 
-  Subshell enables to run two commands in parallel and merge the outputs. It can be helpful in dealing with data files headers. Use of subshell enables to remove header, run the set of operations on the data, and later insert the header back to file. The basic syntax is:
+  Subshell enables to run two commands and capture the output into single file. It can be helpful in dealing with data files headers. Use of subshell enables to remove header, run the set of operations on the data, and later insert the header back to file. The basic syntax is:
 
   .. code-block:: bash
 
@@ -407,7 +410,7 @@ Building commands
   
     (head -n 1 file1.txt && tail -n +2 file1.txt | sort -n -k1,1 -k2,2) > file2.txt
 
-  Another use of subshell to produce input on the fly (saving useless intermediate files):
+  Subshell can be used also to preprocess multiple inputs on the fly (saving useless intermediate files):
 
   .. code-block:: bash
 
@@ -417,20 +420,21 @@ Building commands
 Advanced text manipulation (sed)
 --------------------------------
 
-``sed`` editor enables to manipulate easily text. It provides the same functionality as ``tr`` command does but it enables even more advanced manipulations.
+``sed`` "stream editor" allows you to change file line by line. You can substitute text, you can drop lines, you can transform text... but 
+the syntax can be quite opaque if you're doing anything more than substituting `foo` with `bar` in every line (``sed 's/foo/bar/g'``).
 
 More complex data manipulation (awk)
 ------------------------------------
 
 ``awk`` enables to manipulate text data in a very complex way. In fact, it is a simple programming language with functionality similar to regular programming languages. As such it enables enormous variability in ways of how to process text data.
 
-It can be used to write a short script and which can be chained along with UNIX commands in one pipeline. awk script goes line by line and runs given operation on each line separately. The basic structure of the script is divided into three parts and any of these three parts may or may not be included in the script (according to the intention of user). The first part ``'BEGIN{}'`` conducts operation before going through the input file, the middle part ``'{}'`` goes throughout the input file and conducts operations on each line separately. The last part ``'END{}'`` conducts operation after going through the input file.
+It can be used to write a short script and which can be chained along with UNIX commands in one pipeline. The biggest power of `awk` is that it's line oriented and saves you lot of boilerplate code that you would have to write in other languages, if you need moderately complex processing of text files. The basic structure of the script is divided into three parts and any of these three parts may or may not be included in the script (according to the intention of user). The first part ``'BEGIN{}'`` conducts operation before going through the input file, the middle part ``'{}'`` goes throughout the input file and conducts operations on each line separately. The last part ``'END{}'`` conducts operation after going through the input file.
 
 The basic syntax:
 
   .. code-block:: bash
   
-    < data.txt awk 'BEGIN{<before data processing>}{<data processing>}END{<after data processing>}' > output.txt
+    < data.txt awk 'BEGIN{<before data processing>} {<process each line>} END{<after all lines are processed>}' > output.txt
 
 **Built-in variables**
 
@@ -443,11 +447,11 @@ The basic syntax:
   * ``NR`` - record (line) number
   * ``NF`` - number of fields in record (in line)
 
-More advanced built-in variables are: ``RS``, ``ORS``, ``FILENAME``, ``FNR``
+There is even more built-in variables that we won't discuss here: ``RS``, ``ORS``, ``FILENAME``, ``FNR``
 
 Use of built-in variables:
 
-awk recognizes individual columns based on white symbol (i.e. space). When used different delimiter (e.g. TAB) it has to be specified at the beginning of a script using ``-F`` option. This option passes given character into the script which has to be further passed into built-in variable within the BEGIN part:
+awk splits each line into columns based on white space. When a different delimiter (e.g. TAB) is to be used, it can be specified using ``-F`` option. If you want to keep this custom Field Separator in the output, you have to set the Output Field Separator as well (there's no command line option for OFS):
 
   .. code-block:: bash
   
@@ -455,7 +459,7 @@ awk recognizes individual columns based on white symbol (i.e. space). When used 
 
   This command takes file data.txt, extract first two TAB delimited columns of the input file and print them TAB delimited into the output file output.txt. When we look more closely on the syntax we see that the TAB delimiter was set using ``-F`` option. This option corresponds to the ``FS`` built-in variable. As we want TAB delimited columns in the output file we pass ``FS`` to ``OFS`` (i.e. ouput field separator) in the ``BEGIN`` section. Further, in the middle section we print out first two columns which can be extracted by numbers with ``$`` symbol (``$1``, ``$2``). The numbers correspond to position of the column in the input file. We could, of course, use for this operation the ``tr`` command which is even simpler. However, the awk enables to conduct any other operation on given data.
 
-  .. note:: To work with the whole line one can approach it by ``$0``.
+  .. note:: The complete input line is stored in ``$0``.
 
 
 The ``NR`` built-in variable can be used to capture each second line in a file type:
