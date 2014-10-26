@@ -35,4 +35,4 @@ VCF stands for Variant Call Format. Given a reference and a set of sequenced ind
 VCF is a format to store the differences in these individuals, compared to the reference, efficiently.
 There is also a binary counterpart **BCF**.
 
-  - http://www.1000genomes.org/wiki/analysis/variant%20call%20format/vcf-variant-call-format-version-41
+  - http://samtools.github.io/hts-specs/VCFv4.2.pdf
