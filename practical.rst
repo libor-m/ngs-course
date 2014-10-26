@@ -152,9 +152,9 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    cd data/00-reads
+    cd data
     ls
-    less -SN GS60IET02.RL1.fastq
+    less -SN 00-reads/GS60IET02.RL1.fastq
 
   .. note:: You don't have to type the whole file name. Try to use TAB completition!
   
@@ -164,14 +164,14 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    head GS60IET02.RL1.fastq        # the default is to show 10 lines
-    head -n 20 GS60IET02.RL1.fastq  # to show first 20 lines, use -n 20
+    head 00-reads/GS60IET02.RL1.fastq        # the default is to show 10 lines
+    head -n 20 00-reads/GS60IET02.RL1.fastq  # to show first 20 lines, use -n 20
 
   or ``tail`` command to view last 20 lines:
 
   .. code-block:: bash
 
-    tail -n 20 GS60IET02.RL1.fastq
+    tail -n 20 00-reads/GS60IET02.RL1.fastq
 
 **2. How many reads are there?**
   
@@ -184,7 +184,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    echo *.fastq
+    echo 00-reads/*.fastq
 
   When bash encounters a special character like ``*`` or ``?``, it tries to match 
   filename patterns in the directory structure, where ``?`` match for any single 
@@ -197,13 +197,13 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    wc -l *.fastq
+    wc -l 00-reads/*.fastq
 
   However, to obtain counts of *reads* in each file we have to select just ID lines using ``grep`` command:
 
   .. code-block:: bash
 
-    grep ^@[0-9A-Z]*$ *.fastq | wc -l
+    grep "^@[0-9A-Z]*$" 00-reads/*.fastq | wc -l
 
 
   Command ``grep`` enables to search file for specific character or string of characters.
@@ -229,7 +229,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' *.fastq  | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq  | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
 
   Now we can go step by step through the proces of building it (this is how we did it, there's no other magic):
 
@@ -237,7 +237,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' *.fastq | less -S
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | less -S
 
   ``NR`` is an ``awk`` built-in variable set to the number of current line (see reference for others built-in variables).
 
@@ -245,7 +245,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' *.fastq | tr '\n@' '\t\n' | tail -n +2 | head
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | head
 
   First we replace symbol for newlines (``\n``) with symbol with TAB (``\t``). This concatenates all lines into one, each one separated by TAB. Second, we want to have record for each read (i.e. ID, sequence) in one line. Thus, we introduce newline symbol (``\n``) instead of @ symbol. Lastly, as we find out that first line is empty, we remove it by invoking tail command. This command with -n +2 option takes all lines throughout the file starting at line two.
 
@@ -253,16 +253,16 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' *.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | head
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | head
 
 
-  The syntax of this command is simple. First, we need to set TAB as a separator because by default awk considers white space as a separator. To set input and output field separator variables (``FS``, ``OFS``). The input field separator is set by ``-F`` option. The output field  separator is set in the BEGIN{} part by substituting ``OFS`` by ``FS``. Next, in the middle section we print for each line the first column (read IDs) and length of string in the second column using ``length()`` function. The ``$'\t'`` is a way how to pass TAB character - because if you just press it on the keyboard, it invokes bash autocompletition and does not type the character.
+  TThe syntax of this command is simple. First, we need to set TAB as separator because by default awk considers white space as separator. To set TAB as input and output field separator we use two other built-in variables (``FS``, ``OFS``). The input field separator (``FS``) is set by ``-F`` option. The output field  separator is set in the ``BEGIN{}`` part by passing value of ``FS`` to ``OFS``. Next, in the middle section we print for each line (i.e. each read) the first column (read ID) and length of sequence. The length of sequence is obtained using awk built-in function ``length()``. The ``$'\t'`` is a way how to pass TAB character - because if you just press it on the keyboard, it invokes bash autocompletition and does not type the character.
 
   Lastly, we calculate read length summary statistics using program ``tabtk`` we installed at the beginning:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' *.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
 
 **4. Find primers in FASTQ files**
 
@@ -275,8 +275,8 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    PRIMER1='AAGCAGTGGTATCAACGCAGAGTACGCGGG'
-    PRIMER2='AAGCAGTGGTATCAACGCAGAGT'
+    PRIMER1="AAGCAGTGGTATCAACGCAGAGTACGCGGG"
+    PRIMER2="AAGCAGTGGTATCAACGCAGAGT"
 
   To interpret a string as shell variable name, prefix it with ``$``:
 
@@ -289,7 +289,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    grep --color=always $PRIMER1 *.fastq | less -RS
+    grep --color=always $PRIMER1 00-reads/*.fastq | less -RS
 
   Here, the ``grep``'s coloured output was sent to ``less`` which kept the colors of the matched primers. To colour matches add ``--color=always`` in ``grep`` command and ``-R`` option in ``less``.
 
@@ -312,7 +312,7 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    grep 5utr data/01-genome/luscinia_small.gff3 | tr ';' '\t' | tr ' ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > utrs.bed
+    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > 01-genome/utrs.bed
 
   Let's go step by step:
 
@@ -326,13 +326,13 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr ';' '\t' | tr ' ' '\t' | sed 's/Name=//' | less -S
+    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | less -S
 
   First, we use ``tr`` command to extract gene ID. We replace semicolon and white space by TAB separator. These replacements cause the INFO column to split into three. Subsequently we delete ``'Name='`` part in the gene ID column using ``sed`` command.
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr ';' '\t' | tr ' ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' | less -S
+    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' | less -S
 
   Further, as BEDTools assume zero based coordinate system, we use ``awk`` to subtract one from all start coordinates.
 
@@ -340,7 +340,7 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr ';' '\t' | tr ' ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > utrs.bed
+    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > 01-genome/utrs.bed
 
 **3. Explore VCF file (less)**
 
@@ -348,19 +348,19 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    grep -hv ^# data/02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),($2+length($4)-1),"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' > snps.bed
+    grep -hv ^# 02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),($2+length($4)-1),"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' > 02-variants/variants.bed
 
   First, we use inverted grep command (``-v`` option) to remove INFO lines (beginning with ``#`` symbol). Also, as we grep from multiple files (i.e. ``*`` globbing) we use option ``-h`` to suppress file names in the output. Try run grep with and without ``-h`` option:
 
   .. code-block:: bash
 
-    grep -hv ^# data/02-variants/*.vcf | head
+    grep -hv ^# 02-variants/*.vcf | head
 
   Second, we want to distinguish between SNPs and INDELs and create BED file. The difference is in length of REF column in VCF files. SNPs have always only single character, whereas INDELs have always at least two. So we can use easy ``if()`` condition in ``awk`` based on length of REF column. Also, as in the VCF file is only first position of the variant, when creating BED file one has to calculate the second coordinate. So the start position of a SNP is one minus the actual position, whereas the end position is the actual position:
 
   .. code-block:: bash
 
-    grep -hv ^# data/02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),$2,"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' | head
+    grep -hv ^# 02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),$2,"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' | head
 
   Finally, the output can be printed into variants.bed
 
@@ -373,14 +373,14 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    bedtools intersect -a utrs.bed -b variants.bed -wa -wb | cut -f 4,8 |  sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 |  sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
 
 
   First, we use BEDTools tool ``intersect`` to find an overlap between SNPs, INDELs and 5' UTRs.
 
   .. code-block:: bash
 
-    bedtools intersect -a utrs.bed -b variants.bed -wa -wb | head
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | head
 
   Here, the ``-a`` and ``-b`` options state for file a and file b. Also, it is necessary to specify which of the two files (or both of them) to print in the output (``-wa``, ``-wb``).
 
@@ -388,7 +388,7 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    bedtools intersect -a utrs.bed -b variants.bed -wa -wb | cut -f 4,8 | head
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 | head
 
   The ``-f`` option in the ``cut`` command states for specification of columns which are supposed to be cut out.
 
@@ -396,7 +396,7 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    bedtools intersect -a utrs.bed -b variants.bed -wa -wb | cut -f 4,8 | sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 | sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
 
   To sort based on certain column one has to use ``-k`` option along with specification of range (in columns) of sorting. If we want to sort based on one column - as in the case above - we specify range using column position. Here, we sort based on second column so we specify range as ``-k2,2``. The BEDTools tool groupby has several options. ``-g`` option specifies column based on which we group, ``-c`` option specifies column to which we apply summary statistics and ``-o`` option specifies type of summary statistics (see manual at http://bedtools.readthedocs.org).
 

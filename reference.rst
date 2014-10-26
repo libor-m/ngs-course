@@ -243,6 +243,7 @@ Exploring and basic manipulation with data
   *wc*
 
   This utility generates set of statistics on either standard input or list of text files. It provides these statistics:
+  
   * line count (``-l``)
   * word count (``-w``)
   * character count (``-m``)
