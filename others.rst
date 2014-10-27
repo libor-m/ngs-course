@@ -16,6 +16,8 @@ and run following commands (takes ~10 minutes to build):
 
 If internet connection does not work in your virtual machine, ask for a new image (Libor or Petri).
 
+If you're interested in installing `LDna` into your very own R/RStudio, you can check the instructions here: https://github.com/petrikemppainen/LDna.
+
 Jean Francois Martin
 --------------------
 Nothing here yet.
