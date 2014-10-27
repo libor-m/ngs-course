@@ -14,6 +14,11 @@ Basic orientation
   
     sudo apt-get install htop
 
+  Those without internet acces in the virtual machine:
+
+    - download http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_1.0.1-1_i386.deb
+    - transfer it to virtual machine (WinSCP, scp)
+    - run ``sudo gdebi htop_1.0.1-1_i386.deb``
 
 **1. Use multiple windows**
 
@@ -106,6 +111,14 @@ User installed software can be found in ``~/sw`` directory. To install a new sof
   .. code-block:: bash
 
     git clone https://github.com/arq5x/bedtools2
+
+  For those without internet access in their virtual machines - you need to download the content to your
+  normal computer and then transfer it to the virtual machine.
+
+    - download https://github.com/arq5x/bedtools2/archive/master.zip
+    - transfer it to the virtual machine with WinSCP (Windows) or scp (Mac or Linux)
+    - unpack the file with ``unzip``
+    - rename the folder with ``mv`` to bedtools2
 
   This creates a `clone` of the online repository in directory ``bedtools2``.
 
