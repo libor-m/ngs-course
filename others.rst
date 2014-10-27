@@ -1,5 +1,8 @@
+Other speakers' materials
+=========================
+
 Petri Kemppainen - LDna
-=======================
+-----------------------
 
 To install the LDna package in the Virtual machine, start the machine, log in with PuTTY 
 and run following commands (takes ~10 minutes to build):
@@ -14,5 +17,5 @@ and run following commands (takes ~10 minutes to build):
 If internet connection does not work in your virtual machine, ask for a new image (Libor or Petri).
 
 Jean Francois Martin
-====================
+--------------------
 Nothing here yet.

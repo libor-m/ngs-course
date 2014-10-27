@@ -38,10 +38,4 @@ Supplemental information:
    prepare
    best_practice
    slides
-
-Other speakers:
-
-.. toctree::
-   :maxdepth: 1
-
    others
