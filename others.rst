@@ -4,7 +4,7 @@ Other speakers' materials
 Petri Kemppainen - LDna
 -----------------------
 
-To install the LDna package in the Virtual machine, start the machine, log in with PuTTY 
+To install the LDna package in the virtual machine you got here, start the machine, log in with PuTTY 
 and run following commands (takes ~10 minutes to build):
 
 .. code:: bash
@@ -20,4 +20,8 @@ If you're interested in installing `LDna` into your very own R/RStudio, you can 
 
 Jean Francois Martin
 --------------------
-Nothing here yet.
+
+:download:`NGS technologies approaches, applications and challenges <_static/martin-ngs.pdf>`
+
+:download:`Amplicon sequencing by NGS methods <_static/martin-amplicons.pdf>`
+
