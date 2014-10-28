@@ -61,9 +61,13 @@ Basic orientation
 
 **3. Prepare data in your home directory**
 
-  All data we are going to use today are located in directory ``/data`` and as that they are potentially available to all users. However, we want to have them in our own data directory. Without a need to copy them all to our directory we can have them there using symbolic link (``ln -s``). This keeps data in their original location but creates reference to them.
+  All data we are going to use today are located in directory ``/data`` and as that they are potentially available to
+  all users. However, we want to have them in our own data directory. Without a need to copy them all to our directory
+  we can have them there using symbolic link (``ln -s``). This keeps data in their original location but creates
+  reference to them.
 
-  In case you did not know where the data are but you knew their names or suffixes you could use ``locate`` command. We know they have fastq, vcf and gff3 suffices:
+  In case you did not know where the data are but you knew their names or suffixes you could use ``locate`` command. We
+  know they have fastq, vcf and gff3 suffices:
 
   .. code-block:: bash
 
@@ -90,9 +94,9 @@ Basic orientation
 
 Installing software
 -------------------
-The easiest way to install software is via a package manager as you've seen in the beginning (``apt-get`` for all Debian variants).
-When the required software is not in the repositories, or one needs the latest version, it's necessary to take the more diffucult path.
-The canonical UNIX way is::
+The easiest way to install software is via a package manager as you've seen in the beginning (``apt-get`` for all Debian
+variants). When the required software is not in the repositories, or one needs the latest version, it's necessary to
+take the more diffucult path. The canonical UNIX way is::
 
   wget -O - ..url.. | tar xvz   # download the 'tarball' from internet
   cd ..unpacked directory..     # set working directory to the project directory
@@ -106,7 +110,9 @@ User installed software can be found in ``~/sw`` directory. To install a new sof
 
     cd ~/sw
 
-  When the software source code is in a single file (`tarball`), ``wget`` command is the best option to get the file. The latest versions are usually not packaged, and many of the tools can be found at GitHub. To get stuff from GitHub, ``git clone`` command is usually the easiest option.
+  When the software source code is in a single file (`tarball`), ``wget`` command is the best option to get the file.
+  The latest versions are usually not packaged, and many of the tools can be found at GitHub. To get stuff from GitHub,
+  ``git clone`` command is usually the easiest option.
  
   .. code-block:: bash
 
@@ -134,7 +140,8 @@ User installed software can be found in ``~/sw`` directory. To install a new sof
 
   It should take a while, so you can flip to your `htop` window with ``ctrl-a space`` and watch the CPU spin;)
 
-  When ``bedtools`` is compiled you have to copy bedtools binaries to ``/usr/local/bin`` directory for UNIX system to find the program when calling from any place in the system.
+  When ``bedtools`` is compiled you have to copy bedtools binaries to ``/usr/local/bin`` directory for UNIX system to
+  find the program when calling from any place in the system.
 
   .. warning:: Before you use command below to copy binaries make sure you are really in directory you want to be!
  
@@ -144,7 +151,9 @@ User installed software can be found in ``~/sw`` directory. To install a new sof
     ls # Check that you are really in directory you want to be!
     sudo cp * /usr/local/bin
 
-  We used two commands: ``sudo`` and ``cp``. The sudo command tells the system that we want to make changes in system directories and as such we are asked for password. This step prevents us from harming system. The ``cp`` command copies all bedtools binaries from local bin directory to the system binary repository.
+  We used two commands: ``sudo`` and ``cp``. The sudo command tells the system that we want to make changes in system
+  directories and as such we are asked for password. This step prevents us from harming system. The ``cp`` command
+  copies all bedtools binaries from local bin directory to the system binary repository.
   
 .. note:: We used the ``*`` symbol which tells the system that all files in the current directory should be selected. We explain this later.
 
@@ -242,7 +251,11 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq  | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq  | 
+      tr '\n@' '\t\n' | 
+      tail -n +2 | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | 
+      tabtk num -c 2
 
   Now we can go step by step through the proces of building it (this is how we did it, there's no other magic):
 
@@ -258,31 +271,83 @@ Explore lengths of short reads in FASTQ files:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | head
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | 
+      tr '\n@' '\t\n' | 
+      tail -n +2 | 
+      head
 
-  First we replace symbol for newlines (``\n``) with symbol with TAB (``\t``). This concatenates all lines into one, each one separated by TAB. Second, we want to have record for each read (i.e. ID, sequence) in one line. Thus, we introduce newline symbol (``\n``) instead of @ symbol. Lastly, as we find out that first line is empty, we remove it by invoking tail command. This command with -n +2 option takes all lines throughout the file starting at line two.
+  First we replace symbol for newlines (``\n``) with symbol with TAB (``\t``). This concatenates all lines into one,
+  each one separated by TAB. Second, we want to have record for each read (i.e. ID, sequence) in one line. Thus, we
+  introduce newline symbol (``\n``) instead of @ symbol. Lastly, as we find out that first line is empty, we remove it
+  by invoking tail command. This command with -n +2 option takes all lines throughout the file starting at line two.
 
-  Now, we have TAB delimited file with two columns. The first one is for read ID and second one is the read sequence. However, we are interested in  the length of sequence. So we use awk again to calculate the length for each read:
+  Now, we have TAB delimited file with two columns. The first one is for read ID and second one is the read sequence.
+  However, we are interested inthe length of sequence. So we use awk again to calculate the length for each read:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | head
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | 
+      tr '\n@' '\t\n' | 
+      tail -n +2 | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | 
+      head
 
-
-  TThe syntax of this command is simple. First, we need to set TAB as separator because by default awk considers white space as separator. To set TAB as input and output field separator we use two other built-in variables (``FS``, ``OFS``). The input field separator (``FS``) is set by ``-F`` option. The output field  separator is set in the ``BEGIN{}`` part by passing value of ``FS`` to ``OFS``. Next, in the middle section we print for each line (i.e. each read) the first column (read ID) and length of sequence. The length of sequence is obtained using awk built-in function ``length()``. The ``$'\t'`` is a way how to pass TAB character - because if you just press it on the keyboard, it invokes bash autocompletition and does not type the character.
+  The syntax of this command is simple. First, we need to set TAB as separator because by default awk considers white
+  space as separator. To set TAB as input and output field separator we use two other built-in variables (``FS``,
+  ``OFS``). The input field separator (``FS``) is set by ``-F`` option. The output fieldseparator is set in the
+  ``BEGIN{}`` part by passing value of ``FS`` to ``OFS``. Next, in the middle section we print for each line (i.e. each
+  read) the first column (read ID) and length of sequence. The length of sequence is obtained using awk built-in
+  function ``length()``. The ``$'\t'`` is a way how to pass TAB character - because if you just press it on the
+  keyboard, it invokes bash autocompletition and does not type the character.
 
   Lastly, we calculate read length summary statistics using program ``tabtk`` we installed at the beginning:
 
   .. code-block:: bash
 
-    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | tr '\n@' '\t\n' | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | tabtk num -c 2
+    awk '{ if( (NR+3) % 4 == 0 || (NR+2) % 4 == 0 ){print $0} }' 00-reads/*.fastq | 
+      tr '\n@' '\t\n' | 
+      tail -n +2 | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | 
+      tabtk num -c 2
+
+**3.1 Alternatives (optional)**
+
+  Finally to show you that you can find less concise, but also less understandable alternatives in UNIX,
+  the first awk command can be shortened to almost a half, but you have to know a special rule saying 
+  that the conditions can precede the actions, and that the default action is ``print $0;``.
+
+  .. code-block:: bash
+
+    awk 'NR % 4 == 1 || NR % 4 == 2' 00-reads/*.fastq | 
+      tr '\n@' '\t\n' | 
+      tail -n +2 | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,length($2)}' | 
+      tabtk num -c 2
+
+  Or another tool (``sed``) can be used to get even shorter command (the original was 60 characters, this one is 22). But
+  when trying to get the shortest possible code, one has to keep in mind that he's writing the code once, but will be
+  reading/reusing/fixing it several times. Good readability and understandability is always the most important criterion.
+  You can also use some knowledge about the data to shorten your commands - you're sure here, that there are no whitespace
+  characters in the sequence names and sequences themselves, so you can stick with the default field separator.
+
+  .. code-block:: bash
+
+    sed -n -e 1~4p -e 2~4p 00-reads/*.fastq | 
+      tail -n +2 | 
+      tr '\n@' ' \n' | 
+      awk '{print $1,length($2)}' | 
+      tabtk num -c 2
+
+    # finally, if you don't care about the sequence names
+    sed -n 2~4p 00-reads/*.fastq | awk '{print length}' | tabtk num
 
 **4. Find primers in FASTQ files**
 
   Reads in FASTQ files contain adaptors that were used for reverse transcription of the mRNA. 
   Try to identify them and visualize them using basic UNIX commands.
 
-  First, we store the primer sequences into shell variables which we use later. This steps help us to get families to what it is and how to work with shell variables in UNIX environment.
+  First, we store the primer sequences into shell variables which we use later. This steps help us to get families to
+  what it is and how to work with shell variables in UNIX environment.
 
   To set primer sequences into PRIMER# variable type:
 
@@ -298,13 +363,15 @@ Explore lengths of short reads in FASTQ files:
     echo $PRIMER1
     # AAGCAGTGGTATCAACGCAGAGT
 
-  The ``echo`` command printed contents of the variable. However, the variable can be used in any other command in UNIX. We use them in searching for primers in FASTQ files:
+  The ``echo`` command printed contents of the variable. However, the variable can be used in any other command in UNIX.
+  We use them in searching for primers in FASTQ files:
 
   .. code-block:: bash
 
     grep --color=always $PRIMER1 00-reads/*.fastq | less -RS
 
-  Here, the ``grep``'s coloured output was sent to ``less`` which kept the colors of the matched primers. To colour matches add ``--color=always`` in ``grep`` command and ``-R`` option in ``less``.
+  Here, the ``grep``'s coloured output was sent to ``less`` which kept the colors of the matched primers. To colour
+  matches add ``--color=always`` in ``grep`` command and ``-R`` option in ``less``.
 
 GFF, VCF, BED
 -------------
@@ -321,39 +388,62 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
 **2. Create BED file for 5' untranslated regions**
 
+  We're creating a new type of result from genome annotation data. It is wise to create 
+  a new directory to contain this type of analysis on the genome::
+
+    mkdir 03-utr-analysis
+
   The whole command looks like this:
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > 01-genome/utrs.bed
+    <01-genome/luscinia_small.gff3 grep 5utr | 
+      tr '; ' '\t' | 
+      sed 's/Name=//' | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' \
+    >03-utr-analysis/utrs.bed
 
   Let's go step by step:
 
-  First, we need to filter out records corresponding to 5' UTRs in the GFF file. For this task we can use ``grep`` function and ``less`` to see the results:
+  First, we need to filter out records corresponding to 5' UTRs in the GFF file. For this task we can use ``grep``
+  function and ``less`` to see the results:
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | less -S
+    <01-genome/luscinia_small.gff3 grep 5utr | less -S
 
   Having just 5' UTR records we need to remove and resort some columns. We use combination of ``sed``, ``tr`` and ``awk`` commands:
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | less -S
+    <01-genome/luscinia_small.gff3 grep 5utr | 
+      tr '; ' '\t' | 
+      sed 's/Name=//' | 
+      less -S
 
-  First, we use ``tr`` command to extract gene ID. We replace semicolon and white space by TAB separator. These replacements cause the INFO column to split into three. Subsequently we delete ``'Name='`` part in the gene ID column using ``sed`` command.
+  First, we use ``tr`` command to extract gene ID. We replace semicolon and white space by TAB separator. These
+  replacements cause the INFO column to split into three. Subsequently we delete ``'Name='`` part in the gene ID column
+  using ``sed`` command.
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' | less -S
+    <01-genome/luscinia_small.gff3 grep 5utr | 
+      tr '; ' '\t' | 
+      sed 's/Name=//' | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' | 
+      less -S
 
   Further, as BEDTools assume zero based coordinate system, we use ``awk`` to subtract one from all start coordinates.
 
-  We can print the whole output into utrs.bed file:
+  We can redirect the whole output into ``utrs.bed`` file in our new analysis directory:
 
   .. code-block:: bash
 
-    grep 5utr 01-genome/luscinia_small.gff3 | tr '; ' '\t' | sed 's/Name=//' | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' > 01-genome/utrs.bed
+    <01-genome/luscinia_small.gff3 grep 5utr | 
+      tr '; ' '\t' | 
+      sed 's/Name=//' | 
+      awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$4-1,$5,$10}' \
+    >03-utr-analysis/utrs.bed
 
 **3. Explore VCF file (less)**
 
@@ -361,33 +451,73 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
   .. code-block:: bash
 
-    grep -hv ^# 02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),($2+length($4)-1),"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' > 02-variants/variants.bed
+    grep -hv ^# 02-variants/*.vcf | 
+      awk -F $'\t' '
+        BEGIN{OFS=FS}
+        { if(length($4)==1)
+         { print $1,($2-1),($2+length($4)-1),"SNP"}
+         else
+         { print $1,($2-1),($2+length($4)-1),"INDEL"}
+        }' \
+    >02-variants/variants.bed
 
-  First, we use inverted grep command (``-v`` option) to remove INFO lines (beginning with ``#`` symbol). Also, as we grep from multiple files (i.e. ``*`` globbing) we use option ``-h`` to suppress file names in the output. Try run grep with and without ``-h`` option:
+  The first line can be improved with `pv`, which gives a progress indicator.
+
+  .. code-block:: bash
+
+    pv 02-variants/*.vcf | 
+      grep -v ^# |
+      awk -F $'\t' '
+        BEGIN{OFS=FS}
+        { if(length($4)==1)
+         { print $1,($2-1),($2+length($4)-1),"SNP"}
+         else
+         { print $1,($2-1),($2+length($4)-1),"INDEL"}
+        }' \
+    >02-variants/variants.bed
+
+  First, we use inverted grep command (``-v`` option) to remove INFO lines (beginning with ``#`` symbol). Also, as we
+  grep from multiple files (i.e. ``*`` globbing) we use option ``-h`` to suppress file names in the output. Try run grep
+  with and without ``-h`` option:
 
   .. code-block:: bash
 
     grep -hv ^# 02-variants/*.vcf | head
 
-  Second, we want to distinguish between SNPs and INDELs and create BED file. The difference is in length of REF column in VCF files. SNPs have always only single character, whereas INDELs have always at least two. So we can use easy ``if()`` condition in ``awk`` based on length of REF column. Also, as in the VCF file is only first position of the variant, when creating BED file one has to calculate the second coordinate. So the start position of a SNP is one minus the actual position, whereas the end position is the actual position:
+  Second, we want to distinguish between SNPs and INDELs and create BED file. The difference is in length of REF column
+  in VCF files. SNPs have always only single character, whereas INDELs have always at least two. So we can use easy
+  ``if()`` condition in ``awk`` based on length of REF column. Also, as in the VCF file is only first position of the
+  variant, when creating BED file one has to calculate the second coordinate. So the start position of a SNP is one
+  minus the actual position, whereas the end position is the actual position:
 
   .. code-block:: bash
 
-    grep -hv ^# 02-variants/*.vcf | awk -F $'\t' 'BEGIN{OFS=FS}{ if(length($4)==1){ print $1,($2-1),$2,"SNP"}else{ print $1,($2-1),($2+length($4)-1),"INDEL"} }' | head
+    grep -hv ^# 02-variants/*.vcf | 
+      awk -F $'\t' '
+        BEGIN{OFS=FS}
+        { if(length($4)==1)
+         { print $1,($2-1),($2+length($4)-1),"SNP"}
+         else
+         { print $1,($2-1),($2+length($4)-1),"INDEL"}
+        }' |
+      head
 
-  Finally, the output can be printed into variants.bed
+  Finally, the output can be redirected into ``variants.bed``.
 
 
 **5. Join the two BED files using BEDTools**
 
-  Finally, we are interested in how many of SNPs and INDELs are located in 5' UTRs. For this task we use BEDTools that represent a suite of tools to do easily so-called "genome arithmetic".
+  Finally, we are interested in how many of SNPs and INDELs are located in 5' UTRs. For this task we use BEDTools that
+  represent a suite of tools to do easily so-called "genome arithmetic".
 
   Full pipeline:
 
   .. code-block:: bash
 
-    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 |  sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
-
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | 
+      cut -f 4,8 |  
+      sort -k2,2 | 
+      bedtools groupby -g 2 -c 1 -o count
 
   First, we use BEDTools tool ``intersect`` to find an overlap between SNPs, INDELs and 5' UTRs.
 
@@ -395,23 +525,37 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
 
     bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | head
 
-  Here, the ``-a`` and ``-b`` options state for file a and file b. Also, it is necessary to specify which of the two files (or both of them) to print in the output (``-wa``, ``-wb``).
+  Here, the ``-a`` and ``-b`` options state for file a and file b. Also, it is necessary to specify which of the two
+  files (or both of them) to print in the output (``-wa``, ``-wb``).
 
-  As you may notice, the output contains eight columnts (i.e. four for each file). For us, however, what is important is only information on gene ID and type of variant (SNPs or INDELs). So we cut out only these two columns using ``cut`` command:
+  As you may notice, the output contains eight columnts (i.e. four for each file). For us, however, what is important is
+  only information on gene ID and type of variant (SNPs or INDELs). So we cut out only these two columns using ``cut``
+  command:
 
   .. code-block:: bash
 
-    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 | head
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | 
+      cut -f 4,8 | 
+      head
 
   The ``-f`` option in the ``cut`` command states for specification of columns which are supposed to be cut out.
 
-  Now, we want to obtain counts of SNPs and INDELs overlapping with 5' UTRs. We use another BEDTools tool - ``groupby``. This tool enables to group data based on column of choice and to do some summary statistics on another another one. Before grouping, however, we need to sort the data according to the column which we use as a grouping column:
+  Now, we want to obtain counts of SNPs and INDELs overlapping with 5' UTRs. We use another BEDTools tool - ``groupby``.
+  This tool enables to group data based on column of choice and to do some summary statistics on another another one.
+  Before grouping, however, we need to sort the data according to the column which we use as a grouping column:
 
   .. code-block:: bash
 
-    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | cut -f 4,8 | sort -k2,2 | bedtools groupby -g 2 -c 1 -o count
+    bedtools intersect -a 01-genome/utrs.bed -b 02-variants/variants.bed -wa -wb | 
+      cut -f 4,8 | 
+      sort -k2,2 | 
+      bedtools groupby -g 2 -c 1 -o count
 
-  To sort based on certain column one has to use ``-k`` option along with specification of range (in columns) of sorting. If we want to sort based on one column - as in the case above - we specify range using column position. Here, we sort based on second column so we specify range as ``-k2,2``. The BEDTools tool groupby has several options. ``-g`` option specifies column based on which we group, ``-c`` option specifies column to which we apply summary statistics and ``-o`` option specifies type of summary statistics (see manual at http://bedtools.readthedocs.org).
+  To sort based on certain column one has to use ``-k`` option along with specification of range (in columns) of
+  sorting. If we want to sort based on one column - as in the case above - we specify range using column position. Here,
+  we sort based on second column so we specify range as ``-k2,2``. The BEDTools tool groupby has several options. ``-g``
+  option specifies column based on which we group, ``-c`` option specifies column to which we apply summary statistics
+  and ``-o`` option specifies type of summary statistics (see manual at http://bedtools.readthedocs.org).
 
 
   
