@@ -55,6 +55,9 @@ References that may come handy:
 
 - `Thomas Cokelaer's cheat sheet <http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_
 
+Use http://goo.gl to shorten a link to www.seznam.cz, to get a tracking counter
+url for the network connectivity test.
+
 VirtualBox image
 ----------------
 Create new VirtualBox machine
@@ -101,6 +104,9 @@ Login as user (can be done by ``su user`` in root shell):
   # export LC_ALL=C 
   # maximal width of man
   # export MANWIDTH=120
+  # # wget impersonating normal browser
+  # # good for being tracked with goo.gl for example
+  # alias wgets='H="--header"; wget $H="Accept-Language: en-us,en;q=0.5" $H="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" $H="Connection: keep-alive" -U "Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2" --referer=/ '
   nano ~/.bashrc
   . ~/.bashrc
 
@@ -113,9 +119,6 @@ Login as user (can be done by ``su user`` in root shell):
 This is what it takes to create a basic usable system in VirtualBox.
 We can shut it down now with ``sudo shutdown -h now`` and take a snapshot of the machine.
 If any installation goes haywire from now on, it's easy to revert to this basic system.
-
-Now click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
-service, and use the `goo.gl` url shortener to track the downloads.
 
 Install additional software
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -202,6 +205,9 @@ Prepare the ``/data`` folder.
   sudo chmod user:user /data
 
 Transfer the files to the VirtualBox image, /data directory using WinSCP.
+
+Now click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
+service, and use the `goo.gl` url shortener to track the downloads.
 
 Slide deck
 ----------

@@ -14,12 +14,13 @@ in other envirnonments, with just few commands.
 Not knowing 'the right way' to do things can be intimidating for the beggining users, so an additional section
 stressing the 'best practice' was added to the supplementary materials.
 
-Installation instructions: 
+Initial instructions: 
 
 .. toctree::
    :maxdepth: 1
    
    install
+   connect
 
 Course contents:
 
