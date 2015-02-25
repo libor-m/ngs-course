@@ -1,0 +1,5 @@
+# suggested doc changes
+
+add cd -
+add section on 'small languages'
+add mv neco{,-old} trick
