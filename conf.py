@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'NGS Course Nove Hrady'
-copyright = u'2014, Libor Morkovsky, Vaclav Janousek'
+project = u'UNIX and NGS'
+copyright = u'2015, Libor Morkovsky, Vaclav Janousek'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'NGSCourseNoveHrady', u'NGS Course Nove Hrady Documentation',
-   u'Libor Morkovsky, Vaclav Janousek', 'NGSCourseNoveHrady', 'One line description of project.',
+  ('index', 'NGSCourse', u'NGS Course',
+   u'Libor Morkovsky, Vaclav Janousek', 'NGSCourse', 'NGS and UNIX',
    'Miscellaneous'),
 ]
 
