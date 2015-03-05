@@ -23,18 +23,21 @@ awk 'BEGIN{for(i=33;i<127;i++){printf("s/\t%c/\t%d/\n", i, i - 33)}}' > q2num.se
        }'\
 > quals.tsv
 
-R <<EOF
-library(dplyr)
-library(ggplot2)
+# add base to the long table
+<00-raw/G59B7NP01.fastq sed '1~4s/^@//;3~4d' | paste - - - | awk 'length($2) > 50' |
+  # pick first 1000
+  head -1000 |
+  # melt into long format
+  awk 'BEGIN{OFS="\t"; 
+         for(i=33;i<127;i++) quals[sprintf("%c", i)] = i - 33;
+       }
+       { 
+         l = length($2)
+         for(i=1;i<=l;i++) { 
+           print $1, i, l - i, substr($2, i, 1), quals[substr($3, i, 1)];}
+       }'\
+> quals2.tsv
 
-# sequence quality lines, not very informative
-# first check one, then more..
-d <- read.delim("quals.tsv", col.names=c("seq", "pos", "end_pos", "qual"), header=F)
-sel <- levels(d$seq)[1:10]
-ggplot(d %>% filter(seq %in% sel), aes(pos, qual, colour=seq, group=seq)) + geom_line()
-
-# 
-EOF
 
 # length of fasta sequences to get histogram
 <file.fa \
