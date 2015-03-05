@@ -8,3 +8,6 @@
 # .obj maybe can be converted to a point cloud pretty easily
 <Banana.obj grep '^v ' | cut -d' ' -f2- > banana.tsv
 # http://www.mlahanas.de/CompGeom/Point_in_Poly.htm
+
+# TODO: make a shiny app?
+# upload to https://www.shinyapps.io/?

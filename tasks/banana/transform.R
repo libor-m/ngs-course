@@ -29,11 +29,34 @@ ggplot(rb, aes(y, z)) + geom_point() + coord_equal()
 # write the result when satisfied with the transformation
 write.csv(rb, file="rotated.csv", row.names=F)
 
+rb <- read.csv("rotated.csv")
+
+# play with shiny
+library(shiny)
+runApp("webapp")
+
 # PCA
 pc <- prcomp(as.matrix(rb))
 ggplot(data.frame(pc$x), aes(PC1, PC2)) + geom_point() + coord_equal()
 ggplot(data.frame(pc$x), aes(PC1, PC3)) + geom_point() + coord_equal()
 # ggplot(data.frame(pc$x), aes(PC2, PC3)) + geom_point() + coord_equal()
+
+# extract the roation, to set it up in web
+# http://nghiaho.com/?page_id=846
+
+xrot <- function(r) {
+  tx <- atan2(r[3,2], r[3,3])
+  ty <- atan2(-r[3,1], sqrt(r[3,2]^2 + r[3,3]^2))
+  tz <- atan2(r[2,1], r[1,1])
+  fixa <- function(a) ifelse(a < 0, 2 * pi + a, a)
+  c(tx, ty, tz, fixa(tx), fixa(ty), fixa(tz))
+}
+# test the code
+rmx <- rot3d(1, 1.1, 1.4)
+xrot(t(rmx))
+
+# result works in order x, z, y axes in shiny
+xrot(pc$rotation)
 
 # nmds
 library(MASS)
