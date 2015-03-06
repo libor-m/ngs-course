@@ -24,7 +24,12 @@ shinyServer(function(input, output) {
 
   output$distPlot <- renderPlot({
     rot <- rot3d_df(rb, input$x, input$y, input$z)
-    ggplot(rot, aes(x, y)) + geom_point() + coord_equal()
+    g <- ggplot(rot, aes(x, y)) + geom_point() + coord_equal()
+    
+    if(input$incZero)
+      g <- g + ylim(-350, 350) + xlim(-350, 350)
+    
+    g
   })
   
   output$text1 <- renderText({

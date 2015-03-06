@@ -4,7 +4,7 @@ library(shiny)
 shinyUI(fluidPage(
 
   # Application title
-  titlePanel("Try to put the most variability on x axis!"),
+  titlePanel("Try to put the most variability on the x axis!"),
 
   # Sidebar with a slider input for the number of bins
   sidebarLayout(
@@ -23,7 +23,10 @@ shinyUI(fluidPage(
                   "rotation along z",
                   min = 0,
                   max = 2 * pi,
-                  value = 0)
+                  value = 0),
+      checkboxInput("incZero", 
+                    label = "Include zero.",
+                    value = FALSE)
     ),
 
     # Show a plot of the generated distribution
