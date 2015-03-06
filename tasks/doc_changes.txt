@@ -3,3 +3,6 @@
 add cd -
 add section on 'small languages'
 add mv neco{,-old} trick
+
+# R packages that sould be covered/included
+tidyr, ggplot2, shiny, magrittr, knitr, dplyr, reshape2
