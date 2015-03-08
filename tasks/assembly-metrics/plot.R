@@ -26,11 +26,18 @@ dnx <- d %>%
   arrange(desc(len)) %>%
   mutate(cumlen=cumsum(len), cumrel=cumlen/max(cumlen), nx=cut(100*cumrel, 0:100, labels=1:100)) %>%
   group_by(file, nx) %>% 
-  summarize(mlen=min(len))
+  summarize(mlen=min(len)) %>%
+  mutate(nx=as.numeric(nx))
 
-ggplot(dnx, aes(as.numeric(nx), mlen, colour=file)) + 
+ggplot(dnx, aes(nx, mlen, colour=file)) + 
   geom_line(size=2) +
   geom_vline(xintercept=50, colour="gray") + 
+  geom_vline(xintercept=90, colour="gray") +
+  xlab("N(x)") + ylab("base pairs") + ggtitle("N(x) values for different assemblies")
+
+# the same with a bit more resolution at the end
+ggplot(dnx %>% filter(nx > 80), aes(nx, mlen, colour=file)) + 
+  geom_line(size=2) +
   geom_vline(xintercept=90, colour="gray") +
   xlab("N(x)") + ylab("base pairs") + ggtitle("N(x) values for different assemblies")
 

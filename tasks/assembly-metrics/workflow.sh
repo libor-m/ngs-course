@@ -26,5 +26,8 @@ awk '$2 > 500 {print FILENAME "\t" $1 "\t" $2}' *.lens |
 # genomes do not have prefix in their name
 INS=genomes/*.lens
 awk '{print FILENAME "\t" $1 "\t" $2}' $INS | 
-  sed 's/\.lens//'\
+  sed 's/\.lens//;s,^genomes/,,'\
 > all.tsv
+
+#TODO: remove contig names from the data before inclusion in github?
+# or rather come up with some task that uses them?
