@@ -6,3 +6,6 @@ add mv neco{,-old} trick
 
 # R packages that sould be covered/included
 tidyr, ggplot2, shiny, magrittr, knitr, dplyr, reshape2
+
+http://www.rstudio.com/resources/cheatsheets/
+http://blogs.nature.com/methagora/2013/07/data-visualization-points-of-view.html?WT.mc_id=TWT_NatureMethods

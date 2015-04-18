@@ -39,7 +39,7 @@ runApp("webapp")
 pc <- prcomp(as.matrix(rb))
 ggplot(data.frame(pc$x), aes(PC1, PC2)) + geom_point() + coord_equal()
 ggplot(data.frame(pc$x), aes(PC1, PC3)) + geom_point() + coord_equal()
-# ggplot(data.frame(pc$x), aes(PC2, PC3)) + geom_point() + coord_equal()
+ggplot(data.frame(pc$x), aes(PC2, PC3)) + geom_point() + coord_equal()
 
 # extract the roation, to set it up in web
 # http://nghiaho.com/?page_id=846
