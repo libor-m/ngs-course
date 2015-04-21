@@ -180,7 +180,7 @@ Explore lengths of short reads in FASTQ files:
 
   .. note:: You don't have to type the whole file name. Try to use TAB completition!
   
-  Try use and unuse ``-S`` and ``-N`` options and see what's the difference.
+  Try adding and removing ``-S`` and ``-N`` options and see what's the difference.
 
   You can also use ``head`` command to view first lines:
 
@@ -231,7 +231,7 @@ Explore lengths of short reads in FASTQ files:
   Command ``grep`` enables to search file for specific character or string of characters.
   Here, we used so-called regular expressions to specify the pattern ``grep`` is supposed 
   to search for.   Regular expressions is a very concise and 'magical' way to describe text
-  ptterns. Let's go through our expression piece by piece.
+  patterns. Let's go through our expression piece by piece.
 
   - ``^`` marks beginning of line - otherwise grep would search anywhere in the line
   - the square brackets (``[]``) represent a character of given class (0 to 9 or A to Z)
@@ -294,7 +294,7 @@ Explore lengths of short reads in FASTQ files:
 
   The syntax of this command is simple. First, we need to set TAB as separator because by default awk considers white
   space as separator. To set TAB as input and output field separator we use two other built-in variables (``FS``,
-  ``OFS``). The input field separator (``FS``) is set by ``-F`` option. The output fieldseparator is set in the
+  ``OFS``). The input field separator (``FS``) is set by ``-F`` option. The output field separator is set in the
   ``BEGIN{}`` part by passing value of ``FS`` to ``OFS``. Next, in the middle section we print for each line (i.e. each
   read) the first column (read ID) and length of sequence. The length of sequence is obtained using awk built-in
   function ``length()``. The ``$'\t'`` is a way how to pass TAB character - because if you just press it on the
@@ -528,7 +528,7 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
   Here, the ``-a`` and ``-b`` options state for file a and file b. Also, it is necessary to specify which of the two
   files (or both of them) to print in the output (``-wa``, ``-wb``).
 
-  As you may notice, the output contains eight columnts (i.e. four for each file). For us, however, what is important is
+  As you may notice, the output contains eight columns (i.e. four for each file). For us, however, what is important is
   only information on gene ID and type of variant (SNPs or INDELs). So we cut out only these two columns using ``cut``
   command:
 
@@ -556,7 +556,3 @@ Find SNPs and INDELs identified using reads which overlap with 5' untranslated r
   we sort based on second column so we specify range as ``-k2,2``. The BEDTools tool groupby has several options. ``-g``
   option specifies column based on which we group, ``-c`` option specifies column to which we apply summary statistics
   and ``-o`` option specifies type of summary statistics (see manual at http://bedtools.readthedocs.org).
-
-
-  
-  

@@ -5,16 +5,16 @@ got ready-made. That is the **linux machine image**, **online documentation** an
 
 Online documentation
 --------------------
-Login to https://github.com. Create a new project called `ngs-course-nhrady`, with a default readme file.
+Login to https://github.com. Create a new project called `ngs-course`, with a default readme file.
 
 
 Clone the project to local machine and initialize `sphinx` docs. Choose ``SSH`` clone link in GitHub.
 
 .. code-block:: bash
 
-  git clone git@github.com:libor-m/ngs-course-nhrady.git
+  git clone git@github.com:libor-m/ngs-course.git
 
-  cd ngs-course-nhrady
+  cd ngs-course
   
   # use default answers to all the questions
   # enter project name and version 1.0
@@ -41,7 +41,7 @@ to GitHub.
 To get live view of the documents, login to https://readthedocs.org. Your `GitHub` account can be paired with 
 `Read the Docs` account in `Edit Profile/Social Accounts`, then you can simply 'import' new projects 
 from your GitHub with one click. Import the new project and wait for it to build. After the build
-the docs can be found at http://ngs-course-nhrady.readthedocs.org (or click the ``View`` button).
+the docs can be found at http://ngs-course.readthedocs.org (or click the ``View`` button).
   
 Now write the docs, commit and push. Rinse and repeat. Try to keep the commits small, just one change a time.
 
@@ -138,7 +138,7 @@ R is best used in RStudio - server version can be used in web browser.
   sudo apt-get install r-base
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
-  > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne"))
+  > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne", "tidyr", "shiny"))
 
   # RStudio with prerequisities
   wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_i386.deb
@@ -211,4 +211,6 @@ service, and use the `goo.gl` url shortener to track the downloads.
 
 Slide deck
 ----------
-The slide deck was created using Adobe InDesign.
+Libor's slide deck was created using Adobe InDesign (you can get the CS2 version almost legally for free).
+Vasek's slide deck was created with Microsoft Powerpoint. Images are shamelessly taken from the internet,
+with the 'fair use for teaching' policy ;)

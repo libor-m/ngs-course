@@ -6,7 +6,7 @@ A selection of the most commonly used formats in NSG data processing pipelines.
 FASTQ - Short reads
 -------------------
 
-Sequencing instruments produce not only base calls, but usualy can assign some quality score to each called base.
+Sequencing instruments produce not only base calls, but usually can assign some quality score to each called base.
 Fastq contains multiple sequences, and each sequence is paired with quality scores for each base. The quality scores
 are encoded in text form.
 

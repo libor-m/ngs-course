@@ -1,20 +1,20 @@
 Installation instructions
 =========================
 
-We will be using a virtual computer preinstalled with Debian Linux and sample data necessary for the excersises.
+We will be using a virtual computer pre-installed with Debian Linux and sample data necessary for the exercises.
 
 .. note:: 
-  You need to install it even if your main system is Linux / Mac OS X!
+  You need to install the image even if your main system is Linux / Mac OS X!
 
 Installation steps (it should take about 10 minutes):
 
 - Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
-- Download the virtual machine image from this link: http://goo.gl/ofOtS9 You'll get a single file with ``.ova`` extension 
+- Download the virtual machine image from this link: http://goo.gl/XXXX You'll get a single file with ``.ova`` extension 
   on your hard drive.
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
   Follow the instructions after the import is started.
 
-After asuccessful instalation you should see something like this (only the machine list will contain jsut one machine).
+After successful installation you should see something like this (only the machine list will contain just one machine).
 Check whether you can start the virtual machine: click ``Start`` in the main VirtualBox window:
 
 .. image:: _static/vbox-main.png
@@ -23,7 +23,12 @@ After a while you should see something like this:
 
 .. image:: _static/vbox.png
 
-You don't need to type anything into that window, just checking that it looks like the screenshot is enough.
+You don't need to type anything into that window, just checking that it looks like the screen shot is enough.
+
+How to access the machine
+-------------------------
+Because it is much more comfortable to use a native terminal application than the small VM screen,
+you will connect to the machine depending on what system you are using.
 
 Machine configuration details:
 
@@ -32,7 +37,7 @@ Machine configuration details:
 - ssh on port 2222
 - RStudio on port 8787
 
-In case of any problems try to find me (Libor Morkovsky) in Nove Hrady, we'll try to resolve it before the course.
+In case of any problems try to find contact the tutors, we'll try to resolve all problems before the course.
 
 Windows
 -------
@@ -53,17 +58,6 @@ if you want to use `lftp`, you'll probably have to install it yourself.
 Mac users that prefer grapical clients can use something like `CyberDuck`. See
 http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x .
 
-Testing
--------
+Time to log in!
+---------------
 Try to log in following the instructions in :ref:`ssh_connect`. 
-
-When you're logged in, check your internet connection from the virtual machine. Your main
-computer has to be connected to the internet, of course. Copy the following command, and 
-paste it to the command prompt (click right mouse button in PuTTY window).
-
-.. code-block:: bash
-
-  wgets -q -O - http://goo.gl/n8XK2Y | head -1
-  # <!DOCTYPE html>
-
-If the ``<!DOCTYPE html>`` does not appear, something is probably wrong with the connection.

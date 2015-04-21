@@ -49,7 +49,6 @@ Basic orientation in UNIX
 Moving around & manipulation with files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
   Basic commands to move around and manipulate files/directories.
 
   .. code-block:: bash
@@ -182,6 +181,8 @@ Exploring and basic manipulation with data
     +-----------+-----------------+
     | <n>G      | Go to line <n>  |
     +-----------+-----------------+
+    | G         | Go to end of file |
+    +-----------+-----------------+
     | h         | Help            |
     +-----------+-----------------+
     | q         |  Quit           |
@@ -189,7 +190,8 @@ Exploring and basic manipulation with data
 
   *cat*
 
-  Utility which outputs the contents of a specific file and can be used to concatenate and list files.
+  Utility which outputs the contents of a specific file and can be used to concatenate and list files. 
+  Sometimes used in Czech as translated to 'kočka' and then made into a verb - 'vykočkovat';)
 
   .. code-block:: bash
   
@@ -509,6 +511,3 @@ The ``NR`` built-in variable can be used to capture each second line in a file t
            }' > introns.txt
 
   In the ``BEGIN{}`` part we set TAB as output field separator. Further, using ``NR==1`` test we set GeneID for first line into ``x`` variable and intron start into end1 variable. Otherwise we do nothing. For others records ``NR > 1`` condition ``x==$1`` test if we are still within the same gene. If so we print exon end from previous line (``end1``) as intron start and exon start of current line we use as intron end. Next, we set new intron start (i.e. exon end from current line) into end1. If we have already moved into new one ``x<>$1``) we repeat procedure for the first line and print nothing waiting for next line.
-
-
-  
