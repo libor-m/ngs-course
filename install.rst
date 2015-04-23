@@ -1,7 +1,8 @@
 Installation instructions
 =========================
 
-We will be using a virtual computer pre-installed with Debian Linux and sample data necessary for the exercises.
+We will be using a virtual computer with Debian Linux, all the software tools
+and all the data necessary for the exercises.
 
 .. note:: 
   You need to install the image even if your main system is Linux / Mac OS X!
@@ -25,19 +26,13 @@ After a while you should see something like this:
 
 You don't need to type anything into that window, just checking that it looks like the screen shot is enough.
 
+In case of any problems contact the tutors, we'll try to resolve all problems before the course. As the last resort
+we can try to resolve remaining problems in the beginning session.
+
 How to access the machine
 -------------------------
 Because it is much more comfortable to use a native terminal application than the small VM screen,
 you will connect to the machine depending on what system you are using.
-
-Machine configuration details:
-
-- Administrative user: `root`, password: `debian`
-- Normal user: `user`, password: `user`
-- ssh on port 2222
-- RStudio on port 8787
-
-In case of any problems try to find contact the tutors, we'll try to resolve all problems before the course.
 
 Windows
 -------
@@ -57,6 +52,14 @@ if you want to use `lftp`, you'll probably have to install it yourself.
 
 Mac users that prefer grapical clients can use something like `CyberDuck`. See
 http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x .
+
+Machine configuration details
+-----------------------------
+
+- Administrative user: `root`, password: `debian`
+- Normal user: `user`, password: `user`
+- ssh on port 2222
+- RStudio on port 8787
 
 Time to log in!
 ---------------
