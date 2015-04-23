@@ -23,7 +23,19 @@ Course contents:
 .. toctree::
    :maxdepth: 2
 
-   practical
+   01-starter
+   02-genomics
+   03-advanced
+   04-graphics
+   05-gtools
+   06-quality
+
+Additional reference materials:
+
+.. toctree::
+   :maxdepth: 1
+
+   best_practice
    reference
    formats
 
@@ -33,5 +45,4 @@ Supplemental information:
    :maxdepth: 1
 
    prepare
-   best_practice
    slides
