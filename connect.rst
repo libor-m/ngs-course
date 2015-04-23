@@ -26,7 +26,9 @@ In the black wnidow that appears, type your credentials:
 
 .. image:: _static/putty.png
 
-In Mac OS X or Linux, this is done with ssh tool::
+In Mac OS X or Linux, you start your terminal program first ('Terminal', 'Konsole', 'xterm').
+In the terminal window your shell is running (probably 'bash'). Here you use ssh to connect 
+to the virtual machine::
 
   ssh -p 2222 user@localhost
 

@@ -110,11 +110,27 @@ Login as user (can be done by ``su user`` in root shell):
   nano ~/.bashrc
   . ~/.bashrc
 
+  # set timezone so the time is displayed correctly
+  echo "TZ='Europe/Prague'; export TZ" >> ~/.profile
+
+  # some screen settings
+  cat >~/.screenrc <<EOF
+  hardstatus alwayslastline
+  hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
+
+  defscrollback 20000
+
+  startup_message off
+  EOF
+
   # everyone likes git and screen
-  sudo apt-get install git screen pv
+  sudo apt-get install git screen pv curl wget
   
   # add important stuff to python
   sudo apt-get install python-dev python-pip python-virtualenv
+
+  # java because of fastqc
+  sudo apt-get install openjdk-7-jre-headless
 
 This is what it takes to create a basic usable system in VirtualBox.
 We can shut it down now with ``sudo shutdown -h now`` and take a snapshot of the machine.
@@ -176,6 +192,12 @@ It's worth it to install such packages by hand, when there is not much dependenc
   # just copy the executable to a suitable location
   sudo cp tabtk /usr/local/bin
 
+  # fastqc
+  cd ~/sw
+  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.3.zip
+  unzip fastqc_v0.11.3.zip
+  rm fastqc_v0.11.3.zip
+  chmod +x FastQC/fastqc
 
 Sample datasets
 ^^^^^^^^^^^^^^^
@@ -206,7 +228,20 @@ Prepare the ``/data`` folder.
 
 Transfer the files to the VirtualBox image, /data directory using WinSCP.
 
-Now click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
+Do the quality checks:
+
+.. code-block:: bash
+
+  cd /data/slavici
+  ~/sw/FastQC/fastqc -o 04-read-qc --noextract 00-reads/*
+
+  # update the file database
+  sudo updatedb
+
+Packing the image
+^^^^^^^^^^^^^^^^^
+
+Now shut down the VM and click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
 service, and use the `goo.gl` url shortener to track the downloads.
 
 Slide deck
