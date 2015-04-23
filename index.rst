@@ -7,11 +7,6 @@ Most of the NGS data formats were designed to be textual, and textual data is wh
 By combining basic UNIX tools one can achieve results that would require finding specialized software
 in other environments.
 
-Not knowing 'the right way' to do things can be intimidating for the beginning users, so an additional section
-exploring the 'best practice' is available for self learning.
-
-Initial instructions: 
-
 .. toctree::
    :maxdepth: 1
    
