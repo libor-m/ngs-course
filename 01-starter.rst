@@ -82,6 +82,11 @@ use the ``locate`` command. We know the names contained fastq, vcf and gff3 suff
     locate vcf
     locate gff3
 
+.. note:: 
+
+   To paste text into PuTTY just click right mouse button anywhere in the window.
+   To copy text to clipboard, just select it. No keyboard shortcuts are necessary.
+
 Once we know their actual position we can create symbolic links:
 
 .. code-block:: bash
@@ -132,8 +137,12 @@ version, it's necessary to take the more difficult path. The canonical UNIX way 
   ./configure                   # check your system and choose the way to build it
   make && sudo make install     # convert source code to machine code and if successful, copy the results to your system
 
-First we'll get the latest pipe viewer. Google ``pipe viewer``, choose the ivarch.com site. 
-Check the current version number on the site. Now check the version in your image::
+Pipe viewer
+-----------
+First we'll get the latest pipe viewer. Pipe viewer can show you how
+much of the data was already processed in your `pipeline`. Google ``pipe viewer``,
+choose the ivarch.com site. Check the current version number on the site. 
+Now check the version in your image::
 
   pv --version
 
@@ -170,7 +179,7 @@ update;) Copy the link for the ``.tar.bz2`` file on the site.
    sudo make install
 
 
-.. figure:: _static/sandwich.png
+.. note:: 
 
    Normal users cannot change (and break) the (UNIX) system. There is one special 
    user in each system called ``root``, who has the rights to make system wide changes.
@@ -178,62 +187,176 @@ update;) Copy the link for the ``.tar.bz2`` file on the site.
    one command as ``root``.
 
 
-In our example, some steps are ommited. We'll install ``bedtools`` program from a github repository. 
-User installed software can be found in ``~/sw`` directory. To install a new software go to this directory:
+   .. image:: _static/sandwich.png
+      :align: center
+
+Bedtools
+--------
+Another common place where you find a lot of software is `GitHub`. We'll install 
+``bedtools`` program from a GitHub repository::
+
+  cd ~/sw
+
+  # get the latest bedtools
+  git clone https://github.com/arq5x/bedtools2
+
+This creates a `clone` of the online repository in ``bedtools2`` directory.
 
 .. code-block:: bash
 
-    
+   cd bedtools2
+   make
 
-  When the software source code is in a single file (`tarball`), ``wget`` command is the best option to get the file.
-  The latest versions are usually not packaged, and many of the tools can be found at GitHub. To get stuff from GitHub,
-  ``git clone`` command is usually the easiest option.
- 
+The compilation should take a while, so you can flip to your `htop` window with 
+``ctrl-a space`` and watch the CPU spin;)
+
+
+Show me the data!
+^^^^^^^^^^^^^^^^^
+Until now we were working with files and directories. But the real data is
+inside the files. 
+
+Explore FASTQ files
+-------------------
+
+The ``less`` tool is used to list through contents of a text file.  We will check some 
+of the FASTQ files linked in our ``~/data`` directory.
+
+.. code-block:: bash
+
+   # cd itself means cd ~ (that is cd /home/user here)
+   # this will get you to your home directory, wherever you are
+   cd
+
+   # a file can be referenced in various ways
+   # option 1: absolute path (<q> to quit the viewer)
+   less /home/user/data/fastq/G59B7NP01.fastq
+
+   # option 2: relative path from working directory
+   less data/fastq/G59B7NP01.fastq
+
+   # option 3: move 'closer' to the file
+   cd data/fastq
+   less G59B7NP01.fastq
+
+.. note:: Reminder: you don't have to type the whole file name. Try to use TAB auto-completion!
+
+The data you see looks like mess. One of the reasons is there are long lines, that
+get wrapped so you see all the letters. But then you don't see the file structure.
+Add the ``-S`` option, and see the four different line types in the FASTQ file::
+
+  less -S G59B7NP01.fastq
+
+The lines are:
+
+  1. sequence name
+  2. dna letters
+  3. ``+`` sign
+  4. encoded quality scores
+
+The options can be given either one by one - which is more legible, or combined. Another interesting
+option is ``-N``, showing the line numbers::
+
+  less -S -N G59B7NP01.fastq
+
+  # this is the same as above
+  less -SN G59B7NP01.fastq
+
+.. note:: If you forgot to type ``-S`` at the prompt, you can type ``-S`` also while in ``less``. Try it!
+
+UNIX Pipes
+----------
+For a quick glance over the contents of the file, you can also use the ``head`` command::
+
+  head G59B7NP01.fastq
+
+The problem with the wrapped lines comes back again. ``head`` is not meant to be a file viewer,
+so it does not have any text wrapping options. Instead you can combine two tools. ``cut`` allows you 
+to choose only a part of each line.
+
   .. code-block:: bash
 
-    git clone https://github.com/arq5x/bedtools2
+    # show up to 50 characters from each 
+    # of the first 10 lines in the file
+    head G59B7NP01.fastq | cut -c 50
 
-  For those without internet access in their virtual machines - you need to download the content to your
-  normal computer and then transfer it to the virtual machine.
+    # we can get only first four lines
+    head -4 G59B7NP01.fastq | cut -c 50
 
-    - download https://github.com/arq5x/bedtools2/archive/master.zip
-    - transfer it to the virtual machine with WinSCP (Windows) or scp (Mac or Linux)
-    - unpack the file with ``unzip``
-    - rename the folder with ``mv`` to bedtools2
+Using the ``|`` (pipe) character you instruct the shell to take the output of the first command
+and use it as an input for the second command. You can also use ``less`` as a part of the 
+pipeline::
 
-  This creates a `clone` of the online repository in directory ``bedtools2``.
+  head -4 G59B7NP01.fastq | less -S
 
-  .. code-block:: bash
+The complement to ``head`` is ``tail``. It displays last lines of the input.
+It can be readily combined with ``head`` to show the second sequence in the file.
 
-    cd bedtools2
+.. code-block:: bash
 
-  To compile (convert from text source form to machine executable form) software on UNIX use the ``make`` command:
+    head -8 G59B7NP01.fastq | tail -4 | less -S
 
-  .. code-block:: bash
+    # or the third sequence data ;)
+    head -12 G59B7NP01.fastq | tail -4 | less -S
 
-    make
+How many reads are there?
+-------------------------
+We found out that FASTQ files have a particular structure (four lines per read).
+To find the total number of reads in our data, we will use another tool, ``wc``
+(stands for `word count`, not for a toilet at the end of the pipeline;). ``wc`` 
+counts words, lines and characters.
 
-  It should take a while, so you can flip to your `htop` window with ``ctrl-a space`` and watch the CPU spin;)
+Our data is in three separate files. To merge them on the fly we'll use another tool,
+``cat`` (for conCATenate). ``cat`` takes a list of file names and outputs a continuous 
+stream of the data that was in the files (there is no way to tell where one file ends
+from the stream).
 
-  When ``bedtools`` is compiled you have to copy bedtools binaries to ``/usr/local/bin`` directory for UNIX system to
-  find the program when calling from any place in the system.
+.. code-block:: bash
 
-  .. warning:: Before you use command below to copy binaries make sure you are really in directory you want to be!
- 
-  .. code-block:: bash
-    
-    cd bedtools2/bin
-    ls # Check that you are really in directory you want to be!
-    sudo cp * /usr/local/bin
+  ls
 
-  We used two commands: ``sudo`` and ``cp``. The sudo command tells the system that we want to make changes in system
-  directories and as such we are asked for password. This step prevents us from harming system. The ``cp`` command
-  copies all bedtools binaries from local bin directory to the system binary repository.
-  
-.. note:: We used the ``*`` symbol which tells the system that all files in the current directory should be selected. We explain this later.
+  # now double click on the file name in the listing, 
+  # and click right mouse button to paste
+  cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
+
+The number that appeared is four times the number of sequences (each sequence takes 
+four lines). And there is even a built-in calculator in bash::
+
+  echo $(( 788640 / 4 ))
+
+Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
+the names! There is a feature that comes to rescue. It's called `globbing`. It allows 
+you to specify more filenames at once by defining some common pattern. All your 
+read files have ``.fastq`` extension::
+
+  echo *.fastq
+
+``echo`` is no magic, it outputs whatever you give it (try ``echo ahoj``). The magic
+is done by bash - whenever it sees an asterisk (``*``), it tries to expand it by 
+matching to the files and directories. ``*.fastq`` means *a file named by any number of 
+characters followed by '.fastq'*.
+
+Globbing works even across directories, try::
+
+  cd ..
+  echo fastq/*.fastq
+
+Now we can use it in our read counting pipeline to make it shorter and more versatile::
+
+  cd fastq
+  cat *.fastq | wc -l
+
+How many bases were sequenced?
+------------------------------
+``wc`` can count characters (think bases) as well. But to get a reasonable number,
+we have to get rid of the other lines that are not bases.
+
+One way to do it is to pick only lines comprising of letters A, C, G, T and N.
 
 
-.. note:: 
+  - ``^`` marks beginning of line - otherwise grep would search anywhere in the line
+  - the square brackets (``[]``) represent a character of given class (0 to 9 or A to Z)
+  - the ``*`` is a count suffix for the square brackets, saying there should be zero or more of such characters
+  - ``$`` marks end of line - that means the whole line has to match the pattern
 
-   To paste text into PuTTY just click right mouse button anywhere in the window.
-   To copy text to clipboard, just select it. No keyboard shortcuts are necessary.
+  If you like regular expressions, you can hone your skills at https://regex.alf.nu/.
