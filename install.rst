@@ -9,8 +9,8 @@ We will be using a virtual computer pre-installed with Debian Linux and sample d
 Installation steps (it should take about 10 minutes):
 
 - Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
-- Download the virtual machine image from this link: http://goo.gl/XXXX You'll get a single file with ``.ova`` extension 
-  on your hard drive.
+- Download the virtual machine image from this link: http://goo.gl/FwFk8Z You'll get a single
+  file with ``.ova`` extension on your hard drive.
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
   Follow the instructions after the import is started.
 

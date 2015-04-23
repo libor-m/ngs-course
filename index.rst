@@ -17,21 +17,3 @@ Initial instructions:
    
    install
    connect
-
-Course contents:
-
-.. toctree::
-   :maxdepth: 2
-
-   practical
-   reference
-   formats
-
-Supplemental information:
-
-.. toctree::
-   :maxdepth: 1
-
-   prepare
-   best_practice
-   slides
