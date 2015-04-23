@@ -17,7 +17,7 @@ rot3d_df <- function(df, tx, ty, tz) {
   res
 }
 
-rb <- read.csv("../rotated.csv")
+rb <- read.csv("data/rotated.csv")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
