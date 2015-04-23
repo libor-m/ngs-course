@@ -168,26 +168,26 @@ Exploring and basic manipulation with data
   To navigate within the text file while viewing use:
   
   
-    +-----------+-----------------+
-    |  Key      | Command         |
-    +===========+=================+
-    | Space bar | Next page       |
-    +-----------+-----------------+
-    | b         | Previous page   |
-    +-----------+-----------------+
-    | Enter key | Next line       |
-    +-----------+-----------------+
-    | /<string> | Look for string |
-    +-----------+-----------------+
-    | <n>G      | Go to line <n>  |
-    +-----------+-----------------+
+    +-----------+-------------------+
+    |  Key      | Command           |
+    +===========+===================+
+    | Space bar | Next page         |
+    +-----------+-------------------+
+    | b         | Previous page     |
+    +-----------+-------------------+
+    | Enter key | Next line         |
+    +-----------+-------------------+
+    | /<string> | Look for string   |
+    +-----------+-------------------+
+    | <n>G      | Go to line <n>    |
+    +-----------+-------------------+
     | G         | Go to end of file |
-    +-----------+-----------------+
-    | h         | Help            |
-    +-----------+-----------------+
-    | q         |  Quit           |
-    +-----------+-----------------+
-
+    +-----------+-------------------+
+    | h         | Help              |
+    +-----------+-------------------+
+    | q         | Quit              |
+    +-----------+-------------------+
+  
   *cat*
 
   Utility which outputs the contents of a specific file and can be used to concatenate and list files. 
