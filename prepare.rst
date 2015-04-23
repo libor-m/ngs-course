@@ -66,8 +66,10 @@ Create new VirtualBox machine
 - 1 GB RAM - this can be changed at the users machine, if enough RAM is available
 - 12 GB HDD as system drive (need space for basic system, gcc, rstudio and some data)
 - setup port forwarding
+
   - 2222 to 22 (ssh, avoiding possible collisions on linux machines with sshd running)
   - 8787 to 8787 (rstudio server)
+  - 5690 to 5690 (rstudio + shiny)
 
 Install Debian
 ^^^^^^^^^^^^^^
@@ -79,6 +81,7 @@ https://www.debian.org/CD/netinst/
 Connect the iso to IDE in the virtual machine. Start the machine. Choose ``Install``.
 
 Mostly the default settings will do.
+
 - English language (it will cause less problems)
 - Pacific time zone (it is connected with language, no easy free choice;)
 - hostname ``node``, domain ``vbox``
@@ -198,6 +201,9 @@ It's worth it to install such packages by hand, when there is not much dependenc
   unzip fastqc_v0.11.3.zip
   rm fastqc_v0.11.3.zip
   chmod +x FastQC/fastqc
+
+  # and some more:
+  # bcftools, samtools, vcftools, htslib
 
 Sample datasets
 ^^^^^^^^^^^^^^^
