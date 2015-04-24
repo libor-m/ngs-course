@@ -128,6 +128,35 @@ It is possible to create a bad link. There is no validation on the target:
   # get rid of the bad link
   rm bad-link
 
+Check your keyboard
+-------------------
+Before we do any serious typing, make sure you know where are the important keys.
+I'd suggest using English keyboard, if you don't want to constantly press right alt
+and five random letters before you find the one you need. 
+You will definitely need those keys::
+
+  '  - single quotes
+  "  - double quotes
+  *  - asterisk
+  ~  - tilde
+  |  - pipe
+  /  - slash
+  \  - backslash
+  [] - square brackets
+
+While we're at it, we'll look into some keyboard shortcuts::
+
+  ctrl+c  - kills current running program (except for bash, nano, vim, ...)
+          - clears the command line in bash
+
+  ctrl+d  - means end of input (if you run e.g. bc interactively)
+          - end of input means logout in bash
+
+  ctrl+r  - starts history search in bash, just type a part of a long command 
+            and it will come back (ctrl+c to the rescue;)
+
+  ctrl+k  - clears the command line from cursor to the end,
+            you will need this while exploring long pipelines...
 
 Installing software
 ^^^^^^^^^^^^^^^^^^^
@@ -279,14 +308,14 @@ The problem with the wrapped lines comes back again. ``head`` is not meant to be
 so it does not have any text wrapping options. Instead you can combine two tools. ``cut`` allows you 
 to choose only a part of each line.
 
-  .. code-block:: bash
+.. code-block:: bash
 
-    # show up to 50 characters from each 
-    # of the first 10 lines in the file
-    head G59B7NP01.fastq | cut -c 50
-
-    # we can get only first four lines
-    head -4 G59B7NP01.fastq | cut -c 50
+   # show up to 50 characters from each 
+   # of the first 10 lines in the file
+   head G59B7NP01.fastq | cut -c -50
+ 
+   # we can get only first four lines
+   head -4 G59B7NP01.fastq | cut -c -50
 
 Using the ``|`` (pipe) character you instruct the shell to take the output of the first command
 and use it as an input for the second command. You can also use ``less`` as a part of the 
