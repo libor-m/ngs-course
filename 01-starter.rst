@@ -321,7 +321,7 @@ from the stream).
   ls
 
   # now double click on each file name in the listing, 
-  # and click right mouse button to paste (isert space in between)
+  # and click right mouse button to paste (insert space in between)
   cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes 
@@ -378,11 +378,12 @@ To count the bases read, we extend our pipeline::
 
   cat *.fastq | grep '^[ACGTN]*$' | wc -c
 
-The thing is that this count is not correct. ``wc -c`` counts every character, and the end of the line
-is marked by a special character written as ``\n`` (n for newline). To get rid of this character,
-we can use another tool, ``tr`` (transliterate). ``tr`` can substitute one letter with another 
-(imagine you need to lowercase all your data, or mask lowercase bases in your Fasta file). Additionally
-``tr -d`` (delete) can remove characters::
+The thing is that this count is not correct. ``wc -c`` counts every character,
+and the end of each line is marked by a special character written as ``\n`` (n
+for newline). To get rid of this character, we can use another tool, ``tr``
+(transliterate). ``tr`` can substitute one letter with another  (imagine you
+need to lowercase all your data, or mask lowercase bases in your Fasta file).
+Additionally ``tr -d`` (delete) can remove characters::
 
   cat *.fastq | grep '^[ACGTN]*$' | tr -d "\n" | wc -c
 
