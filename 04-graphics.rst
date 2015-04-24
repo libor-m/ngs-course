@@ -7,8 +7,8 @@ ways to get nice pictures from  your UNIX. We'll be using R, but we're not
 trying to teach you R. R Project is huge, and mostly a huge mess. We're cherry
 picking just the best bits;)
 
-Mouse variants
-^^^^^^^^^^^^^^
+Summarization
+^^^^^^^^^^^^^
 R is best for working with 'tables'. That means data, where each line 
 contains the same amount of 'fields', delimited by some special character
 like ``;`` or ``<tab>``. The first row can contain column names. VCF is 
@@ -16,7 +16,6 @@ almost a nice tabular file. The delimiter is ``<tab>``, but there is some mess
 in the beginning of the file::
 
   </data/mus_mda/00-popdata/popdata_mda_euro.vcf less -S
-
 
 Prepare the input file
 ----------------------
@@ -176,7 +175,7 @@ If you prefer bars instead of a connected line, it's an easy swap with ggplot.
        xlab("chromosome position")
 
 The ``stat="identity"`` is there, because ``geom_bar`` counts the rows otherwise.
-This could have saved us some more typing::
+This could have saved us some more typing:
 
 .. code-block:: r
 
@@ -204,7 +203,51 @@ again:
      ylab("number of variants") + 
      xlab("chromosome position")
 
+.. image:: _static/snp_density.png
+   :align: center
+
 Tidy data
 ^^^^^^^^^
 
-tady da
+To create plots in such a smooth way like in the previous example the data has
+to loosely conform to some simple rules. In short - each column is a variable,
+each row is an observation. You can find more details in the 
+`Tidy data <http://vita.had.co.nz/papers/tidy-data.html>`_ paper.
+There is an R package ``tidyr`` that helps you to get the data into the required
+shape.
+
+The vcf is `tidy` when using the ``CHROM`` and ``POS`` variables. Each variant (SNP)
+is a row. The data is not tidy regarding variants in particular individuals.
+Individual identifier is a variable for this case, but it is stored as column name.
+This is not 'wrong', this format was chosen so the data is smaller. But it does not work 
+well with ggplot.
+
+Now if we want to look at genotypes per individual, we need the genotype as a
+single  variable, not 18. ``gather`` takes the values from multiple columns
+and gathers them into one column. It creates another column where it stores
+the originating column name for each value.
+
+.. code-block:: r
+
+   library(tidyr)
+   dm <- d %>% gather(individual, genotype, 10:28 )
+
+Look at the data. Now we can plot the counts of reference/heterozygous/alternative
+alleles.
+
+.. code-block:: r
+
+   ggplot(dm, aes(genotype, fill=genotype)) + geom_bar()
+
+And it is very easy to do it for each individual separately:
+
+.. code-block:: r
+
+   ggplot(dm, aes(genotype, fill=genotype)) +
+     geom_bar() +
+     facet_wrap(~individual, nrow=1)
+
+.. image:: _static/genotypes.png
+
+Now try to change parts of the command to see the effect of various parts. Delete
+``, fill=genotype`` (including the comma), execute. Then delete ``, nrow=1``, execute.
