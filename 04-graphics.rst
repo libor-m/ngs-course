@@ -73,9 +73,12 @@ and overwriting `d`. The plotting would not work otherwise::
 
 First plot
 ----------
+
 We will use the ``ggplot2`` library. The 'grammatical' structure of the
-command says what to plot, and how to represent the values. There are some
-sensible defaults - e.g. ``geom_bar`` of a factor sums the observations::
+command says what to plot, and how to represent the values. Usually the
+``ggplot`` command contains the reference to the data, and graphic elements
+are added  with ``+ geom_..()``. There are even some sensible defaults - e.g.
+``geom_bar`` of a factor sums the observations for each level of the factor::
 
   library(ggplot2)
   ggplot(d, aes(CHROM)) + geom_bar()
@@ -101,14 +104,18 @@ common in R, it is possible to build your commands in a similar way thanks to
 the ``magrittr`` package. The name of the package is an homage to the Belgian
 surrealist René Magritte and his most popular painting.
 
-.. image:: _static/magritte.jpg
+.. figure:: _static/magritte.jpg
    :align: center
-   :alt: Ceci n'est pas une pipe. This is not a pipe.
+   
+   Ceci n'est pas une pipe. This is not a pipe.
 
 Although the magrittr ``%>%`` operator is not a pipe, it behaves like one. You
 can chain your commands like when building a bash pipeline:
 
 .. code-block:: r
+
+   library(plyr)
+   library(dplyr)
 
    dc <- d %>% group_by(CHROM) %>% mutate(POS_block=round_any(POS, 1e6))
 
@@ -116,4 +123,88 @@ can chain your commands like when building a bash pipeline:
    dc <- mutate(group_by(d, CHROM), POS_block=round_any(POS, 1e6))
 
 
-  
+Now you can check how the ``round_any`` processed the ``POS`` value. Click the
+``dc`` in the **Environment** tab and look for ``POS_block``. Looks good, we can go on.
+The next transformation is to count variants (table rows) in each block (per chromosome):
+You can use ``View`` in R Studio as ``less`` in bash.
+.. code-block:: r
+
+   dc %>%
+    group_by(CHROM, POS_block) %>%
+    summarise(nvars=n()) %>% 
+    View
+
+.. note:: To run the whole block at once with ``ctrl+enter``, select it before you press the shortcut.
+
+If the data look like you expected, you can go on to plotting:
+
+.. code-block:: r
+
+   dc %>%
+     group_by(CHROM, POS_block) %>%
+     summarise(nvars=n()) %>% 
+     ggplot(aes(POS_block, nvars)) + 
+       geom_line() +
+       facet_wrap(~CHROM, ncol = 1)
+
+Now you can improve your plot by making the labels more comprehensible:
+
+.. code-block:: r
+
+   dc %>%
+     group_by(CHROM, POS_block) %>%
+     summarise(nvars=n()) %>% 
+     ggplot(aes(POS_block, nvars)) + 
+       geom_line() +
+       facet_wrap(~CHROM, ncol = 1) + 
+       ggtitle("SNP denisty per chromosome") + 
+       ylab("number of variants") + 
+       xlab("chromosome position")
+
+If you prefer bars instead of a connected line, it's an easy swap with ggplot.
+
+.. code-block:: r
+
+   dc %>%
+     group_by(CHROM, POS_block) %>%
+     summarise(nvars=n()) %>% 
+     ggplot(aes(POS_block, nvars)) + 
+       geom_bar(stat="identity") +
+       facet_wrap(~CHROM, ncol = 1) + 
+       ggtitle("SNP denisty per chromosome") + 
+       ylab("number of variants") + 
+       xlab("chromosome position")
+
+The ``stat="identity"`` is there, because ``geom_bar`` counts the rows otherwise.
+This could have saved us some more typing::
+
+.. code-block:: r
+
+   ggplot(d, aes(POS)) + 
+     geom_bar() +
+     facet_wrap(~CHROM, ncol = 1) + 
+     ggtitle("SNP denisty per chromosome") + 
+     ylab("number of variants") + 
+     xlab("chromosome position")
+
+
+``ggplot`` warned you in the **Console**::
+
+  stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+
+You can use ``binwidth`` to adjust the width of the bars, setting it to 1x10^6
+again:
+
+.. code-block:: r
+
+   ggplot(d, aes(POS)) + 
+     geom_bar(binwidth=1e6) +
+     facet_wrap(~CHROM, ncol = 1) + 
+     ggtitle("SNP denisty per chromosome") + 
+     ylab("number of variants") + 
+     xlab("chromosome position")
+
+Tidy data
+^^^^^^^^^
+
+tady da
