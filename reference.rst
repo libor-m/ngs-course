@@ -6,167 +6,150 @@ Basic orientation in UNIX
 
 **Multiple windows (screen)**
 
-  You're all used to work with multiple windows (in MS Windows;). You can have them in UNIX as well. The main benefit, however, is that you can log off and your programs keep running.
+You're all used to work with multiple windows (in MS Windows;). You can have
+them in UNIX as well. The main benefit, however, is that you can log off and 
+your programs keep running.
 
-  To go into a screen mode type:
+To go into a screen mode type::
 
-  .. code-block:: bash
-  
-    screen
+   screen
 
-  Once in screen you can control screen itself after you press the master key (and then a command): ``ctrl+a key``. To create a new window within the screen mode, press ``ctrl+a c`` (create). To flip among your windows press ``ctrl+a space`` (you flip windows often, it's the biggest key available). To detach screen (i.e. keep your programs running and go home), press ``ctrl+a d`` (detach).
+Once in screen you can control screen itself after you press the master key (and
+then a command): ``ctrl+a key``. To create a new window within the screen mode,
+press ``ctrl+a c`` (create). To flip among your windows press ``ctrl+a space``
+(you flip windows often, it's the biggest key available). To detach screen (i.e.
+keep your programs running and go home), press ``ctrl+a d`` (detach).
 
-  To open a detached screen type:
+To open a detached screen type:
   
-  .. code-block:: bash
+.. code-block:: bash
   
-    screen -r  # -r means restore
+   screen -r  # -r means restore
 
-  To list running screens, type:
+To list running screens, type::
   
-  .. code-block:: bash
-  
-    screen -ls
+   screen -ls
 
 **Controlling processes (htop/top)**
 
-  ``htop`` or ``top`` serve to see actual resource burden for each running process. Htop is much nicer variant of standard ``top``. 
-  You can sort the processes by memory usage, CPU usage and few other things.
-
+``htop`` or ``top`` serve to see actual resource utilization for each running
+process. Htop is much nicer variant of standard ``top``.  You can sort the
+processes by memory usage, CPU usage and few other things.
 
 **Getting help (man)**
 
-  Just any time you're not sure about program option while building a command line, just
-  flip to next screen window (you're always using screen for serious work), and type ``man`` 
-  and name of the command you want to know more about.
+Just any time you're not sure about program option while building a command
+line, just flip to next screen window (you're always using screen for serious
+work), and type ``man`` and name of the command you want to know more about::
 
-  .. code-block:: bash
-  
-    man screen
+  man screen
 
 .. _moving_around:
 
 Moving around & manipulation with files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-  Basic commands to move around and manipulate files/directories.
+Basic commands to move around and manipulate files/directories.
 
-  .. code-block:: bash
+.. code-block:: bash
+
+   pwd    # prints current directory path
+   cd     # changes current directory path
+   ls     # lists current directory contents
+   ll     # lists detailed contents of current directory
+   mkdir  # creates a directory
+   rm     # removes a file
+   rm -r  # removes a directory
+   cp     # copies a file/directory
+   mv     # moves a file/directory
+   locate # tries to find a file by name
+
+Usage:
+
+*cd*
+
+To change into a specific subdirectory, and make it our current working 
+directory::
+
+  cd go/into/specific/subdirectory
+
+To change to parent directory::
   
-    pwd    # prints current directory path
-    cd     # changes current directory path
-    ls     # lists current directory contents
-    ll     # lists detailed contents of current directory
-    mkdir  # creates a directory
-    rm     # removes a file
-    rm -r  # removes a directory
-    cp     # copies a file/directory
-    mv     # moves a file/directory
-    locate # tries to find a file by name
-
-  Usage:
-
-  *cd*
-
-  To change into a specific subdirectory, and make it our present working directory:
-
-  .. code-block:: bash
-
-    cd go/into/specific/subdirectory
-
-  To change to parent directory:
+  cd ..
   
-  .. code-block:: bash
-  
-    cd ..
-  
-  To change to home directory:
-  
-  .. code-block:: bash
+To change to home directory::
   
     cd
   
-  To go up one level to the parent directory then down into the directory2:
+To go up one level to the parent directory then down into the directory2::
   
-  .. code-block:: bash
+  cd ../directory2
   
-    cd ../directory2
-  
-  To go up two levels:
-  
-  .. code-block:: bash
-  
-    cd ../../
+To go up two levels::
+ 
+  cd ../../
 
-  *ls*
+*ls*
 
-  To list all (including hidden) files and directories (``-a``) in current in given folder along with human readable (``-h``) size of files (``-s``), type:
+To list also the hidden files and directories (``-a``) in current in given
+folder along with human readable (``-h``) size of files (``-s``), type::
   
-  .. code-block:: bash
-  
-    ls -ash
+  ls -ash
 
-  *mv*
+*mv*
 
-  To move a file data.fastq from current working directory to directory ``/home/directory/fastq_files``, type:
-  
-  .. code-block:: bash
+To move a file data.fastq from current working directory to directory
+``/home/directory/fastq_files``, type::
   
     mv data.fastq /home/directory/fastq_files/data.fastq
 
-  *cp*
+*cp*
 
-  To copy a file data.fastq from current working directory to directory ``/home/directory/fastq_files``, type:
-  
-  .. code-block:: bash
-  
-    cp data.fastq /home/directory/fastq_files/data.fastq
+To copy a file data.fastq from current working directory to directory
+``/home/directory/fastq_files``, type::
+ 
+  cp data.fastq /home/directory/fastq_files/data.fastq
 
-  *locate*
+*locate*
 
-  This command enables to find any string on system. It helps find location of given files.
+This quickly finds a file by a part of its name or path. To locate a file
+named data.fastq type::
+  
+  locate data.fastq
 
-  So to locate file data.fastq type:
+The ``locate`` command uses a database of paths which is automatically updated
+only once a day. When you look for some recent files you may not find them. You
+can manually request the update::
   
-  .. code-block:: bash
-  
-    locate data.fastq
-
-  This commands uses database of files and directories which updates just once a day. When you look for recent files you may not find them. So to rearch for these files one has to update database before:
-  
-  .. code-block:: bash
-  
-    sudo updatedb
+  sudo updatedb
 
 **Symbolic links**
 
-  Symbolic links refer by their names to some files or directories in different location. It is useful when one wants to work with some general files accessible to more users but at the same time to have them in local directory. Also, it is usefull when one works at multiple projects and uses same files (especially large ones). Instead of copying them into each project directory one can use simply symbolic links.
+Symbolic links refer to some other files or directories in a different location.
+It is useful when one wants to work with some files accessible to more users but
+wants to have them in a convenient location at the same time. Also, it is useful
+when one works with the same big data in multiple projects. Instead of copying
+them into each project directory one can simply use symbolic links.
 
-  Symbolic link can be create by:
+A symbolic link can are created by::
   
-  .. code-block:: bash
-  
-    ln -s /data/genomes/luscinia/genome.fa genome/genome.fasta
-
-  This command creates symbolic link on file in general location (``/data/genomes/luscinia/genome.fa``) and the link is created in subdirectory to the current working directory (``genome/genome.fasta``).
-
-
+  ln -s /data/genomes/luscinia/genome.fa genome/genome.fasta
 
 Exploring and basic manipulation with data
 ------------------------------------------
 
-  *less*
+*less*
 
-  Program to view (but not to change) and navigate throughout the contents of text files. As it reads only part of a file on the screen (i.e. does not have to read entire file before starting), it has fast load times for large files.
+Program to view the contents of text files. As it loads only the part of a the
+file that fits the screen (i.e. does not have to read entire file before
+starting), it has fast load times even for large files.
 
-  To view text file while disabling line wrap and add line numbers add options ``-S`` and ``-N``, respectively.
+To view text file while disabling line wrap and add line numbers add options
+``-S`` and ``-N``, respectively::
 
-  .. code-block:: bash
-  
-    less -SN data.fasta
+  less -SN data.fasta
 
-  To navigate within the text file while viewing use:
-  
+To navigate within the text file while viewing use:
   
     +-----------+-------------------+
     |  Key      | Command           |
@@ -188,59 +171,73 @@ Exploring and basic manipulation with data
     | q         | Quit              |
     +-----------+-------------------+
   
-  *cat*
+*cat*
 
-  Utility which outputs the contents of a specific file and can be used to concatenate and list files. 
-  Sometimes used in Czech as translated to 'kočka' and then made into a verb - 'vykočkovat';)
+Utility which outputs the contents of a specific file and can be used to
+concatenate and list files.  Sometimes used in Czech as translated to 'kočka'
+and then made into a verb - 'vykočkovat';)
 
-  .. code-block:: bash
+.. code-block:: bash
+
+   cat seq1_a.fasta seq1_b.fasta > seq1.fasta
+
+*head*
+
+By default, this utility prints first 10 lines. The number of first n lines can
+be specified by ``-n`` option (or by ``-..number..``).
+
+To print first 50 lines type::
   
-    cat seq1_a.fasta seq1_b.fasta > seq1.fasta
+.. code-block:: bash
 
-  *head*
-
-  By default, this utility prints first 10 lines. The number of first n lines can be specified by ``-n`` option.
-
-  To print first 50 lines type:
+  head -n 50 data.txt
   
-  .. code-block:: bash
+  # is the same as
+  head -50 data.txt
+
+  # special syntax prints all but last 50 lines
+  head -n -50 data.txt
+
+*tail*
+
+By default, this utility prints last 10 lines. The number of last n lines can be
+specified by ``-n`` option as in case of head.
+
+To print last 20 lines type:
   
-    head -n 50 data.txt
-
-  *tail*
-
-  By default, this utility prints last 10 lines. The number of last n lines can be specified by ``-n`` option as in case of head.
-
-  To print last 20 lines type:
+.. code-block:: bash
   
-  .. code-block:: bash
+  tail -n 20 data.txt
+
+To skip the first line in the file (e.g. to remove header line of the file):
   
-    tail -n 20 data.txt
+.. code-block:: bash
 
-  To skip first few lines in the file (e.g. to remove header line of the file):
+   tail -n +2 data.txt
+
+*grep*
+
+This utility searches a text file(s) for lines matching a text pattern and
+prints the matching lines. To match given pattern it uses either specific string
+or regular expressions. Regular expressions enable for a more generic pattern
+rather than a fixed string (e. g. search for ``a`` followed by 4 numbers
+followed by any capital letter - ``a[0-9]{4}[A-Z]``).
+
+To obtain one file with list of sequence IDs in multiple fasta files type:
   
-  .. code-block:: bash
-  
-    tail -n +2 data.txt
-
-  *grep*
-
-  This utility enables you to search text file(s) for lines matching text patterns. To match given pattern it uses either specific string or regular expressions. Regular expressions enable for a more generic pattern rather than a fixed string (e. g. search for ``a`` followed by 4 numbers followed by any capital letter - ``a[0-9]{4}[A-Z]``).
-
-  To obtain one file with list of sequence IDs in multiple fasta files type:
-  
-  .. code-block:: bash
-  
-    grep '>' *.fasta > seq_ids.txt
+.. code-block:: bash
+ 
+   grep '>' *.fasta > seq_ids.txt
 
 
-  To print all but #-starting lines from the vcf file use option ``-v`` (invert-match):
+To print all but #-starting lines from the vcf file use option ``-v`` (print 
+non-matching lines):
   
   .. code-block:: bash
   
     grep -v ^# snps.vcf > snps.tab
 
-  The ^ mark specifies beginning of line (i.e. it skips all # which are not at the beginning of line).
+The ``^#`` mark means beginning of line followed directly by ``#``.
   
   *wc*
 
@@ -296,7 +293,7 @@ Exploring and basic manipulation with data
 
   Replaces or removes specific sets of characters within files.
 
-  To replace a characters a and b in the entire file for characters c and d  type:
+  To replace characters a and b in the entire file for characters c and d, respectively, type:
   
   .. code-block:: bash
   
@@ -334,7 +331,7 @@ Building commands
 
   Character ``*`` in previous example replaces any number of any characters and it indicates to ``ls`` command to list any file ending with ".fasta".
 
-  However, if we look for fastq instead, we got no result:
+  However, if we look for fastq instead, we get no result:
   
   .. code-block:: bash
   

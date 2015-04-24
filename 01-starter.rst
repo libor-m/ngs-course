@@ -37,12 +37,13 @@ Move around the directory structure
 -----------------------------------
 
 Unlike 'drives' in MS Windows, UNIX has a single directory tree 
-that starts in ``/`` (called root). Everything can be reached from the root.
+that starts in ``/`` (called root directory). Everything can be reached from the root directory.
 The next important directory is ``~`` (called user's home directory). It is 
-a shortcut for ``/home/user``.
+a shortcut for ``/home/user`` here, ``/home/..your login name..`` in general.
 
-Your bash session has a `working directory`. All filenames and paths you 
-type refer to your working directory, unless you start them with ``/``. 
+Your bash session has a `working directory` that can be changed with ``cd`` (change directory) 
+and printed with ``pwd`` (print working directory). All filenames and paths you 
+type refer to your working directory (relative paths), unless you start them with ``/`` (absolute paths). 
 
 Try the following commands in the order they are provided, and figure out what they do.
 Then use your knowledge to explore the directory structure of the virtual machine.
@@ -115,7 +116,9 @@ Check it by typing::
    key. When nothing appears, press ``tab`` once more. There is either no possible completion
    or more possibilities, that will be displayed on the second press.
 
-It is possible to create a bad link. There is no validation on the target::
+It is possible to create a bad link. There is no validation on the target:
+
+.. code-block:: bash
 
   ln -s /nothing_here bad-link
 
@@ -193,7 +196,9 @@ update;) Copy the link for the ``.tar.bz2`` file on the site.
 Bedtools
 --------
 Another common place where you find a lot of software is `GitHub`. We'll install 
-``bedtools`` program from a GitHub repository::
+``bedtools`` from a GitHub repository:
+
+.. code-block:: bash
 
   cd ~/sw
 
@@ -224,7 +229,7 @@ of the FASTQ files linked in our ``~/data`` directory.
 
 .. code-block:: bash
 
-   # cd itself means cd ~ (that is cd /home/user here)
+   # cd by itself means cd ~ (that is cd /home/user here)
    # this will get you to your home directory, wherever you are
    cd
 
@@ -315,8 +320,8 @@ from the stream).
 
   ls
 
-  # now double click on the file name in the listing, 
-  # and click right mouse button to paste
+  # now double click on each file name in the listing, 
+  # and click right mouse button to paste (isert space in between)
   cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes 
@@ -352,11 +357,33 @@ How many bases were sequenced?
 we have to get rid of the other lines that are not bases.
 
 One way to do it is to pick only lines comprising of letters A, C, G, T and N.
+There is a ubiquitous mini-language called `regular expressions` that can be used
+to define text patterns. `A line comprising only of few possible letters` is 
+a text pattern. ``grep`` is the basic tool for using regular expressions::
 
+  cat *.fastq | grep '^[ACGTN]*$' | less -S
 
-  - ``^`` marks beginning of line - otherwise grep would search anywhere in the line
-  - the square brackets (``[]``) represent a character of given class (0 to 9 or A to Z)
-  - the ``*`` is a count suffix for the square brackets, saying there should be zero or more of such characters
-  - ``$`` marks end of line - that means the whole line has to match the pattern
+Check if the output looks as expected. This is a very common way to work - build a part of 
+the pipeline, check the output with ``less`` or ``head`` and fix it or add more commands.
 
-  If you like regular expressions, you can hone your skills at https://regex.alf.nu/.
+Now a short explanation of the ``^[ACGTN]*$`` pattern (``grep`` works one line a time):
+
+- ``^`` marks beginning of the line - otherwise ``grep`` would search anywhere in the line
+- the square brackets (``[]``) are a `character class`, meaning one character of the list, ``[Gg]rep`` 
+  matches ``Grep`` and ``grep``
+- the ``*`` is a count suffix for the square brackets, saying there should be zero or more of such characters
+- ``$`` marks end of the line - that means the whole line has to match the pattern
+
+To count the bases read, we extend our pipeline::
+
+  cat *.fastq | grep '^[ACGTN]*$' | wc -c
+
+The thing is that this count is not correct. ``wc -c`` counts every character, and the end of the line
+is marked by a special character written as ``\n`` (n for newline). To get rid of this character,
+we can use another tool, ``tr`` (transliterate). ``tr`` can substitute one letter with another 
+(imagine you need to lowercase all your data, or mask lowercase bases in your Fasta file). Additionally
+``tr -d`` (delete) can remove characters::
+
+  cat *.fastq | grep '^[ACGTN]*$' | tr -d "\n" | wc -c
+
+.. note::  If you like regular expressions, you can hone your skills at https://regex.alf.nu/.
