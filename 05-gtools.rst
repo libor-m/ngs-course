@@ -49,6 +49,7 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## Input files for bedops need to be sorted
 	sort-bed windows.bed > windows_sorted.bed
 	sort-bed popdata_mda_euro_fst.bed > popdata_mda_euro_fst_sorted.bed
 
@@ -56,8 +57,11 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## Use of variables: var=value
+	## `` can be used to assign output of command
 	q500=`grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=c(0.99))[[1]]' | cut -d " " -f 2`
 
+	## Call variable
 	echo $q500
 
 	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{ if($6 >= a){print $1,$2,$3} }' | bedtools merge -i stdin > signif_500kb.bed
