@@ -1,3 +1,4 @@
 Genomics session
 ================
-This is how genomic data look like.
+
+The commands for this session are in the talk's slide deck.
