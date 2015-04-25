@@ -1,7 +1,4 @@
 Slide decks
 ===========
 
-:download:`Theoretical part <_static/genomes_unix.pdf>` (Libor)
-
-
-:download:`Practical part <_static/practicals.pdf>` (Vasek)
+:download:`Starter session <_static/unix.pdf>` (Libor)
