@@ -85,7 +85,7 @@ Genomic tools session
 			facet_wrap(~chrom, nrow=2) + 	geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 		
-	.. code-block:: bash
+.. code-block:: bash
 
 	## Use of variables: var=value
 	## `` can be used to assign output of command as a variable
