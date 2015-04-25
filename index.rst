@@ -39,6 +39,7 @@ Additional reference materials:
    best_practice
    reference
    formats
+   more-exercise
 
 Supplemental information:
 
