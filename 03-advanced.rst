@@ -103,8 +103,10 @@ List of Tasks:
 	
 	awk -F $'\t' 'BEGIN{ OFS=FS }{if(NR==1){ gene=$4; chrom=$1; gene_start=$2; gene_end=$3 }else{ if(gene==$4){if(gene_end<=$3){gene_end=$3}}else{ print gene,chrom,gene_start,gene_end,gene_end-gene_start; gene=$4;chrom=$1;gene_start=$2;gene_end=$3; }}}END{print gene,chrom,gene_start,gene_end,gene_end-gene_start }' | sort -rn -k5,5 | head
 	
-.. code-block:: bash
 
+.. code-block:: bash
+	
+	## Detail structure:
 	awk -F $'\t' 'BEGIN{ OFS=FS }{
 		if(NR==1){ 
 			gene=$4; chrom=$1; gene_start=$2; gene_end=$3 
