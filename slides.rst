@@ -7,4 +7,4 @@ Slide decks
 
 :download:`Advanced UNIX session <_static/genomics.pdf>` (Vasek)
 
-:download:`Advanced UNIX session <_static/graphics.pdf>` (Libor)
+:download:`Graphics session <_static/graphics.pdf>` (Libor)
