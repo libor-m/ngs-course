@@ -1,6 +1,8 @@
 Genomic tools session
 =====================
 
+**Explore bedtools's functionality**
+
 **Explore vcftools's functionality**
 
 .. code-block:: bash
@@ -54,6 +56,7 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## Concatenate windows of all sizes
 	cat windows_*.bed > windows.bed
 
 .. code-block:: bash
