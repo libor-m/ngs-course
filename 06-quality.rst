@@ -9,7 +9,6 @@ need an idea of the underlying biology. Find some variants for further
 screening. Sometimes you're trying to pinpoint particular variant causing a
 disease.
 
-
 Read quality
 ^^^^^^^^^^^^
 Each read that comes out of the (now common) sequencing machines like Illumina
@@ -102,7 +101,93 @@ description:
 Quality by position
 -------------------
 The first of the FastQC plots shows a summary of base qualities
-according to position in the read.
+according to position in the read. But it does not show quality scores 
+for all possible positions, they are grouped into classes of similar importance.
+The further the base in the read, the bigger the group. 
+
+Fire up `R Studio <http://localhost:8787>`_ by clicking the link. Set your
+working directory to the directory with the quality data (in **Console**, 
+don't forget to use tab completion)::
+
+  setwd('~/data/quality')
+
+Now create a file where your plotting code will live, ``File > New file > R Script``,
+then save it as ``plots.R``. First we will read in the data.
+
+.. code-block:: r
+
+  d <- read.delim("quals.tsv", col.names=c("seq", "pos", "end_pos", "base", "qual"), header=F)
+
+We did not include column names in the data file, but it is easy to provide them 
+during the load via ``col.names`` argument. Let's look at base quality values for first 
+10 sequences:
+
+.. code-block:: r
+
+    library(ggplot)
+    library(dplyr)
+    sel <- levels(d$seq)[1:10]
+    ggplot(d %>% filter(seq %in% sel), aes(pos, qual, colour=seq, group=seq)) + geom_line()
+
+The qualities on sequence level don't seem to be very informative. They're rather noisy.
+A good way to fight noise is aggregation. We will aggregate the quality values using boxplots
+and for different position regions. First set up the intervals::
+
+.. code-block:: r
+
+    # fastqc uses bins with varying size: 
+    # 1-9 by one, up to 75 by 5, up to 300 by 50, rest by 100
+    # the real bin sizes are a bit weird, use some nice approximation
+
+    breaks <- c(0:9, seq(14, 50, by=5), seq(59, 100, by=10), seq(100, 300, by=50), seq(400, 1000, by=100))
+
+    # create nice labels for the intervals
+    labs <- data.frame(l=breaks[1:length(breaks)-1], r=breaks[2:length(breaks)]) %>%
+      mutate(diff=r-l, lab=ifelse(diff > 1, paste0(l+1, "-", r), as.character(r)))
+
+Check the ``breaks`` and ``labs`` variables. In the FastQC plot there are vertical quality zones,
+green, yellow and red. To replicate this, we need the values of the limits::
+
+.. code-block:: r
+
+    # data for quality zones
+    quals <- data.frame(ymin=c(0, 20, 28), ymax=c(20, 28, 40), colour=c("red", "orange", "green"))
+
+    # check if the quality zones look reasonably
+    ggplot(quals, aes(ymin=ymin, ymax=ymax, fill=colour)) + 
+      geom_rect(alpha=0.3, xmin=-Inf, xmax=Inf) + 
+      scale_fill_identity() + 
+      scale_x_discrete()
+
+Now we can use the breaks to create position bins::
+
+.. code-block:: r
+
+    dm <- d %>% mutate(bin=cut(pos, breaks, labels=labs$lab))
+
+    # plot the qualities in the bins
+    ggplot(dm, aes(bin, qual)) +
+      geom_boxplot(outlier.colour=NA) + 
+      ylim(c(0, 45))
+
+Zones and boxplots look ok, we can easily combine those two into one plot.
+That's pretty easy with ggplot. We use ``theme`` to rotate the x labels, so 
+they're all legible. In real world application the qualities are binned first,
+and then the statistics are calculated on the fly, so it is not necessary to 
+load all the data at once.
+
+.. code-block:: r
+
+    ggplot(dm) + 
+      geom_rect(xmin=-Inf, xmax=Inf, data=quals, aes(ymin=ymin, ymax=ymax, fill=colour), alpha=0.3) + 
+      scale_fill_identity() +
+      geom_boxplot(aes(bin, qual), outlier.colour=NA, fill="yellow") +
+      geom_smooth(aes(bin, qual, group=1), colour="blue") + 
+      theme(axis.text.x=element_text(angle = 40, hjust = 1))
+
+.. put image here
+
+Now the seq
 
 Variant quality
 ^^^^^^^^^^^^^^^
