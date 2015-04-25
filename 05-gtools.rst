@@ -1,6 +1,8 @@
 Genomic tools session
 =====================
 
+**Explore vcftools's functionality**
+
 .. code-block:: bash
 
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout | less -S
@@ -55,10 +57,38 @@ Genomic tools session
 
 	bedmap --echo --mean –-count windows_sorted.bed popdata_mda_euro_fst_sorted.bed | grep -v NA | tr "|:" "\t" > windows2snps_fst.bed
 
-.. code-block:: bash
+.. note:: During the afternoon session we are going to use these commands:
+
+	.. code-block:: bash
+
+		library(ggplot2)
+
+		setwd("~/Data/projects/unix_workshop_data")
+
+		fst <- read.table("windows2snps_fst.bed", header=F,sep="\t")
+
+		names(fst) <- c("chrom", "start", "end", "win_id", "win_size", "fst", "cnt_snps")
+
+		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
+
+		qplot(fst, data=fst, geom="density",fill=I("blue")) + facet_wrap(~win_size)
+	
+	.. code-block:: bash	
+	
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 	geom_line() + 
+			facet_wrap(~chrom, nrow=2) + 
+			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
+
+		q <- quantile(subset(fst,win_size=="500kb",select="fst")[,1],prob=0.99)[[1]]
+
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 	geom_line() + 
+			facet_wrap(~chrom, nrow=2) + 	geom_hline(yintercept=q,colout="black") +
+			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
+		
+	.. code-block:: bash
 
 	## Use of variables: var=value
-	## `` can be used to assign output of command
+	## `` can be used to assign output of command as a variable
 	q500=`grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=c(0.99))[[1]]' | cut -d " " -f 2`
 
 	## Call variable
