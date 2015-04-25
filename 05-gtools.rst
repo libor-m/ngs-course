@@ -43,10 +43,13 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## Create windows of 1 Mb with 100 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 1000000 -s 100000 -i winnum | awk '{ print $0":1000kb" }' > windows_1000kb.bed
-	
+
+	## Create windows of 500 kb with 500 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{ print $0":500kb" }' > windows_500kb.bed
-		
+
+	## Create windows of 100 kb with 10 kb step		
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{ print $0":100kb" }' > windows_100kb.bed
 
 .. code-block:: bash
