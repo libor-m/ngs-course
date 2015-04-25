@@ -139,7 +139,7 @@ and for different position regions. First set up the intervals::
     # 1-9 by one, up to 75 by 5, up to 300 by 50, rest by 100
     # the real bin sizes are a bit weird, use some nice approximation
 
-    breaks <- c(0:9, seq(14, 50, by=5), seq(59, 100, by=10), seq(100, 300, by=50), seq(400, 1000, by=100))
+    breaks <- c(0:9, seq(14, 50, by=5), seq(59, 100, by=10), seq(149, 300, by=50), seq(400, 1000, by=100))
 
     # create nice labels for the intervals
     labs <- data.frame(l=breaks[1:length(breaks)-1], r=breaks[2:length(breaks)]) %>%
@@ -187,7 +187,44 @@ load all the data at once.
 
 .. put image here
 
-Now the seq
+Now we can do the base frequency plot. We already have the position bins,
+so just throw ggplot at it::
+
+  ggplot(dm, aes(bin, fill=base)) + geom_bar()
+
+We're almost there, just need to normalize the values in each column so they 
+sum up to 1. Ggplot can do it for us::
+
+  ggplot(dm, aes(bin, fill=base)) + geom_bar(position="fill")
+
+It's possible to rearrange the  legend by reordering levels of the factor.
+As you can see, the visual fine-tuning added the most of the code:
+
+.. code-block:: r
+
+    levs <- rev(c("A", "C", "G", "T", "N"))
+    dm %>% 
+      mutate(baseo=factor(base, levels=rev(levs))) %>%
+      ggplot(aes(bin, fill=baseo, order=factor(baseo, levs))) + geom_bar(position="fill")
+
+If you still want to get the line chart, you need to calculate the relative frequencies 
+yourself:
+
+.. code-block:: r
+
+    t <- dm %>% 
+          select(base, bin) %>% 
+          table %>% 
+          data.frame %>%
+          group_by(bin) %>% 
+          mutate(Freqn=Freq / sum(Freq))
+
+    t %>%
+      mutate(baseo=factor(base, levels=levs)) %>% 
+      ggplot(aes(bin, Freqn, colour=baseo, group=baseo)) + geom_line(size=1.3)
+
+Now you can think for a while about what is better about the bar chart, and what
+is better about the line chart.
 
 Variant quality
 ^^^^^^^^^^^^^^^
