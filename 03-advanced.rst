@@ -1,9 +1,6 @@
 Advanced UNIX session
 =====================
 
-Advanced UNIX (Saturday afternoon)
-==================================
-
 List of Tasks:
 --------------
 
