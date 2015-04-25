@@ -17,6 +17,7 @@ Visual design
 ^^^^^^^^^^^^^
 - one secret link you got by email
 - http://www.smashingmagazine.com/2014/03/28/design-principles-visual-perception-and-the-principles-of-gestalt/
-- http://www.vanseodesign.com/web-design/design-unity/
+- http://www.vanseodesign.com/web-design/gestalt-principles-of-perception/
+- http://colorbrewer2.org
 
 .. http://gastonsanchez.com/blog/archive/
