@@ -57,7 +57,7 @@ Genomic tools session
 
 	bedmap --echo --mean –-count windows_sorted.bed popdata_mda_euro_fst_sorted.bed | grep -v NA | tr "|:" "\t" > windows2snps_fst.bed
 
-.. note:: During the afternoon session we are going to use these commands:
+.. note:: R ggplot2 commands to plot population differentiation
 
 	.. code-block:: bash
 
