@@ -44,6 +44,10 @@ Genomic tools session
 .. code-block:: bash
 
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 1000000 -s 100000 -i winnum | awk '{ print $0":1000kb" }' > windows_1000kb.bed
+	
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{ print $0":500kb" }' > windows_500kb.bed
+		
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{ print $0":100kb" }' > windows_100kb.bed
 
 .. code-block:: bash
 
