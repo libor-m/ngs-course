@@ -35,6 +35,7 @@ Additional reference materials:
 .. toctree::
    :maxdepth: 1
 
+   links
    best_practice
    reference
    formats
