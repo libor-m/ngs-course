@@ -87,7 +87,7 @@ List of Tasks:
 
 .. code-block:: bash
 	
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | grep exon | cut -f 9 | cut -d " " -f 3,5,9 | tr -d '";' | sort | uniq -c | sed 's/^ *//g' | tr " " "\t" | sort -rn -k1,1 | head
+	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | grep $'\texon\t' | cut -f 9 | cut -d " " -f 3,5,9 | tr -d '";' | sort | uniq -c | sed 's/^ *//g' | tr " " "\t" | sort -rn -k1,1 | head
 	
 **11. What is the total size (in Mb) of coding sequences**
 
@@ -99,7 +99,7 @@ List of Tasks:
 
 .. code-block:: bash
 	
-	grep protein_coding Mus_musculus.NCBIM37.67.gtf | grep exon | cut -f 1,4,5,9 | cut -d " " -f 1,3 | tr -d '";' | sort -k4,4 -k2,2n > exons.bed < exons.bed
+	grep protein_coding Mus_musculus.NCBIM37.67.gtf | grep $'\texon\t' | cut -f 1,4,5,9 | cut -d " " -f 1,3 | tr -d '";' | sort -k4,4 -k2,2n > exons.bed < exons.bed
 	
 	awk -F $'\t' 'BEGIN{ OFS=FS }{if(NR==1){ gene=$4; chrom=$1; gene_start=$2; gene_end=$3 }else{ if(gene==$4){if(gene_end<=$3){gene_end=$3}}else{ print gene,chrom,gene_start,gene_end,gene_end-gene_start; gene=$4;chrom=$1;gene_start=$2;gene_end=$3; }}}END{print gene,chrom,gene_start,gene_end,gene_end-gene_start }' | sort -rn -k5,5 | head
 	
