@@ -98,27 +98,26 @@ List of Tasks:
 **12. Get the longest gene**
 
 .. code-block:: bash
-	
+	
 	grep protein_coding Mus_musculus.NCBIM37.67.gtf | grep $'\texon\t' | cut -f 1,4,5,9 | cut -d " " -f 1,3 | tr -d '";' | sort -k4,4 -k2,2n > exons.bed < exons.bed
-	
-	< exons.bed awk -F $'\t' 'BEGIN{ OFS=FS }{if(NR==1){ gene=$4; chrom=$1; gene_start=$2; gene_end=$3 }else{ if(gene==$4){if(gene_end<=$3){gene_end=$3}}else{ print gene,chrom,gene_start,gene_end,gene_end-gene_start; gene=$4;chrom=$1;gene_start=$2;gene_end=$3; }}}END{print gene,chrom,gene_start,gene_end,gene_end-gene_start }' | sort -rn -k5,5 | head
-	
-
-.. code-block:: bash
-	
-	## Detail structure:
-	awk -F $'\t' 'BEGIN{ OFS=FS }{
-		if(NR==1){ 
-			gene=$4; chrom=$1; gene_start=$2; gene_end=$3 
-		}else{ 
-			if(gene==$4){
-				if(gene_end<=$3){
-					gene_end=$3}
-				}else{ 
-					print gene,chrom,gene_start,gene_end,gene_end-gene_start;
-					gene=$4;chrom=$1;gene_start=$2;gene_end=$3; 
-				}
-			}
-		}END{
-			print gene,chrom,gene_start,gene_end,gene_end-gene_start 
+	
+	< exons.bed awk -F $'\t' 'BEGIN{ OFS=FS }{if(NR==1){ gene=$4; chrom=$1; gene_start=$2; gene_end=$3 }else{ if(gene==$4){if(gene_end<=$3){gene_end=$3}}else{ print gene,chrom,gene_start,gene_end,gene_end-gene_start; gene=$4;chrom=$1;gene_start=$2;gene_end=$3; }}}END{print gene,chrom,gene_start,gene_end,gene_end-gene_start }' | sort -rn -k5,5 | head
+
+.. code-block:: bash
+	
+	## Detail structure:
+	awk -F $'\t' 'BEGIN{ OFS=FS }{
+		if(NR==1){
+			gene=$4; chrom=$1; gene_start=$2; gene_end=$3
+		}else{
+			if(gene==$4){
+				if(gene_end<=$3){
+					gene_end=$3}
+				}else{ 
+					print gene,chrom,gene_start,gene_end,gene_end-gene_start;
+					gene=$4;chrom=$1;gene_start=$2;gene_end=$3; 
+				}
+			}
+		}END{
+			print gene,chrom,gene_start,gene_end,gene_end-gene_start 
 		}'
