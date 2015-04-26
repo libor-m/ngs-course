@@ -131,7 +131,7 @@ during the load via ``col.names`` argument. Let's look at base quality values fo
 
 The qualities on sequence level don't seem to be very informative. They're rather noisy.
 A good way to fight noise is aggregation. We will aggregate the quality values using boxplots
-and for different position regions. First set up the intervals::
+and for different position regions. First set up the intervals:
 
 .. code-block:: r
 
@@ -146,7 +146,7 @@ and for different position regions. First set up the intervals::
       mutate(diff=r-l, lab=ifelse(diff > 1, paste0(l+1, "-", r), as.character(r)))
 
 Check the ``breaks`` and ``labs`` variables. In the FastQC plot there are vertical quality zones,
-green, yellow and red. To replicate this, we need the values of the limits::
+green, yellow and red. To replicate this, we need the values of the limits:
 
 .. code-block:: r
 
@@ -159,7 +159,7 @@ green, yellow and red. To replicate this, we need the values of the limits::
       scale_fill_identity() + 
       scale_x_discrete()
 
-Now we can use the breaks to create position bins::
+Now we can use the breaks to create position bins:
 
 .. code-block:: r
 
@@ -234,14 +234,16 @@ of ``freebayes``  variant caller are located in::
 
   /data/slavici/02-variants
 
-Your task now is to look at the files, then prepare data for loading to R. The ``INFO``
-column is full of various values. You're interested only in ``DP`` and ``TYPE``.
+Your task now is to look at the files, then prepare the data for loading into
+R.  In R you will use plotting to explore some relations in the data. The
+``INFO`` column is full of various values. You're interested only in ``DP``
+and ``TYPE``.
 
 - create a new project directory in your data
 - concatenate the two files, so you get data for chr1 and chrZ in one file
 - remember the comments and headers (remove all with grep, then stick the header in?)
 - extact the first 6 columns (cut)
-- extract each ``DP`` and ``TYPE`` (egrep -o)
+- extract each ``DP`` and ``TYPE`` (egrep -o 'DP=[^;]*' | sed ..)
 - merge the data before loading to R (paste)
 - use ggplot to explore relation between read depth and quality (scatter plot)
 - check if variant type affects the relation between read depth and quality (facets)
