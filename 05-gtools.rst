@@ -52,6 +52,16 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## Prepare data files
+	
+	cd
+	mkdir data/diff
+
+	cp /data/mus_mda/00-popdata/*.txt data/diff/.
+	mv /data/mus_mda/00-popdata/popdata_mda.vcf.gz data/diff/.
+
+	cd data/diff/
+	
 	## vcf file statistics - i.e. number of samples, number of SNPs
 
 	vcftools –-gzvcf popdata_mda.vcf.gz
