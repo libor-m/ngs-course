@@ -76,46 +76,48 @@ Genomic tools session
 	## Open compressed (.gz) vcf file and save it as a new file
 	
 	vcftools --gzvcf popdata_mda.vcf.gz --recode --out new_vcf
-
-	## Select subset of samples
 	
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | less -S
+	## Select subset of samples
+
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | less -S
 
 	## Select subset of samples and SNPs based on physical position in genome
-	
-	vcftools --gzvcf popdata_mda.vcf.gz --chr 11 --from-bp 22000000 --to-bp 23000000 --keep euro_samples.txt --recode --stdout | less -S
+
+	vcftools --gzvcf popdata_mda.vcf.gz --chr 11 --from-bp 22000000 --to-bp 23000000 --keep euro_samps.txt --recode --stdout | less -S
 
 	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout  | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout | less -S
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
 
 	## Calculate Fst
-
-	vcftools –-vcf popdata_mda_euro.vcf –-weir-fst-pop musculus_samps.txt –-weir-fst-pop domesticus_samps.txt --stdout | less -S
-
+	
+	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt --weir-fst-pop domesticus_samps.txt --stdout | less -S
+	
 **Exercise: Population differentiation**
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
 
 .. code-block:: bash
 
-	vcftools –-vcf popdata_mda_euro.vcf –-weir-fst-pop musculus_samps.txt –-weir-fst-popdomesticus_samps.txt --stdout | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,$2-1,$2,$1":"$2,$3}' > popdata_mda_euro_fst.bed
+	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt  --weir-fst-pop domesticus_samps.txt --stdout | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-$1,$2,$1":"$2,$3}' > popdata_mda_euro_fst.bed
 
 .. code-block:: bash
+
+	cp /data/mus_mda/02-windows/genome.fa.fai .
 
 	## Create windows of 1 Mb with 100 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 1000000 -s 100000 -i winnum | awk '{ print $0":1000kb" }' > windows_1000kb.bed
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 1000000 -s 100000 -i winnum | awk '{print $0":1000kb"}' > windows_1000kb.bed
 
 	## Create windows of 500 kb with 500 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{ print $0":500kb" }' > windows_500kb.bed
-
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{print $0":500kb"}' > windows_500kb.bed
+	
 	## Create windows of 100 kb with 10 kb step		
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{ print $0":100kb" }' > windows_100kb.bed
-
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{print $0":100kb"}' > windows_100kb.bed
+	
 .. code-block:: bash
 
 	## Concatenate windows of all sizes
@@ -127,7 +129,7 @@ Genomic tools session
 	sort-bed windows.bed > windows_sorted.bed
 	sort-bed popdata_mda_euro_fst.bed > popdata_mda_euro_fst_sorted.bed
 
-	bedmap --echo --mean –-count windows_sorted.bed popdata_mda_euro_fst_sorted.bed | grep -v NA | tr "|:" "\t" > windows2snps_fst.bed
+	bedmap --echo --mean --count windows_sorted.bed popdata_mda_euro_fst_sorted.bed | grep -v NA | tr "|:" "\t" > windows2snps_fst.bed
 
 .. note:: R ggplot2 commands to plot population differentiation
 
@@ -166,11 +168,11 @@ Genomic tools session
 
 	## Use of variables: var=value
 	## `` can be used to assign output of command as a variable
-	q500=`grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=c(0.99))[[1]]' | cut -d " " -f 2`
-
+	q500=`grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=0.99)[[1]]' | cut -d " " -f 2`
+	
 	## Call variable
 	echo $q500
-
+	
 	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{ if($6 >= a){print $1,$2,$3} }' | bedtools merge -i stdin > signif_500kb.bed
 
 .. code-block:: bash
