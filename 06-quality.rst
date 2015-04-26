@@ -228,4 +228,34 @@ is better about the line chart.
 
 Variant quality
 ^^^^^^^^^^^^^^^
+And now for something completely different. You're already familiar with the data
+and some reformatting and plotting tools. Two VCF files that are the actual output 
+of ``freebayes``  variant caller are located in::
 
+  /data/slavici/02-variants
+
+Your task now is to look at the files, then prepare data for loading to R. The ``INFO``
+column is full of various values. You're interested only in ``DP`` and ``TYPE``.
+
+- create a new project directory in your data
+- concatenate the two files, so you get data for chr1 and chrZ in one file
+- remember the comments and headers (remove all with grep, then stick the header in?)
+- extact the first 6 columns (cut)
+- extract each ``DP`` and ``TYPE`` (egrep -o)
+- merge the data before loading to R (paste)
+- use ggplot to explore relation between read depth and quality (scatter plot)
+- check if variant type affects the relation between read depth and quality (facets)
+
+In principle you only need to save the data once - before loading to R.
+But I would suggest splitting the pipeline into more pieces, saving at least some
+intermediate results. 
+
+Personally i would filter out the comments and headers, and concatenate the files, 
+saving this as the first intermediate. Then I would use ``paste`` to merge the data, 
+using ``<( )`` to get the extracted values::
+
+  paste <( cut .. ) <( egrep -o .. ) <( egrep -o )
+
+I would set the column names while loading the data into R. 
+
+.. pull-quote:: Good luck! (We will help you;)
