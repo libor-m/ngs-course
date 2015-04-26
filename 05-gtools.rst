@@ -3,6 +3,46 @@ Genomic tools session
 
 **Explore bedtools's functionality**
 
+.. code-block:: bash
+
+	## Get parts of features that overlap
+	
+	bedops --intersect genes.bed features.bed
+	bedtools intersect –a genes.bed –b features.bed
+	
+	## Merge entire features
+	
+	bedops --merge genes.bed features.bed
+	
+	cat *.bed | sortBed > features2.bed
+	bedtools merge –i features2.bed
+	
+	## Get complement features
+	
+	bedops --complement genes.bed features.bed
+	
+	cat *.bed | sortBed > features2.bed
+	bedtools complement –i features2.bed –g my.genome
+	
+	## Report A which overlaps B
+	
+	bedops –-element-of 1 genes.bed features.bed
+	bedtools intersect –u –a genes.bed –b features.bed
+	
+	## Report B which overlpas A
+	
+	bedops –-element-of 1 features.bed genes.bed
+	bedtools intersect –u –a features.bed –b genes.bed
+	
+	## Report A,B which overlap each other
+	
+	bedtools intersect –wa –wb –a genes.bed –b features.bed
+	
+	## What is the base coverage of features within genes?
+	
+	bedmap --echo --count --bases-uniq genes.bed features.bed
+	coverageBed –b genes.bed –a features.bed
+	
 **Explore vcftools's functionality**
 
 .. code-block:: bash
