@@ -169,15 +169,15 @@ Genomic tools session
 	## Use of variables: var=value
 	## $() can be used to assign output of command as a variable
 	## do not use ` (backticks) please, they're depracated and confusing..:)
-	q500=$( grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=0.99)[[1]]' | cut -d " " -f 2 )
+	q500=$( grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' | cut -d " " -f 2 )
 	
 	## Call variable
 	echo $q500
 	
-	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{ if($6 >= a){print $1,$2,$3} }' | bedtools merge -i stdin > signif_500kb.bed
-
+	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' | bedtools merge -i stdin > signif_500kb.bed
+	
 .. code-block:: bash
-
-	bedtools intersect –a signif.bed –b Mus_musculus.NCBIM37.67.gtf -wa -wb | grep protein_coding | cut -f 1,2,3,4,13 | cut -d ' ' -f 1,3,9 | tr -d '"";' | sort | uniq > fst2genes.tab
-
-
+	
+	cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf .
+	
+bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb | grep protein_coding | cut -f 1,2,3,4,13 | cut -d ' ' -f 1,3,9 | tr -d '";' | sort -u > fst2genes.tab
