@@ -27,3 +27,9 @@ Genomic tools
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 - http://vcftools.sourceforge.net
+
+Genomic data formats
+^^^^^^^^^^^^^^^^^^^^
+- http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-40
+- http://www.ensembl.org/info/website/upload/gff.html
+- https://genome.ucsc.edu/FAQ/FAQformat.html#format1
