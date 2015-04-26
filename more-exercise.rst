@@ -93,12 +93,16 @@ Let's link the project directory to your own data directory::
 
   ln -s /data/banana/ ~/data
 
-Now you can go to R and load the data::
+Now you can go to R and load the data:
+
+.. code-block:: r
 
   setwd('~/data/banana')
   d <- read.csv("webapp/data/rotated.csv")
 
-Plot the data to look what we've got::
+Plot the data to look what we've got:
+
+.. code-block:: r
 
   library(ggplot2)
   ggplot(d, aes(x, y)) + geom_point() + coord_equal()
@@ -108,7 +112,9 @@ Correct the distortion
 ----------------------
 Maybe you can already recognize what's in your data. But it appears to be a
 bit .. rotated. Here is a code for 3d rotation of points, copy, paste and run it
-in your R session::
+in your R session:
+
+.. code-block:: r
 
     # create a 3d rotation matrix
     # https://www.math.duke.edu/education/ccp/materials/linalg/rotation/rotm3.html
@@ -126,7 +132,9 @@ in your R session::
     }
 
 Now try to rotate the object a bit, so we can see it better. Try to find good values 
-for the rotation yourself (numbers are in radians, 0..2*PI makes sense)::
+for the rotation yourself (numbers are in radians, 0..2*PI makes sense):
+
+.. code-block:: r
 
     dr <- rot3d_df(d, .9, .1, 2)
     ggplot(dr, aes(x, y)) + geom_point() + coord_equal()
@@ -135,6 +143,8 @@ Enter PCA. It actually finds the best rotation for you. Even in a way that the
 first axis has the most variability (longest side of the object), the second axis
 has the maximum of the remaining variability etc.
 
+.. code-block:: r
+
   pc <- prcomp(as.matrix(dr))
   ggplot(data.frame(pc$x), aes(PC1, PC2)) + geom_point() + coord_equal()
   ggplot(data.frame(pc$x), aes(PC1, PC3)) + geom_point() + coord_equal()
@@ -142,9 +152,12 @@ has the maximum of the remaining variability etc.
 
 MDS
 ---
-Metric MDS (multidimensional scaling) with euclidean distance equals to PCA. We will 
+Metric MDS (multidimensional scaling) with `euclidean` distance equals to PCA. We will 
 use the non-metric variant here, which tries to keep only the order of pairwise 
-distances, not the distances themselves::
+distances, not the distances themselves. You prefer MDS when you want to use a different
+distance than `euclidean` - we're using `manhattan` (`taxicab`) distance here:
+
+.. code-block:: r
 
     library(MASS)
     dmx <- dist(dr, "manhattan")
