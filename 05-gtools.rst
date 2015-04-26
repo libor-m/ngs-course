@@ -58,7 +58,7 @@ Genomic tools session
 	mkdir data/diff
 
 	cp /data/mus_mda/00-popdata/*.txt data/diff/.
-	mv /data/mus_mda/00-popdata/popdata_mda.vcf.gz data/diff/.
+	cp /data/mus_mda/00-popdata/popdata_mda.vcf.gz data/diff/.
 
 	cd data/diff/
 	
