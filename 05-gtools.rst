@@ -118,11 +118,13 @@ Genomic tools session
 
 .. note:: R ggplot2 commands to plot population differentiation
 
+	Get to the Rstudio by typing `localhost:8787` in your web browser.
+
 	.. code-block:: bash
 
 		library(ggplot2)
 
-		setwd("~/Data/projects/unix_workshop_data")
+		setwd("~/data/diff")
 
 		fst <- read.table("windows2snps_fst.bed", header=F,sep="\t")
 
@@ -134,14 +136,17 @@ Genomic tools session
 	
 	.. code-block:: bash	
 	
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 	geom_line() + 
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 
+			geom_line() + 
 			facet_wrap(~chrom, nrow=2) + 
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 		q <- quantile(subset(fst,win_size=="500kb",select="fst")[,1],prob=0.99)[[1]]
 
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 	geom_line() + 
-			facet_wrap(~chrom, nrow=2) + 	geom_hline(yintercept=q,colout="black") +
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 
+			geom_line() + 
+			facet_wrap(~chrom, nrow=2) + 
+			geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 		
 .. code-block:: bash
