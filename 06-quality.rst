@@ -45,7 +45,7 @@ FastQC is a nice tool that you run with your data and get nice graphical
 reports on the quality. It is not completely installed in your images,
 so you can try to run a tool that was just unpacked (this is how this 
 tool is distributed, there is no install script - a daily bread of a 
-bioinformatician;). You have to use the full path to the tool to run it::
+bioinformatician;). You have to use the full path to the tool to run it:
 
 .. code-block:: bash
 
