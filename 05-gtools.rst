@@ -3,6 +3,9 @@ Genomic tools session
 
 **Explore bedtools & bedops functionality**
 
+- http://bedtools.readthedocs.org/en/
+- http://bedops.readthedocs.org/en/
+
 .. code-block:: bash
 	
 	## Prepare files (features.bed, genes.bed, my.genome)
@@ -52,6 +55,8 @@ Genomic tools session
 	coverageBed -b genes.bed -a features.bed
 	
 **Explore vcftools functionality**
+
+- http://vcftools.sourceforge.net
 
 .. code-block:: bash
 

@@ -21,3 +21,9 @@ Visual design
 - http://colorbrewer2.org
 
 .. http://gastonsanchez.com/blog/archive/
+
+Genomic tools
+^^^^^^^^^^^^^
+- http://bedtools.readthedocs.org/en/
+- http://bedops.readthedocs.org/en/
+- http://vcftools.sourceforge.net
