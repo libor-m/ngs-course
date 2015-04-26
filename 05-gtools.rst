@@ -99,7 +99,7 @@ Genomic tools session
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
 
 .. code-block:: bash
 
