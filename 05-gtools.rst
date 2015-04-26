@@ -1,7 +1,7 @@
 Genomic tools session
 =====================
 
-**Explore bedtools's functionality**
+**Explore bedtools functionality**
 
 .. code-block:: bash
 
@@ -43,7 +43,7 @@ Genomic tools session
 	bedmap --echo --count --bases-uniq genes.bed features.bed
 	coverageBed –b genes.bed –a features.bed
 	
-**Explore vcftools's functionality**
+**Explore vcftools functionality**
 
 .. code-block:: bash
 
