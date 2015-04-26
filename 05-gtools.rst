@@ -167,8 +167,9 @@ Genomic tools session
 .. code-block:: bash
 
 	## Use of variables: var=value
-	## `` can be used to assign output of command as a variable
-	q500=`grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=0.99)[[1]]' | cut -d " " -f 2`
+	## $() can be used to assign output of command as a variable
+	## do not use ` (backticks) please, they're depracated and confusing..:)
+	q500=$( grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),p=0.99)[[1]]' | cut -d " " -f 2 )
 	
 	## Call variable
 	echo $q500
