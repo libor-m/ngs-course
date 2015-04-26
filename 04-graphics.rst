@@ -126,6 +126,7 @@ Now you can check how the ``round_any`` processed the ``POS`` value. Click the
 ``dc`` in the **Environment** tab and look for ``POS_block``. Looks good, we can go on.
 The next transformation is to count variants (table rows) in each block (per chromosome):
 You can use ``View`` in R Studio as ``less`` in bash.
+
 .. code-block:: r
 
    dc %>%
