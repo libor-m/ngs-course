@@ -1,10 +1,15 @@
 Genomic tools session
 =====================
 
-**Explore bedtools functionality**
+**Explore bedtools & bedops functionality**
 
 .. code-block:: bash
-
+	
+	## Prepare files (features.bed, genes.bed, my.genome)
+	
+	cd
+	cp /data/bed/* data/.
+	
 	## Get parts of features that overlap
 	
 	bedops --intersect genes.bed features.bed
@@ -47,29 +52,33 @@ Genomic tools session
 
 .. code-block:: bash
 
+	## vcf file statistics - i.e. number of samples, number of SNPs
+
+	vcftools –-gzvcf popdata_mda.vcf.gz
+
+	## Open compressed (.gz) vcf file and view it in less
+	
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout | less -S
-
-.. code-block:: bash
-
+	
+	## Open compressed (.gz) vcf file and save it as a new file
+	
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-out new_vcf
 
-.. code-block:: bash
-
+	## Select subset of samples
+	
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | less -S
 
-.. code-block:: bash
-
+	## Select subset of samples and SNPs based on physical position in genome
+	
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt –-chr 11 –-from-bp 22000000 –-to-bp 23000000 | less -S
 
-.. code-block:: bash
+	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
 
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | vcftools –-vcf - --recode –-stdout –-max-missing 1 –maf 0.2 | less -S
 
-.. code-block:: bash
-
 	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | vcftools –-vcf - --recode –-stdout –-max-missing 1 –maf 0.2 > popdata_mda_euro.vcf
 
-.. code-block:: bash
+	## Calculate Fst
 
 	vcftools –-vcf popdata_mda_euro.vcf --stdout –-weir-fst-pop musculus_samps.txt –-weir-fst-pop domesticus_samps.txt | less -S
 
