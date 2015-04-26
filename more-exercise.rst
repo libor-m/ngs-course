@@ -164,9 +164,12 @@ distance than `euclidean` - we're using `manhattan` (`taxicab`) distance here:
     mds <- isoMDS(dmx)
     ggplot(data.frame(mds$points), aes(X1, X2)) + geom_point() + coord_equal()
 
+Shiny
+-----
+And now there is something you definitely wanted, while you were trying to find 
+the good values for rotation of your object::
 
+  setwd('/data/banana/webapp/')
 
-
-
-
-
+Now ``File > Open``, and open ``server.R``. There should be a green ``Run App`` 
+button at the top right of the editor window. Click that button!
