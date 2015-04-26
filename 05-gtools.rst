@@ -8,45 +8,48 @@ Genomic tools session
 	## Prepare files (features.bed, genes.bed, my.genome)
 	
 	cd
-	cp /data/bed/* data/.
+	
+	mkdir data/bed
+	cp /data/bed/* data/bed/.
+	cd data/bed/
 	
 	## Get parts of features that overlap
 	
 	bedops --intersect genes.bed features.bed
-	bedtools intersect –a genes.bed –b features.bed
+	bedtools intersect -a genes.bed -b features.bed
 	
 	## Merge entire features
 	
 	bedops --merge genes.bed features.bed
 	
 	cat *.bed | sortBed > features2.bed
-	bedtools merge –i features2.bed
+	bedtools merge -i features2.bed
 	
 	## Get complement features
 	
 	bedops --complement genes.bed features.bed
 	
 	cat *.bed | sortBed > features2.bed
-	bedtools complement –i features2.bed –g my.genome
+	bedtools complement -i features2.bed -g my.genome
 	
 	## Report A which overlaps B
 	
-	bedops –-element-of 1 genes.bed features.bed
-	bedtools intersect –u –a genes.bed –b features.bed
+	bedops --element-of 1 genes.bed features.bed
+	bedtools intersect -u -a genes.bed -b features.bed
 	
 	## Report B which overlpas A
 	
-	bedops –-element-of 1 features.bed genes.bed
-	bedtools intersect –u –a features.bed –b genes.bed
+	bedops --element-of 1 features.bed genes.bed
+	bedtools intersect -u -a features.bed -b genes.bed
 	
 	## Report A,B which overlap each other
 	
-	bedtools intersect –wa –wb –a genes.bed –b features.bed
+	bedtools intersect -wa -wb -a genes.bed -b features.bed
 	
 	## What is the base coverage of features within genes?
 	
 	bedmap --echo --count --bases-uniq genes.bed features.bed
-	coverageBed –b genes.bed –a features.bed
+	coverageBed -b genes.bed -a features.bed
 	
 **Explore vcftools functionality**
 
@@ -64,43 +67,43 @@ Genomic tools session
 	
 	## vcf file statistics - i.e. number of samples, number of SNPs
 
-	vcftools –-gzvcf popdata_mda.vcf.gz
+	vcftools --gzvcf popdata_mda.vcf.gz
 
 	## Open compressed (.gz) vcf file and view it in less
 	
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
 	
 	## Open compressed (.gz) vcf file and save it as a new file
 	
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-out new_vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --recode --out new_vcf
 
 	## Select subset of samples
 	
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | less -S
 
 	## Select subset of samples and SNPs based on physical position in genome
 	
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt –-chr 11 –-from-bp 22000000 –-to-bp 23000000 | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --chr 11 --from-bp 22000000 --to-bp 23000000 --keep euro_samples.txt --recode --stdout | less -S
 
 	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
 
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | vcftools –-vcf - --recode –-stdout –-max-missing 1 –maf 0.2 | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout  | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout | less -S
 
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | vcftools –-vcf - --recode –-stdout –-max-missing 1 –maf 0.2 > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
 
 	## Calculate Fst
 
-	vcftools –-vcf popdata_mda_euro.vcf --stdout –-weir-fst-pop musculus_samps.txt –-weir-fst-pop domesticus_samps.txt | less -S
+	vcftools –-vcf popdata_mda_euro.vcf –-weir-fst-pop musculus_samps.txt –-weir-fst-pop domesticus_samps.txt --stdout | less -S
 
 **Exercise: Population differentiation**
 
 .. code-block:: bash
 
-	vcftools –-gzvcf popdata_mda.vcf.gz –-recode –-stdout –-keep euro_samples.txt | vcftools –-vcf - --recode –-stdout –-max-missing 1 –maf 0.2 > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samples.txt --recode --stdout | vcftools --vcf -  --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
 
 .. code-block:: bash
 
-	vcftools –-vcf popdata_mda_euro.vcf --stdout –-weir-fst-pop musculus_samps.txt –-weir-fst-popdomesticus_samps.txt | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,$2-1,$2,$1":"$2,$3}' > popdata_mda_euro_fst.bed
+	vcftools –-vcf popdata_mda_euro.vcf –-weir-fst-pop musculus_samps.txt –-weir-fst-popdomesticus_samps.txt --stdout | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{ print $1,$2-1,$2,$1":"$2,$3}' > popdata_mda_euro_fst.bed
 
 .. code-block:: bash
 
