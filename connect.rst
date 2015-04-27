@@ -58,7 +58,7 @@ a home directory of ``user`` on a running virtual machine is::
   scp -P 2222 myfile user@localhost:~
 
 Connect to RStudio
------------------
+------------------
 This is the easiest one, just click this link: `Open RStudio <http://localhost:8787>`_.
 Login with the same credentials (user, user).
 
