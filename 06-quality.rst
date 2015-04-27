@@ -240,20 +240,20 @@ R.  In R you will use plotting to explore some relations in the data. The
 and ``TYPE``.
 
 - create a new project directory in your data
-- concatenate the two files, so you get data for chr1 and chrZ in one file
-- remember the comments and headers (remove all with grep, then stick the header in?)
-- extact the first 6 columns (cut)
-- extract each ``DP`` and ``TYPE`` (egrep -o 'DP=[^;]*' | sed ..)
-- merge the data before loading to R (paste)
-- use ggplot to explore relation between read depth and quality (scatter plot)
+- concatenate the two files, so you get data for chr1 and chrZ in one file (``cat``)
+- get rid of the comments (they start with ``#``, that is ``^#`` regular expression)
+- use the 'pure, concatenated data' for:
+    - extact the first 6 columns (``cut``)
+    - extract ``DP`` and ``TYPE`` columns, one by on (``egrep -o 'DP=[^;]*' | sed ..``)
+- merge the data before loading to R (``paste``)
+- add column names while loading the data with ``read.delim``
+- use ggplot to explore the relation between read depth and quality (scatter plot, log transformed axes)
 - check if variant type affects the relation between read depth and quality (facets)
+- you'll find out that you need to filter out the 'compound' TYPEs, do it by filtering out anything with 
+  ``,`` in the ``TYPE`` column (choose your way, ``grep`` in bash, ``filter`` of ``dplyr``, ...)
 
-In principle you only need to save the data once - before loading to R.
-But I would suggest splitting the pipeline into more pieces, saving at least some
-intermediate results. 
-
-Personally i would filter out the comments and headers, and concatenate the files, 
-saving this as the first intermediate. Then I would use ``paste`` to merge the data, 
+You can save each intermediate result. To me it makes sense to save the 'pure data' 
+(concatenated, without comments). Then I would use ``paste`` to merge the data, 
 using ``<( )`` to get the extracted values::
 
   paste <( cut .. ) <( egrep -o .. ) <( egrep -o )
@@ -261,3 +261,7 @@ using ``<( )`` to get the extracted values::
 I would set the column names while loading the data into R. 
 
 .. pull-quote:: Good luck! (We will help you;)
+
+.. remove this for next course, just tell them to visit the -solution link
+
+:ref:`varq_solution` by Libor.
