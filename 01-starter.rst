@@ -33,6 +33,22 @@ Htop displays CPU and memory utilization of the (virtual) computer. Continue you
 work in another window (``ctrl+a space``). You can switch back to the htop window to
 monitor progress of some lengthy operation.
 
+Get help
+--------
+Call Libor or Vaclav to get any help ;)
+
+To find the name of the command that does what you need (``grep``), use google::
+
+  linux search for string
+
+Once you know the name of the command that does what you need, all the
+details are easily accessible using ``man``. To get all possible help about
+finding text patterns in files do:
+
+.. code-block:: bash
+
+  man grep
+
 Move around the directory structure
 -----------------------------------
 
