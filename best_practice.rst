@@ -1,9 +1,10 @@
 Best practice
 =============
 
-This is a collection of tips, that may help to overcome the initial barrier of working with a 'foreign' system.
-There is a lot of ways to achieve the soulution, those presented here are not the only correct ones, but some
-that proved beneficial to the authors.
+This is a collection of tips, that may help to overcome the initial barrier of
+working with a 'foreign' system. There is a lot of ways to achieve the
+solution, those presented here are not the only correct ones, but some that
+proved beneficial to the authors.
 
 Easiest ways to get UNIX
 ------------------------
@@ -28,8 +29,8 @@ and it will make you keep your home computer running even if your calculation is
 on a remote server.
 
 Track system resources usage with ``htop``. System that is running low on memory won't
-perform fast. System with many cores where only one core ('CPU') is used should be utilized 
-more - or can finish your tasks much faster, if used correctly.
+perform fast. System with many cores where only one core ('CPU') is used should be used for 
+more tasks - or can finish your task much faster, if used correctly.
 
 Data organization
 -----------------
@@ -80,9 +81,10 @@ output is what you expect, and only after that add the next command. If there is
 your pipeline, you have to put ``head`` in front of the ``sort``, because otherwise sort has to process
 all the data before it gives out any output.
 
-I prefer 'input first' syntax (``<file command | comm2 | comm3 >out``) which improves legibility,
-fits better the notion of the real world (plumbing) pipeline (input tap -> garden hose -> garden sprinkler), 
-and when changing the inputs in reusal, they're easier to find.
+I (Libor) do prefer the 'input first' syntax (``<file command | comm2 | comm3
+>out``) which improves legibility, resembles the real world pipeline (garden
+hose, input tap -> garden hose -> garden sprinkler) more, and when changing
+the input file names when reusing the pipeline, the names are easier to find.
 
 Wrap your long pipelines on ``|`` - copy and paste to bash still works, because bash knows there
 has to be something after ``|`` at the end of the line. Only the last line has to be escaped with ``\``,
@@ -95,11 +97,11 @@ otherwise all your output would go to the screen instead of a file.
     sort -k1rn,1 \
   >out
   
-You can get a nice proress bar if you use ``pv`` (pipe viewer) instead of ``cat`` at the beginning
+You can get a nice progress bar if you use ``pv`` (pipe viewer) instead of ``cat`` at the beginning
 of the pipeline. But again, if there is a ``sort`` in your pipeline, it has to consume all the data
 before it starts to work.
 
-Use variables instead of hardcoded file names / arguments, especially when the name is used more times
+Use variables instead of hard-coded file names / arguments, especially when the name is used more times
 in the process, or the argument is supposed to be tuned:
 
 .. code-block:: bash
@@ -120,5 +122,5 @@ Parallelization
 ---------------
 Many tasks, especially in Big Data and NGS, are 'data parallel' - that means you can split the data in pieces,
 compute the results on each piece separately and then combine the results to get the complete result.
-This makes very easy to exploit the full power of modern multicore machines, speeding up your processing e.g. 10 times.
+This makes very easy to exploit the full power of modern multi core machines, speeding up your processing e.g. 10 times.
 ``GNU parallel`` is a nice tool that helps to parallelize bash pipelines, check the manual.

@@ -1,18 +1,14 @@
-.. NGS Course Nove Hrady documentation master file, created by
-   sphinx-quickstart on Tue Oct 14 18:29:24 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+UNIX and NGS Course - April 2015 edition
+========================================
 
-NGS Course Nove Hrady
-=====================
 This course aims to introduce the participants to UNIX - an interface that is one of the most convenient
 options for working with big data. Special attention is put on working with Next Generation Sequencing (NGS) data.
 Most of the NGS data formats were designed to be textual, and textual data is where UNIX excels in its versatility.
-With just a combination of basic UNIX tools one can achieve results that would require finding specialized software
-in other envirnonments, with just few commands.
+By combining basic UNIX tools one can achieve results that would require finding specialized software
+in other environments.
 
-Not knowing 'the right way' to do things can be intimidating for the beggining users, so an additional section
-stressing the 'best practice' was added to the supplementary materials.
+Not knowing 'the right way' to do things can be intimidating for the beginning users, so an additional section
+exploring the 'best practice' is available for self learning.
 
 Initial instructions: 
 
@@ -27,9 +23,23 @@ Course contents:
 .. toctree::
    :maxdepth: 2
 
-   practical
+   01-starter
+   02-genomics
+   03-advanced
+   04-graphics
+   05-gtools
+   06-quality
+
+Additional reference materials:
+
+.. toctree::
+   :maxdepth: 1
+
+   links
+   best_practice
    reference
    formats
+   more-exercise
 
 Supplemental information:
 
@@ -37,6 +47,4 @@ Supplemental information:
    :maxdepth: 1
 
    prepare
-   best_practice
    slides
-   others

@@ -1,7 +1,12 @@
 Slide decks
 ===========
 
-:download:`Theoretical part <_static/genomes_unix.pdf>` (Libor)
+:download:`Starter session <_static/unix.pdf>` (Libor)
 
+:download:`Genomics session <_static/unix_advanced.pdf>` (Vasek)
 
-:download:`Practical part <_static/practicals.pdf>` (Vasek)
+:download:`Advanced UNIX session <_static/genomics.pdf>` (Vasek)
+
+:download:`Graphics session <_static/graphics.pdf>` (Libor)
+
+:download:`Genomic tools <_static/gtools.pdf>` (Vasek)

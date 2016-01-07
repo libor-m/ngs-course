@@ -5,16 +5,16 @@ got ready-made. That is the **linux machine image**, **online documentation** an
 
 Online documentation
 --------------------
-Login to https://github.com. Create a new project called `ngs-course-nhrady`, with a default readme file.
+Login to https://github.com. Create a new project called `ngs-course`, with a default readme file.
 
 
 Clone the project to local machine and initialize `sphinx` docs. Choose ``SSH`` clone link in GitHub.
 
 .. code-block:: bash
 
-  git clone git@github.com:libor-m/ngs-course-nhrady.git
+  git clone git@github.com:libor-m/ngs-course.git
 
-  cd ngs-course-nhrady
+  cd ngs-course
   
   # use default answers to all the questions
   # enter project name and version 1.0
@@ -41,7 +41,7 @@ to GitHub.
 To get live view of the documents, login to https://readthedocs.org. Your `GitHub` account can be paired with 
 `Read the Docs` account in `Edit Profile/Social Accounts`, then you can simply 'import' new projects 
 from your GitHub with one click. Import the new project and wait for it to build. After the build
-the docs can be found at http://ngs-course-nhrady.readthedocs.org (or click the ``View`` button).
+the docs can be found at http://ngs-course.readthedocs.org (or click the ``View`` button).
   
 Now write the docs, commit and push. Rinse and repeat. Try to keep the commits small, just one change a time.
 
@@ -66,8 +66,10 @@ Create new VirtualBox machine
 - 1 GB RAM - this can be changed at the users machine, if enough RAM is available
 - 12 GB HDD as system drive (need space for basic system, gcc, rstudio and some data)
 - setup port forwarding
+
   - 2222 to 22 (ssh, avoiding possible collisions on linux machines with sshd running)
   - 8787 to 8787 (rstudio server)
+  - 5690 to 5690 (rstudio + shiny)
 
 Install Debian
 ^^^^^^^^^^^^^^
@@ -79,6 +81,7 @@ https://www.debian.org/CD/netinst/
 Connect the iso to IDE in the virtual machine. Start the machine. Choose ``Install``.
 
 Mostly the default settings will do.
+
 - English language (it will cause less problems)
 - Pacific time zone (it is connected with language, no easy free choice;)
 - hostname ``node``, domain ``vbox``
@@ -110,11 +113,27 @@ Login as user (can be done by ``su user`` in root shell):
   nano ~/.bashrc
   . ~/.bashrc
 
+  # set timezone so the time is displayed correctly
+  echo "TZ='Europe/Prague'; export TZ" >> ~/.profile
+
+  # some screen settings
+  cat >~/.screenrc <<EOF
+  hardstatus alwayslastline
+  hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
+
+  defscrollback 20000
+
+  startup_message off
+  EOF
+
   # everyone likes git and screen
-  sudo apt-get install git screen pv
+  sudo apt-get install git screen pv curl wget
   
   # add important stuff to python
   sudo apt-get install python-dev python-pip python-virtualenv
+
+  # java because of fastqc
+  sudo apt-get install openjdk-7-jre-headless
 
 This is what it takes to create a basic usable system in VirtualBox.
 We can shut it down now with ``sudo shutdown -h now`` and take a snapshot of the machine.
@@ -138,7 +157,7 @@ R is best used in RStudio - server version can be used in web browser.
   sudo apt-get install r-base
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
-  > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne"))
+  > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne", "tidyr", "shiny"))
 
   # RStudio with prerequisities
   wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_i386.deb
@@ -176,6 +195,15 @@ It's worth it to install such packages by hand, when there is not much dependenc
   # just copy the executable to a suitable location
   sudo cp tabtk /usr/local/bin
 
+  # fastqc
+  cd ~/sw
+  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.3.zip
+  unzip fastqc_v0.11.3.zip
+  rm fastqc_v0.11.3.zip
+  chmod +x FastQC/fastqc
+
+  # and some more:
+  # bcftools, samtools, vcftools, htslib
 
 Sample datasets
 ^^^^^^^^^^^^^^^
@@ -206,9 +234,24 @@ Prepare the ``/data`` folder.
 
 Transfer the files to the VirtualBox image, /data directory using WinSCP.
 
-Now click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
+Do the quality checks:
+
+.. code-block:: bash
+
+  cd /data/slavici
+  ~/sw/FastQC/fastqc -o 04-read-qc --noextract 00-reads/*
+
+  # update the file database
+  sudo updatedb
+
+Packing the image
+^^^^^^^^^^^^^^^^^
+
+Now shut down the VM and click in VirtualBox main window ``File > Export appliance``. Upload the file to a file sharing
 service, and use the `goo.gl` url shortener to track the downloads.
 
 Slide deck
 ----------
-The slide deck was created using Adobe InDesign.
+Libor's slide deck was created using Adobe InDesign (you can get the CS2 version almost legally for free).
+Vasek's slide deck was created with Microsoft Powerpoint. Images are shamelessly taken from the internet,
+with the 'fair use for teaching' policy ;)

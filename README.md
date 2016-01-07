@@ -1,18 +1,17 @@
-# NGS Course
+ngs-course
+==========
 
-Practice material for "advanced introductory course" on using UNIX to analyze
-NGS data, with some GUI stuff.
+Practice material for NGS weekend course in Praha, April 25-26 2015. 
 
-Contents of this repository are supposed to be rendered with Sphinx, either
-offline, or with Read The Docs web service.
+The rendered version can be found at http://ngs-course.rtfd.org 
+(choose version praha-april-2015 in the bottom left menu).
 
-## Particular courses
+Aftermath
+=========
 
-Several similar courses already took place, so to get the contents of each particular course,
-switch to the given branch.
-
-### studenec-may-2014
-*How to analyze NGS data in non-model species* in Studenec, May 2, 2014 - http://ngs-course-2014.readthedocs.org/
-
-### nove-hrady-oct-2014
-*NGS workshop* in Nove Hrady, October 27, 2014 - http://ngs-course-nhrady.readthedocs.org/
+- make /data read only, to be sure they don't delete own data, and
+  to simulate shared environment
+- variant quality task takes ~1 hour
+- do not forget 'man'
+- consider command chaining (ln, then work with linked data) .. but probably 
+  yes, so they have to see that the steps have to be done...
