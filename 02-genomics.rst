@@ -1,5 +1,10 @@
-Session 2: Unix Basic - Data extraction/modification
-====================================================
+Session 2: Unix - Advanced I
+============================
+
+This session focuses on plain text file data extraction/modification
+using build-in Unix tools.
+
+
 
 The commands for this session are in the talk's slide deck.
 
