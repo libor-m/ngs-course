@@ -1,5 +1,5 @@
-UNIX and NGS Course - April 2015 edition
-========================================
+Course on UNIX and Genomic Data - Prague, January 2016
+======================================================
 
 This course aims to introduce the participants to UNIX - an interface that is one of the most convenient
 options for working with big data. Special attention is put on working with Next Generation Sequencing (NGS) data.
@@ -10,11 +10,11 @@ in other environments.
 Not knowing 'the right way' to do things can be intimidating for the beginning users, so an additional section
 exploring the 'best practice' is available for self learning.
 
-Initial instructions: 
+Initial instructions:
 
 .. toctree::
    :maxdepth: 1
-   
+
    install
    connect
 
