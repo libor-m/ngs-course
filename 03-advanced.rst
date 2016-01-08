@@ -67,3 +67,42 @@ Scripting in one line (awk):
       }
     }
   }' | less
+
+Functions in Shell:
+-------------------
+
+.. code-block:: bash
+
+	uniq(){ uniq -c | sed -r 's/^ *([0-9]+) /\1\t/'; }
+
+Shell Scripts:
+--------------
+
+.. code-block:: bash
+
+	nano script.sh
+
+.. code-block::bash
+
+	#!/bin/sh
+
+	FILE=$1
+	LENGTH=$2
+	OUT=$1-filtered
+
+	< data/fastq/HRTMUOC01.RL12.00.fastq \
+	awk -v l=$LENGTH '{
+		if( (NR + 3) % 4 == 0 ){
+			id=$0;
+		}else if( (NR + 3) % 4 == 1 ){
+			seq=$0;
+		}else if( (NR + 3) % 4 == 2 ){
+			q=$0;
+		}else{
+			if( length(seq) >= l ){
+				print id"\n"seq"\n"q"\n+";
+			}
+		}
+	}' > $OUT
+
+	echo File `basename $FILE` done
