@@ -92,7 +92,7 @@ Pattern search & regular expressions
 Cutting out, sorting and replacing text
 ---------------------------------------
 
-We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed`.
+We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``.
 
 *Use nightingale variant call file (VCF)*
 
