@@ -188,7 +188,7 @@ from the stream).
   cat data/fastq/HRTMUOC01.RL12.00.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes
-four lines). And there is even a built-in calculator in bash::
+four lines). And there is even a built-in calculator in bash:
 
 .. code-block:: bash
 
