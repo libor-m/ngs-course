@@ -94,6 +94,33 @@ Cutting out, sorting and replacing text
 
 We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``.
 
+.. note:
+
+  Difference between ``sed`` and ``tr``:
+
+  ``tr`` replaces/deletes individual characters: Ideal for replacing/removing
+  ends of lines (``\n``) or TAB-seprator (``\t``).
+
+  ``sed`` replaces/deletes complex patterns.
+
+.. note::
+
+  ``sed`` (Text Stream Editor): It knows to do a lot of things, however,
+  pattern replacement is the best thing to use it for.
+
+  General syntax:
+
+  .. code-block:: bash
+
+    sed 's/old_pattern/new_pattern/'
+
+    # Replace one or more A or C or G or T by N
+    sed 's/^[AGCT]\{1,\}/N/'
+
+    # The same thing using extended regular expressions:
+    sed -r 's/^[AGCT]+/N/'
+
+
 *Use nightingale variant call file (VCF)*
 
 1. Which chromosome has the highest and the least number of variants?
@@ -102,6 +129,10 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
   sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
+
+  # sed -r (extended regular expressions)
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  sort | uniq -c | sed -r 's/^ +//' | tr " " "\t" | sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
