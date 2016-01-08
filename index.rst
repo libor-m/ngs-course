@@ -62,6 +62,8 @@ Course contents:
    01-starter
    02-genomics
    03-advanced
+
+.. ::
    04-graphics
    05-gtools
    06-quality

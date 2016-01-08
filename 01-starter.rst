@@ -13,9 +13,7 @@ Check your keyboard
 Before we do any serious typing, make sure you know where are the important keys.
 I'd suggest using English keyboard, if you don't want to constantly press right alt
 and five random letters before you find the one you need.
-You will definitely need those keys:
-
-.. code-block::
+You will definitely need those keys::
 
   [] - squared brackets
   {} - curly brackets
@@ -168,7 +166,7 @@ It can be readily combined with ``head`` to show the second sequence in the file
     # or the third sequence data ;)
     < data/fastq/HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
-**Exercise (How many reads are there?)**::
+**Exercise (How many reads are there?)**:
 
 We found out that FASTQ files have a particular structure (four lines per read).
 To find the total number of reads in our data, we will use another tool, ``wc``
@@ -223,7 +221,7 @@ What do these commands do?
   touch 0{1..9}-{a..f}.txt {10..12}-{a..f}.txt
   touch 0{1..9}-{jan,feb,mar}.txt {10..12}-{jan,feb,mar}.txt
 
-**Exercise**::
+**Exercise**:
 
 Program runs 20 runs of simulations for three datasets (hm, ss, mm) using
 three different sets of values: small (sm), medium sized (md) and large (lg).
