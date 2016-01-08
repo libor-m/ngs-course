@@ -4,8 +4,10 @@ Unix - Advanced I
 This session focuses on plain text file data extraction/modification
 using build-in Unix tools.
 
-Pattern search & regular expressions (``grep``)
------------------------------------------------
+Pattern search & regular expressions
+------------------------------------
+
+``grep`` useful tool to search pattern using regular expressions.
 
 .. block-code:: bash
 
@@ -87,8 +89,10 @@ Use nightingale variant call file (VCF)
  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chr[1-9]\{1,2\}\s' | wc -l
 
 
-Cutting out, sorting and replacing text (cut, sort, uniq, tr, sed)
-------------------------------------------------------------------
+Cutting out, sorting and replacing text
+---------------------------------------
+
+We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed`.
 
 Use nightingale variant call file (VCF)
 
@@ -104,8 +108,10 @@ Use nightingale variant call file (VCF)
 
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
-Joining multiple file (paste, join) + subshell
-----------------------------------------------
+Joining multiple file + subshell
+--------------------------------
+
+``paste``, ``join``
 
 Use nightingale FASTQ file
 
