@@ -113,7 +113,16 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 Joining multiple file + subshell
 --------------------------------
 
-``paste``, ``join``
+Use ``paste``, ``join`` commands.
+
+.. note::
+
+  Subshell enables to fork processes, i.e. run multiple
+  processes before inputing into parent process:
+
+  .. code-block:: bash
+
+  cat <( cut -f 1 file.txt | sort -n ) <( cut -f 1 file2.txt | sort -n ) | less
 
 *Use nightingale FASTQ file*
 
