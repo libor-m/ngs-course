@@ -1,9 +1,7 @@
-Genomics session
-================
+Session 2: Unix Basic - Data extraction/modification
+====================================================
 
 The commands for this session are in the talk's slide deck.
-
-
 
 How many bases were sequenced? => GREP EXERCISE FOR SATURDAY
 ------------------------------

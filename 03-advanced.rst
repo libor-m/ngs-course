@@ -1,5 +1,5 @@
-Session 2: Unix Basic - Data extraction/modification
-====================================================
+Session 3: Advanced UNIX - Scripting
+====================================
 
 List of Tasks:
 --------------
