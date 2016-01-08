@@ -4,6 +4,131 @@ Unix - Advanced I
 This session focuses on plain text file data extraction/modification
 using build-in Unix tools.
 
+Pattern search & regular expressions (``grep``)
+-----------------------------------------------
+
+.. block-code:: bash
+
+  ^A         # match A at the beginning of line
+  A$         # match A at the end of line
+  [0-9]      # match numerical characters
+  [A-Z]      # match alphabetical characters
+  [ATGC]     # match A or T or G or C
+  .          # match any character
+  A*         # match A letter 0 or more times
+  A\{2\}     # match A letter exactly 2 times
+  A\{1,\}    # match A letter 1 or more times
+  A+         # match A letter 1 or more times (extended regular expressions)
+  A\{1,3\}   # match A letter at least 1 times but no more than 3 times
+  AATT\|TTAA # match AATT or TTAA
+  \s         # match whitespace (also TAB)
+
+Use mouse annotation file (GTF)
+
+.. block-code::
+
+  cd ~
+  sudo cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data/.
+  gunzip data/Mus_musculus.NCBIM37.67.gtf.gz
+  less -S data/Mus_musculus.NCBIM37.67.gtf
+
+1. Count the number of records on the chromosome X
+
+.. block-code::
+
+  < data/Mus_musculus.NCBIM37.67.gtf grep '^X' | wc -l
+
+2. Count the number of records on chromosome X and Y
+
+.. block-code::
+
+  < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]'
+  < data/Mus_musculus.NCBIM37.67.gtf grep '^X\|^Y' | wc -l
+  < data/Mus_musculus.NCBIM37.67.gtf grep -E '^X' -E '^Y' | wc -l
+
+3. Count the number of 'CDS' on the chromosome X
+
+.. block-code::
+
+  < data/Mus_musculus.NCBIM37.67.gtf grep 'CDS' | grep '^X' | wc -l
+
+Use nightingale variant call file (VCF)
+
+.. block-code:: bash
+
+  cd ~
+  sudo cp /data/mus_mda/05-fst2genes/luscinia_vars_flags.vcf.gz ~/data/.
+  gunzip data/luscinia_vars_flags.vcf.gz
+  less -S data/luscinia_vars_flags.vcf
+
+1. Count the number variants in the file
+
+.. block-code:: bash
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | wc -l
+
+2. Count the number of variants passing/failing the quality threshold
+
+.. block-code:: bash
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | wc -l
+  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'FAIL' | wc -l
+
+3. Count the number of variants on the chromosome Z passing the quality threshold
+
+.. block-code:: bash
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
+
+4. Count the number of records on large autosomes which passed quality threshold
+
+.. block-code:: bash
+
+ < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chr[1-9]\{1,2\}\s' | wc -l
+
+
+Cutting out, sorting and replacing text (cut, sort, uniq, tr, sed)
+------------------------------------------------------------------
+
+Use nightingale variant call file (VCF)
+
+1. Which chromosome has the highest and the least number of variants?
+
+.. block-code:: bash
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
+
+2. What is the number of samples in the VCF file?
+
+.. block-code:: bash
+
+  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | cut --complement -f 1-9 | tr "\t" "\n" | wc -l
+
+Joining multiple file (paste, join)
+-----------------------------------
+
+Use nightingale FASTQ file
+
+1. Join all nightingale FASTQ files and create a TAB separated file with one line per read
+
+  < cat *.fastq | paste - - - - | cut -f 1-3 | less
+
+2. Make a TAB-separated file having four columns:
+    1. chromosome name
+    2. number of variants in total for given chromosome
+    3. number of variants which pass
+    4. number of variants which fails
+
+.. block-code:: bash
+
+  # Command 1
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > count_vars_chrom.txt
+
+  # Command 2
+
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r | \
+  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 > count_vars_pass_fail.txt
 
 
 The commands for this session are in the talk's slide deck.
