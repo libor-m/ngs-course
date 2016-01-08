@@ -2,125 +2,68 @@ Session 3: Unix - Advanced II
 =============================
 
 Scripting session: scripting in one line using ``awk``,
-writing functions and scripts in shell, and running procedures in parralel.
+writing functions and scripts in shell, and running procedures in parallel.
 
 
-List of Tasks:
---------------
+Scripting in one line (awk):
+----------------------------
 
-1. How many records in the GTF file
-2. Explore the 'group' column (column 9) in the GTF file
-3. Get list of chromosomes (column 1)
-4. Get list of features (column 3)
-5. Get the number of genes mapping onto chromosomes in total
-6. Get the number of protein coding genes mapping onto chromosomes
-7. Get the number of protein coding genes on chromosome X and Y
-8. Get the number of transcripts of protein coding genes mapping onto chromosomes
-9. Get the gene with the highest number of transcripts
-10. Get the gene with the highest number of exons
-11. What is the total size (in Mb) of coding sequences
-12. Get the longest gene
-
-.. note:: During the afternoon session we are going to use these commands:
-
-	.. code-block:: bash
-
-		cut
-		sort
-		uniq
-		grep
-		tr
-		sed
-		awk
-
-**1. How many records in the GTF file**
+1. Extract IDs of a FASTQ file and count the number of reads
 
 .. code-block:: bash
 
-	cat Mus_musculus.NCBIM37.67.gtf | wc -l
+	< data/fastq/HRTMUOC01.RL12.00.fastq awk '{ if( (NR + 3) % 4 == 0 ){ print $0 } }' | wc -l
 
-**2. Explore the 'group' column (column 9) in the GTF file**
-
-.. code-block:: bash
-
-	cut -f 9 Mus_musculus.NCBIM37.67.gtf | less -S
-
-**3. Get list of chromosomes (column 1)**
+2. Make a file with read ID and read lengths in one line
 
 .. code-block:: bash
 
-	cut -f 1 Mus_musculus.NCBIM37.67.gtf | sort | uniq
-
-**4. Get list of features (column 3)**
-
-.. code-block:: bash
-
-	cut -f 3 Mus_musculus.NCBIM37.67.gtf | sort | uniq
-
-**5. Get the number of genes mapping onto chromosomes in total**
-
-.. code-block:: bash
-
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | cut -f 9 | cut -d ";" -f 1 | sort | uniq | wc -l
-
-**6. Get the number of protein coding genes mapping onto chromosomes**
-
-.. code-block:: bash
-
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | cut -f 9 | cut -d ";" -f 1 | sort | uniq | wc -l
-
-**7. Get the number of protein coding genes on chromosome X and Y**
-
-.. code-block:: bash
-
-	grep ^[XY] Mus_musculus.NCBIM37.67.gtf | grep protein_coding | cut -f 1,9 | cut -d ';' -f 1 | sort | uniq | cut -f 1 | sort | uniq -c
-
-**8. Get the number of transcripts of protein coding genes mapping onto chromosomes**
-
-.. code-block:: bash
-
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | cut -f 9 | cut -d ";" -f 2 | sort | uniq | wc -l
-
-**9. Get the gene with the highest number of transcripts**
-
-.. code-block:: bash
-
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | cut -f 9 | cut -d " " -f 3,5,9 | tr -d '";' | sort -k1,1 | uniq | cut -d ' ' -f 1,3 | uniq -c | sed 's/^ *//' | tr ' ' "\t" | sort -nr -k1,1 | head
-**10. Get the gene with the highest number of exons**
-
-.. code-block:: bash
-
-	grep -v ^NT Mus_musculus.NCBIM37.67.gtf | grep protein_coding | grep $'\texon\t' | cut -f 9 | cut -d " " -f 3,5,9 | tr -d '";' | sort | uniq -c | sed 's/^ *//g' | tr " " "\t" | sort -rn -k1,1 | head
-
-**11. What is the total size (in Mb) of coding sequences**
-
-.. code-block:: bash
-
-	grep CDS Mus_musculus.NCBIM37.67.gtf | awk -F $'\t' 'BEGIN{OFS=FS;t=0}{s=$5-$4+1;t+=s}END{print t/1000000" Mb"}'
-
-**12. Get the longest gene**
-
-.. code-block:: bash
-
-	grep protein_coding Mus_musculus.NCBIM37.67.gtf | grep $'\texon\t' | cut -f 1,4,5,9 | cut -d " " -f 1,3 | tr -d '";' | sort -k4,4 -k2,2n > exons.beds
-
-	< exons.bed awk -F $'\t' 'BEGIN{ OFS=FS }{if(NR==1){ gene=$4; chrom=$1; gene_start=$2; gene_end=$3 }else{ if(gene==$4){if(gene_end<=$3){gene_end=$3}}else{ print gene,chrom,gene_start,gene_end,gene_end-gene_start; gene=$4;chrom=$1;gene_start=$2;gene_end=$3; }}}END{print gene,chrom,gene_start,gene_end,gene_end-gene_start }' | sort -rn -k5,5 | head
-
-.. code-block:: bash
-
-	## Detail structure:
-	awk -F $'\t' 'BEGIN{ OFS=FS }{
-		if(NR==1){
-			gene=$4; chrom=$1; gene_start=$2; gene_end=$3
-		}else{
-			if(gene==$4){
-				if(gene_end<=$3){
-					gene_end=$3}
+	< data/fastq/HRTMUOC01.RL12.00.fastq \
+	awk 'BEGIN{
+				OFS="\t"
+			}{
+				if(( NR + 3 ) % 4 == 0 ){
+					id = $0
 				}else{
-					print gene,chrom,gene_start,gene_end,gene_end-gene_start;
-					gene=$4;chrom=$1;gene_start=$2;gene_end=$3;
+					if( (NR + 3) % 4 == 1 ){
+						print id,length($0)
+					}
 				}
-			}
-		}END{
-			print gene,chrom,gene_start,gene_end,gene_end-gene_start
-		}'
+			}' | less
+
+3. Get average read length
+
+.. code-block:: bash
+
+	< data/fastq/HRTMUOC01.RL12.00.fastq \
+	awk 'BEGIN{
+			OFS="\t"; l=0; n=0
+		}{
+	    if( ( NR + 3 ) % 4 == 1 ){
+	      l = l + length($0);
+	      n = n + 1;
+	    }
+	  }END{
+	    print "Average read length:", l/n
+	  }'
+
+4. Filter out short sequences (set the minimum size allowed)
+
+.. code-block:: bash
+
+	LENGTH=80
+
+	< data/fastq/HRTMUOC01.RL12.00.fastq \
+	awk -v l=$LENGTH '{
+    if( (NR + 3) % 4 == 0 ){
+      id=$0;
+    }else if( (NR + 3) % 4 == 1 ){
+      seq=$0;
+    }else if( (NR + 3) % 4 == 2 ){
+      q=$0;
+    }else{
+      if( length(seq) >= l ){
+        print id"\n"seq"\n"q"\n+";
+      }
+    }
+  }' | less
