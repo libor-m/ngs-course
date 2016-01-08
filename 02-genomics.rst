@@ -122,7 +122,7 @@ Use ``paste``, ``join`` commands.
 
   .. code-block:: bash
 
-  cat <( cut -f 1 file.txt | sort -n ) <( cut -f 1 file2.txt | sort -n ) | less
+    cat <( cut -f 1 file.txt | sort -n ) <( cut -f 1 file2.txt | sort -n ) | less
 
 *Use nightingale FASTQ file*
 
