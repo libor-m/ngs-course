@@ -82,6 +82,9 @@ Shell Scripts
 
 	nano script.sh
 
+Make a script ``filter_fastq.sh`` which reads a FASTQ file, filter out short sequences
+and print as standard output:
+
 .. code-block:: bash
 
 	#!/bin/sh
@@ -90,8 +93,7 @@ Shell Scripts
 	LENGTH=$2
 	OUT=$1-filtered
 
-	< data/fastq/HRTMUOC01.RL12.00.fastq \
-	awk -v l=$LENGTH '{
+	< $FILE awk -v l=$LENGTH '{
 		if( (NR + 3) % 4 == 0 ){
 			id=$0;
 		}else if( (NR + 3) % 4 == 1 ){
@@ -107,6 +109,12 @@ Shell Scripts
 
 	echo File `basename $FILE` done
 
+To run the script:
+
+.. code-block:: bash
+
+	bash filter_fastq.sh data/fastq/HRTMUOC01.RL12.00.fastq 80
+
 Parallel
 --------
 
@@ -114,4 +122,12 @@ Running programs/scripts/commands in parallel mode:
 
 .. code-block:: bash
 
- parallel –j 5 'bash script.sh {}' ::: {1..10}
+ parallel –j 5 'bash script.sh {input} {output}.out' ::: {1..10}
+
+Run the ``filter_fastq.sh`` in parallel:
+
+.. code-block:: bash
+
+	parallel -j 1 'bash filter_scripts.sh {} 80' ::: data/fastq/*.fastq
+
+That's it for this session...
