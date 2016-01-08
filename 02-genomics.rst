@@ -100,13 +100,15 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | cut --complement -f 1-9 | tr "\t" "\n" | wc -l
+  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | \
+  cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
 Joining multiple file + subshell
 --------------------------------
@@ -130,11 +132,13 @@ Joining multiple file + subshell
 .. code-block:: bash
 
   # Command 1
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > count_vars_chrom.txt
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > count_vars_chrom.txt
 
   # Command 2
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r | \
-  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 > count_vars_pass_fail.txt
+  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | \
+  cut --complement -f 2,3,6 > count_vars_pass_fail.txt
 
   # Command 3
   join -1 2 -2 3 count_vars_chrom.txt count_vars_pass_fail.txt | wc -l
@@ -142,14 +146,15 @@ Joining multiple file + subshell
   # How many lines did you retrieved?
 
   # You have to sort the data before sending to ``join`` - subshell
-  join -1 2 -2 3 <( sort -k2,2 count_vars_chrom.txt ) <( sort -k3,3 count_vars_pass_fail.txt ) | tr " " "\t" > count_all.txt
+  join -1 2 -2 3 <( sort -k2,2 count_vars_chrom.txt ) \
+  <( sort -k3,3 count_vars_pass_fail.txt ) | tr " " "\t" > count_all.txt
 
 All three commands together using subshell:
 
 .. code-block:: bash
 
-  join -1 2 -2 3 <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | \
-  sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
+  join -1 2 -2 3 <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1 | \
+  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
   <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1,7 | sort -r | uniq -c | \
   sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 | \
   sort -k3,3  ) | tr " " "\t" > count_all.txt
