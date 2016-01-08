@@ -112,12 +112,27 @@ and copy FASTQ data from common repository:
   sudo cp -r /data/fastq/fastq.tar.gz data/fastq/.
   ls data/fastq
 
+  .. note::
+
+     Normal users cannot change (and break) the (UNIX) system. There is one special
+     user in each system called ``root``, who has the rights to make system wide changes.
+     You can either directly log in as root, or use ``sudo`` (super user do) to execute
+     one command as ``root``.
+
+
+     .. image:: _static/sandwich.png
+        :align: center
+
 Uncompressing files
 ^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
+  # Compressed tarball archives
   tar -xzvf data/fastq/fastq.tar.gz
+
+  # gzipped files
+  gunzip file.txt.gz
 
 Viewing plain text file content
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -258,6 +273,7 @@ Screen creates the first window for you. To create another one press
 
 Installing software
 -------------------
+
 The easiest way to install software is via a package manager (eg. ``apt-get`` for all Debian
 variants). When the required software is not in the repositories, or one needs the latest
 version, it's necessary to take the more difficult path. The canonical UNIX way is::
@@ -265,66 +281,32 @@ version, it's necessary to take the more difficult path. The canonical UNIX way 
   wget -O - ..url.. | tar xvz   # download and unpack the 'tarball' from internet
   cd ..unpacked directory..     # set working directory to the project directory
   ./configure                   # check your system and choose the way to build it
-  make && sudo make install     # convert source code to machine code and if successful, copy the results to your system
+  make                          # convert source code to machine code (compile it)
+  sudo make install             # copy the results to your system
 
 htop
 ^^^^
 
-Pipe viewer
-^^^^^^^^^^^
-First we'll get the latest pipe viewer. Pipe viewer can show you how
-much of the data was already processed in your `pipeline`. Google ``pipe viewer``,
-choose the ivarch.com site. Check the current version number on the site.
-Now check the version in your image::
-
-  pv --version
-
-.. note::
-
-   It is a good habit to include ``--version`` option for a command. You need to check
-   the version of given tool in your system when you're trying to use some new features.
-
-The version found at the site should be higher then the one in your image. A good reason for
-update;) Copy the link for the ``.tar.bz2`` file on the site.
+Installing software from common repository:
 
 .. code-block:: bash
 
-   # go to the directory where software installations live
-   cd ~/sw
-
-   wget -O - ..paste the link here .. | tar xvj
-
-   # the complete command from above for those who are cheating
-   wget -O - http://www.ivarch.com/programs/sources/pv-1.6.0.tar.bz2 | tar xvj
-
-   # do not copy this, try the autocompletion
-   # cd pv<tab> <tab> <6> <tab> <enter>
-
-   ls
-   # you can see green configure script in the listing
-
-   # to run something in current directory, the path has
-   # to be given
-   ./configure
-   make
-
-   # to make changes system wide, super user 'powers' have to be used
-   sudo make install
-
-
-.. note::
-
-   Normal users cannot change (and break) the (UNIX) system. There is one special
-   user in each system called ``root``, who has the rights to make system wide changes.
-   You can either directly log in as root, or use ``sudo`` (super user do) to execute
-   one command as ``root``.
-
-
-   .. image:: _static/sandwich.png
-      :align: center
+  sudo apt-get install htop
 
 Bedtools
 ^^^^^^^^
+
+Install software which is not in the common repository. You just need to find
+a source code and compile it:
+
+.. code-block:: bash
+
+  wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+  tar -zxvf bedtools-2.25.0.tar.gz
+  cd bedtools2
+  make
+
+
 Another common place where you find a lot of software is `GitHub`. We'll install
 ``bedtools`` from a GitHub repository:
 
@@ -341,9 +323,6 @@ This creates a `clone` of the online repository in ``bedtools2`` directory.
 
    cd bedtools2
    make
-
-The compilation should take a while, so you can flip to your `htop` window with
-``ctrl-a space`` and watch the CPU spin;)
 
 Exercise
 --------
