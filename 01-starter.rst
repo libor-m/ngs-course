@@ -108,7 +108,8 @@ and copy FASTQ data from common repository:
   cd ~
   mkdir -p data/fastq
   sudo cp -r /data/fastq/fastq.tar.gz data/fastq/.
-  ls data/fastq
+  cd data/fastq
+  ls
 
 .. note::
 
@@ -147,8 +148,8 @@ Try these commands:
 .. code-block:: bash
 
   cd ~
-  head -n 8 data/fastq/HRTMUOC01.RL12.00.fastq
-  tail -n 8 data/fastq/HRTMUOC01.RL12.00.fastq
+  head -n 8 HRTMUOC01.RL12.00.fastq
+  tail -n 8 HRTMUOC01.RL12.00.fastq
 
 Pipes
 ^^^^^
@@ -161,10 +162,10 @@ It can be readily combined with ``head`` to show the second sequence in the file
 
 .. code-block:: bash
 
-    head -8 data/fastq/HRTMUOC01.RL12.00.fastq | tail -4 | less -S
+    head -8 HRTMUOC01.RL12.00.fastq | tail -4 | less -S
 
     # or the third sequence data ;)
-    < data/fastq/HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
+    < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
 **Exercise (How many reads are there?)**:
 
@@ -183,7 +184,7 @@ from the stream).
 
 .. code-block:: bash
 
-  cat data/fastq/HRTMUOC01.RL12.00.fastq | wc -l
+  cat HRTMUOC01.RL12.00.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes
 four lines). And there is even a built-in calculator in bash:
@@ -204,10 +205,10 @@ characters followed by '.fastq'*.
 
 .. code-block:: bash
 
-  cat data/fastq/HRTMUOC01.RL12.*.fastq | wc -l
+  cat HRTMUOC01.RL12.*.fastq | wc -l
   expr XXXX / 4
 
-  cat data/fastq/HRTMUOC01.RL12.0?.fastq | wc -l
+  cat HRTMUOC01.RL12.0?.fastq | wc -l
   expr XXXX / 4
 
 Producing lists
@@ -241,7 +242,18 @@ Variables & Loops
 
 .. code-block:: bash
 
-  list=`ls data/fastq/HRTMUOC01.RL12.0{1..9}.fastq`
+  CPU=4
+  echo $CPU
+
+  FILE=data/fastq/HRTMUOC01.RL12.00.fastq
+  echo $FILE
+
+  FILES=`ls ~/data/fastq/*.fastq`
+  echo $FILES
+
+.. code-block:: bash
+
+  list=`ls ~/data/fastq/HRTMUOC01.RL12.0{1..9}.fastq`
 
   for i in $list
   do
@@ -250,7 +262,7 @@ Variables & Loops
 
   for i in $list
   do
-    head -n1 $i
+    head -n1 $i | wc -c
   done
 
 Use multiple windows (and be safe when the network fails)
