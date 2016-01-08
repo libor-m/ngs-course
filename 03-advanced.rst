@@ -84,7 +84,7 @@ Shell Scripts
 
 	nano script.sh
 
-.. code-block::bash
+.. code-block:: bash
 
 	#!/bin/sh
 
@@ -111,3 +111,9 @@ Shell Scripts
 
 Parallel
 --------
+
+Running programs/scripts/commands in parallel mode:
+
+.. code-block:: bash
+
+ parallel –j 5 'bash script.sh {}' ::: {1..10}
