@@ -128,7 +128,7 @@ Viewing plain text file content
   cat
   nano
 
-Exercise (What does these commands do?):
+Try these commands:
 
 .. code-block:: bash
 
@@ -169,7 +169,7 @@ from the stream).
 
 .. code-block:: bash
 
-  cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
+  cat data/fastq/HRTMUOC01.RL12.00.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes
 four lines). And there is even a built-in calculator in bash::
@@ -177,7 +177,7 @@ four lines). And there is even a built-in calculator in bash::
 .. code-block:: bash
 
   echo $(( 788640 / 4 ))
-  expr 788640 / 4
+  expr XXXX / 4
 
 Globbing
 ^^^^^^^^
@@ -190,8 +190,11 @@ characters followed by '.fastq'*.
 
 .. code-block:: bash
 
-  ls *.fastq
-  ls *.fastq
+  cat data/fastq/HRTMUOC01.RL12.*.fastq | wc -l
+  expr XXXX / 4
+
+  cat data/fastq/HRTMUOC01.RL12.0?.fastq | wc -l
+  expr XXXX / 4
 
 Producing lists
 ^^^^^^^^^^^^^^^
