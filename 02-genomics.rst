@@ -25,7 +25,7 @@ Pattern search & regular expressions (``grep``)
 
 Use mouse annotation file (GTF)
 
-.. block-code::
+.. block-code:: bash
 
   cd ~
   sudo cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data/.
@@ -34,13 +34,13 @@ Use mouse annotation file (GTF)
 
 1. Count the number of records on the chromosome X
 
-.. block-code::
+.. block-code:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep '^X' | wc -l
 
 2. Count the number of records on chromosome X and Y
 
-.. block-code::
+.. block-code:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]'
   < data/Mus_musculus.NCBIM37.67.gtf grep '^X\|^Y' | wc -l
@@ -48,7 +48,7 @@ Use mouse annotation file (GTF)
 
 3. Count the number of 'CDS' on the chromosome X
 
-.. block-code::
+.. block-code:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep 'CDS' | grep '^X' | wc -l
 
