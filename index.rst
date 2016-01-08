@@ -10,6 +10,16 @@ in other environments.
 Not knowing 'the right way' to do things can be intimidating for the beginning users, so an additional section
 exploring the 'best practice' is available for self learning.
 
+Program:
+
++----------------------------------------------------+
+| Friday (14:00-18:00)                               |
++=============+======================================+
+| Afternoon I | Course Intro, Introduction to Unix   |
++-------------+--------------------------------------+
+| Afternoon Break (~ 0.5 h)                          |
++-------------+--------------------------------------+
+
 Initial instructions:
 
 .. toctree::

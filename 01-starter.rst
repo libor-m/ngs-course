@@ -112,16 +112,16 @@ and copy FASTQ data from common repository:
   sudo cp -r /data/fastq/fastq.tar.gz data/fastq/.
   ls data/fastq
 
-  .. note::
+.. note::
 
-     Normal users cannot change (and break) the (UNIX) system. There is one special
-     user in each system called ``root``, who has the rights to make system wide changes.
-     You can either directly log in as root, or use ``sudo`` (super user do) to execute
-     one command as ``root``.
+   Normal users cannot change (and break) the (UNIX) system. There is one special
+   user in each system called ``root``, who has the rights to make system wide changes.
+   You can either directly log in as root, or use ``sudo`` (super user do) to execute
+   one command as ``root``.
 
 
-     .. image:: _static/sandwich.png
-        :align: center
+   .. image:: _static/sandwich.png
+      :align: center
 
 Uncompressing files
 ^^^^^^^^^^^^^^^^^^^
