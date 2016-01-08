@@ -11,19 +11,19 @@ Pattern search & regular expressions
 
 .. code-block:: bash
 
-  # ^A         # match A at the beginning of line
-  # A$         # match A at the end of line
-  # [0-9]      # match numerical characters
-  # [A-Z]      # match alphabetical characters
-  # [ATGC]     # match A or T or G or C
-  # .          # match any character
-  # A*         # match A letter 0 or more times
-  # A\{2\}     # match A letter exactly 2 times
-  # A\{1,\}    # match A letter 1 or more times
-  # A+         # match A letter 1 or more times (extended regular expressions)
-  # A\{1,3\}   # match A letter at least 1 times but no more than 3 times
-  # AATT\|TTAA # match AATT or TTAA
-  # \s         # match whitespace (also TAB)
+  ^A         # match A at the beginning of line
+  A$         # match A at the end of line
+  [0-9]      # match numerical characters
+  [A-Z]      # match alphabetical characters
+  [ATGC]     # match A or T or G or C
+  .          # match any character
+  A*         # match A letter 0 or more times
+  A\{2\}     # match A letter exactly 2 times
+  A\{1,\}    # match A letter 1 or more times
+  A+         # match A letter 1 or more times (extended regular expressions)
+  A\{1,3\}   # match A letter at least 1 times but no more than 3 times
+  AATT\|TTAA # match AATT or TTAA
+  \s         # match whitespace (also TAB)
 
 *Use mouse annotation file (GTF)*
 
