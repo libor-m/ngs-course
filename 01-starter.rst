@@ -15,7 +15,7 @@ I'd suggest using English keyboard, if you don't want to constantly press right 
 and five random letters before you find the one you need.
 You will definitely need those keys:
 
-.. code-block:: bash
+.. code-block::
 
   [] - squared brackets
   {} - curly brackets
@@ -90,8 +90,8 @@ Helpful commands (dir content and its size, disc usage)
   ls | wc -l # what does this command do?
   locate # find a file/program
 
-Moving/copying files/directories
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Moving or copying files and directories
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -118,7 +118,6 @@ and copy FASTQ data from common repository:
    user in each system called ``root``, who has the rights to make system wide changes.
    You can either directly log in as root, or use ``sudo`` (super user do) to execute
    one command as ``root``.
-
 
    .. image:: _static/sandwich.png
       :align: center
