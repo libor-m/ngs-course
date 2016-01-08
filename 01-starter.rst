@@ -4,8 +4,12 @@ Unix - Introduction
 This session will give you all the basics that you need
 to smoothly move around when using a UNIX system (in the text mode!).
 
+Basic orientation
+-----------------
+
 Check your keyboard
--------------------
+^^^^^^^^^^^^^^^^^^^
+
 Before we do any serious typing, make sure you know where are the important keys.
 I'd suggest using English keyboard, if you don't want to constantly press right alt
 and five random letters before you find the one you need.
@@ -38,8 +42,8 @@ You will definitely need those keys:
   '' - quotation mark single
   "" - quotation mark double
 
-Basic orientation - directory structure
----------------------------------------
+Directory structure
+^^^^^^^^^^^^^^^^^^^
 
 Unlike 'drives' in MS Windows, UNIX has a single directory tree
 that starts in ``/`` (called root directory). Everything can be reached from the root directory.
@@ -76,7 +80,7 @@ A neat trick to go back where you've been before the last ``cd`` command:
 More in :ref:`moving_around`.
 
 Helpful commands (dir content and its size, disc usage)
--------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -86,7 +90,7 @@ Helpful commands (dir content and its size, disc usage)
   ls | wc -l # what does this command do?
 
 Moving/copying files/directories
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -107,14 +111,14 @@ and copy FASTQ data from common repository:
   ls data/fastq
 
 Uncompressing files
--------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
   tar -xzvf data/fastq/fastq.tar.gz
 
 Viewing plain text file content
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -133,7 +137,7 @@ Exercise (What does these commands do?):
   tail -n 8 data/fastq/HRTMUOC01.RL12.00.fastq
 
 Pipes
------
+^^^^^
 
 Using the ``|`` (pipe) character you instruct the shell to take the output of the first command
 and use it as an input for the second command.
@@ -176,7 +180,7 @@ four lines). And there is even a built-in calculator in bash::
   expr 788640 / 4
 
 Globbing
---------
+^^^^^^^^
 
 Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
 the names! There is a feature that comes to rescue. It's called `globbing`. It allows
@@ -190,7 +194,7 @@ characters followed by '.fastq'*.
   ls *.fastq
 
 Producing lists
----------------
+^^^^^^^^^^^^^^^
 
 What do these commands do?
 
@@ -216,7 +220,7 @@ Producing lists of subdirectories
   mkdir –p {2013..2015}/0{1..9}/{A..C} {2013..2015}/{10..12}/{A..C}
 
 Variables & Loops
------------------
+^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
