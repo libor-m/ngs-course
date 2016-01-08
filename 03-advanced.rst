@@ -55,18 +55,18 @@ Scripting in one line (awk)
 
 	< data/fastq/HRTMUOC01.RL12.00.fastq \
 	awk -v l=80 '{
-    if( (NR + 3) % 4 == 0 ){
-      id=$0;
-    }else if( (NR + 3) % 4 == 1 ){
-      seq=$0;
-    }else if( (NR + 3) % 4 == 2 ){
-      q=$0;
-    }else{
-      if( length(seq) >= l ){
-        print id"\n"seq"\n"q"\n+";
-      }
-    }
-  }' | less
+	  if( (NR + 3) % 4 == 0 ){
+	    id=$0;
+	  }else if( (NR + 3) % 4 == 1 ){
+	    seq=$0;
+	  }else if( (NR + 3) % 4 == 2 ){
+	    q=$0;
+	  }else{
+	    if( length(seq) >= l ){
+	      print id"\n"seq"\n"q"\n+";
+	    }
+	  }
+	}' | less
 
 Functions in Shell
 ------------------
