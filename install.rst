@@ -3,13 +3,13 @@ Installation instructions
 
 We will be using a virtual computer pre-installed with Debian Linux and sample data necessary for the exercises.
 
-.. note:: 
+.. note::
   You need to install the image even if your main system is Linux / Mac OS X!
 
 Installation steps (it should take about 10 minutes):
 
 - Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
-- Download the virtual machine image from this link: http://goo.gl/FwFk8Z You'll get a single 
+- Download the virtual machine image from this link: https://goo.gl/ugMHB0 You'll get a single 
   file with ``.ova`` extension on your hard drive.
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
   Follow the instructions after the import is started.
@@ -44,15 +44,15 @@ Windows
 Install PuTTY and WinSCP. PuTTY will be used to control the virtual computer. WinSCP will be used to transfer
 files between your computer and the virtual computer.
 
-- PuTTY (http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html - look for putty.exe) 
-- WinSCP (http://winscp.net/eng/download.php - look for Installation package). 
+- PuTTY (http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html - look for putty.exe)
+- WinSCP (http://winscp.net/eng/download.php - look for Installation package).
 
 Mac OS X and Linux
 ------------------
 Ssh is used to control the virtual computer. It should be installed in your computer.
 
-Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended) 
-from the command line. `Scp` and `rsync` could be already installed in your system, 
+Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended)
+from the command line. `Scp` and `rsync` could be already installed in your system,
 if you want to use `lftp`, you'll probably have to install it yourself.
 
 Mac users that prefer grapical clients can use something like `CyberDuck`. See
@@ -60,4 +60,4 @@ http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utili
 
 Time to log in!
 ---------------
-Try to log in following the instructions in :ref:`ssh_connect`. 
+Try to log in following the instructions in :ref:`ssh_connect`.
