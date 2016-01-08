@@ -108,3 +108,6 @@ Shell Scripts
 	}' > $OUT
 
 	echo File `basename $FILE` done
+
+Parallel
+--------
