@@ -1,7 +1,11 @@
 Slide decks
 ===========
 
-:download:`Starter session <_static/unix.pdf>` (Libor)
+:download:`Unix - Introduction <_static/unix.pdf>` (Libor)
+
+:download:`Unix - Basics <_static/unix_basics.pdf>` (Vasek)
+
+Old:
 
 :download:`Genomics session <_static/unix_advanced.pdf>` (Vasek)
 
