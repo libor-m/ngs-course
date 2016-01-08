@@ -34,6 +34,16 @@ Pattern search & regular expressions
   gunzip data/Mus_musculus.NCBIM37.67.gtf.gz
   less -S data/Mus_musculus.NCBIM37.67.gtf
 
+.. note::
+
+  Permissions to work with file:
+  .. code-block::
+
+    sudo chmod ugo+r data/Mus_musculus.NCBIM37.67.gtf.gz
+
+    # Check the permissions by:
+    ls -l
+
 1. Count the number of records on the chromosome X
 
 .. code-block:: bash
@@ -44,9 +54,8 @@ Pattern search & regular expressions
 
 .. code-block:: bash
 
-  < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]'
+  < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]' | wc -l
   < data/Mus_musculus.NCBIM37.67.gtf grep '^X\|^Y' | wc -l
-  < data/Mus_musculus.NCBIM37.67.gtf grep -E '^X' -E '^Y' | wc -l
 
 3. Count the number of 'CDS' on the chromosome X
 
