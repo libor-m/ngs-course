@@ -5,8 +5,8 @@ Scripting session: scripting in one line using ``awk``,
 writing functions and scripts in shell, and running procedures in parallel.
 
 
-Scripting in one line (awk):
-----------------------------
+Scripting in one line (awk)
+---------------------------
 
 1. Extract IDs of a FASTQ file and count the number of reads
 
@@ -68,15 +68,15 @@ Scripting in one line (awk):
     }
   }' | less
 
-Functions in Shell:
--------------------
+Functions in Shell
+------------------
 
 .. code-block:: bash
 
 	uniq(){ uniq -c | sed -r 's/^ *([0-9]+) /\1\t/'; }
 
-Shell Scripts:
---------------
+Shell Scripts
+-------------
 
 .. code-block:: bash
 

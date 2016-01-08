@@ -80,9 +80,10 @@ Helpful commands (dir content and its size, disc usage)
 
 .. code-block:: bash
 
-  ls -shaR
-  du -sh
-  df -h
+  ls -shaR # list content of a directory
+  du -sh # disc usage (by directory)
+  df -h # disc free
+  ls | wc -l # what does this command do?
 
 Moving/copying files/directories
 --------------------------------
