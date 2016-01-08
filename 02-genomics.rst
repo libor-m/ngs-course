@@ -110,8 +110,8 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | \
   cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
-Joining multiple file + subshell
---------------------------------
+Joining multiple files + subshell
+---------------------------------
 
 Use ``paste``, ``join`` commands.
 
