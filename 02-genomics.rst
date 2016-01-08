@@ -9,7 +9,7 @@ Pattern search & regular expressions
 
 ``grep`` useful tool to search pattern using regular expressions.
 
-.. block-code:: bash
+.. code-block:: bash
 
   # ^A         # match A at the beginning of line
   # A$         # match A at the end of line
@@ -27,7 +27,7 @@ Pattern search & regular expressions
 
 *Use mouse annotation file (GTF)*
 
-.. block-code:: bash
+.. code-block:: bash
 
   cd ~
   sudo cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data/.
@@ -36,13 +36,13 @@ Pattern search & regular expressions
 
 1. Count the number of records on the chromosome X
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep '^X' | wc -l
 
 2. Count the number of records on chromosome X and Y
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]'
   < data/Mus_musculus.NCBIM37.67.gtf grep '^X\|^Y' | wc -l
@@ -50,13 +50,13 @@ Pattern search & regular expressions
 
 3. Count the number of 'CDS' on the chromosome X
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep 'CDS' | grep '^X' | wc -l
 
 *Use nightingale variant call file (VCF)*
 
-.. block-code:: bash
+.. code-block:: bash
 
   cd ~
   sudo cp /data/mus_mda/05-fst2genes/luscinia_vars_flags.vcf.gz ~/data/.
@@ -65,26 +65,26 @@ Pattern search & regular expressions
 
 1. Count the number variants in the file
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | wc -l
 
 2. Count the number of variants passing/failing the quality threshold
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | wc -l
   < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'FAIL' | wc -l
 
 3. Count the number of variants on the chromosome Z passing the quality threshold
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
 
 4. Count the number of records on large autosomes which passed quality threshold
 
-.. block-code:: bash
+.. code-block:: bash
 
  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chr[1-9]\{1,2\}\s' | wc -l
 
@@ -98,13 +98,13 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 1. Which chromosome has the highest and the least number of variants?
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
-.. block-code:: bash
+.. code-block:: bash
 
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
@@ -117,6 +117,8 @@ Joining multiple file + subshell
 
 1. Join all nightingale FASTQ files and create a TAB separated file with one line per read
 
+.. code-block:: bash
+
   < cat *.fastq | paste - - - - | cut -f 1-3 | less
 
 2. Make a TAB-separated file having four columns:
@@ -125,7 +127,7 @@ Joining multiple file + subshell
     3. number of variants which pass
     4. number of variants which fails
 
-.. block-code:: bash
+.. code-block:: bash
 
   # Command 1
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > count_vars_chrom.txt
@@ -144,7 +146,7 @@ Joining multiple file + subshell
 
 All three commands together using subshell:
 
-.. block-code:: bash
+.. code-block:: bash
 
   join -1 2 -2 3 <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | \
   sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
@@ -165,7 +167,9 @@ we have to get rid of the other lines that are not bases.
 One way to do it is to pick only lines comprising of letters A, C, G, T and N.
 There is a ubiquitous mini-language called `regular expressions` that can be used
 to define text patterns. `A line comprising only of few possible letters` is
-a text pattern. ``grep`` is the basic tool for using regular expressions::
+a text pattern. ``grep`` is the basic tool for using regular expressions:
+
+.. code-block:: bash
 
   cat *.fastq | grep '^[ACGTN]*$' | less -S
 
@@ -180,7 +184,9 @@ Now a short explanation of the ``^[ACGTN]*$`` pattern (``grep`` works one line a
 - the ``*`` is a count suffix for the square brackets, saying there should be zero or more of such characters
 - ``$`` marks end of the line - that means the whole line has to match the pattern
 
-To count the bases read, we extend our pipeline::
+To count the bases read, we extend our pipeline:
+
+.. code-block:: bash
 
   cat *.fastq | grep '^[ACGTN]*$' | wc -c
 
@@ -189,7 +195,9 @@ and the end of each line is marked by a special character written as ``\n`` (n
 for newline). To get rid of this character, we can use another tool, ``tr``
 (transliterate). ``tr`` can substitute one letter with another  (imagine you
 need to lowercase all your data, or mask lowercase bases in your Fasta file).
-Additionally ``tr -d`` (delete) can remove characters::
+Additionally ``tr -d`` (delete) can remove characters:
+
+.. code-block:: bash
 
   cat *.fastq | grep '^[ACGTN]*$' | tr -d "\n" | wc -c
 
