@@ -1,5 +1,5 @@
-Session 3: Unix - Advanced II
-=============================
+Unix - Advanced II
+==================
 
 Scripting session: scripting in one line using ``awk``,
 writing functions and scripts in shell, and running procedures in parallel.

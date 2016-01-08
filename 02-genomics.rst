@@ -1,5 +1,5 @@
-Session 2: Unix - Advanced I
-============================
+Unix - Advanced I
+=================
 
 This session focuses on plain text file data extraction/modification
 using build-in Unix tools.
