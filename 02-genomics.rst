@@ -118,7 +118,6 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   pattern replacement is the best thing to use it for.
 
   General syntax:
-
   .. code-block:: bash
 
     sed 's/old_pattern/new_pattern/'
