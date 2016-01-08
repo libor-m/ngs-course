@@ -88,6 +88,7 @@ Helpful commands (dir content and its size, disc usage)
   du -sh # disc usage (by directory)
   df -h # disc free
   ls | wc -l # what does this command do?
+  locate # find a file/program
 
 Moving/copying files/directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -99,6 +100,7 @@ Moving/copying files/directories
   rm -r # remove a file/directory
   mv # move a file/directory
   cp -r # copy a file/directory
+  ln -s # make a symbolic link
 
 Prepare data directory in your HOME directory
 and copy FASTQ data from common repository:
