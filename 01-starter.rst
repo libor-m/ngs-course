@@ -127,7 +127,7 @@ Uncompressing files
 .. code-block:: bash
 
   # Compressed tarball archives
-  tar -xzvf data/fastq/fastq.tar.gz
+  tar -xzvf fastq.tar.gz
 
   # gzipped files
   gunzip file.txt.gz
