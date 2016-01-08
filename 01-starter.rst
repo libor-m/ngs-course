@@ -254,110 +254,6 @@ Screen creates the first window for you. To create another one press
    Keyboard shortcuts notation: ``ctrl+a space`` means press ``ctrl`` key and ``a`` key
    simultaneously and ``space`` key after you release both of the previous keys.
 
-Check what the computer is doing
---------------------------------
-
-Run ``htop`` in one of your screen windows::
-
-  htop
-
-Htop displays CPU and memory utilization of the (virtual) computer. Continue your
-work in another window (``ctrl+a space``). You can switch back to the htop window to
-monitor progress of some lengthy operation.
-
-.. note::
-
-  To find the name of the command that does what you need (``grep``), use google::
-
-    linux search for string
-
-  Once you know the name of the command that does what you need, all the
-  details are easily accessible using ``man``. To get all possible help about
-  finding text patterns in files do:
-
-  .. code-block:: bash
-
-    man grep
-
-.. note::
-
-  Some useful keyboard shortcuts::
-
-    ctrl+c  - kills current running program (except for bash, nano, vim, ...)
-            - clears the command line in bash
-
-    ctrl+d  - means end of input (if you run e.g. bc interactively)
-            - end of input means logout in bash
-
-    ctrl+r  - starts history search in bash, just type a part of a long command
-              and it will come back (ctrl+c to the rescue;)
-
-    ctrl+k  - clears the command line from cursor to the end,
-              you will need this while exploring long pipelines...
-
-
-Prepare data in your home directory
------------------------------------
-
-All the data we are going to use are located in ``/data``. However, we want to have it
-to be conveniently located in our own directory (``~``, ``/home/user``). Without the need
-to copy all of it, we can use a symbolic link (``ln -s``). This keeps the data in their original
-location but creates a reference.
-
-In case you do not know where your files are but you do know some part of the name,
-use the ``locate`` command. We know the names contained fastq, vcf and gff3 suffices:
-
-.. code-block:: bash
-
-    locate fastq
-    locate vcf
-    locate gff3
-
-.. note::
-
-   To paste text into PuTTY just click right mouse button anywhere in the window.
-   To copy text to clipboard, just select it. No keyboard shortcuts are necessary.
-
-Once we know their actual position we can create symbolic links:
-
-.. code-block:: bash
-
-    # create directory data
-    # <- this marks a comment - anything after first # is ignored
-    mkdir data
-
-    # go to your new data directory
-    cd data
-
-    # create a link to the nightingale reads
-    # and name it 'fastq'
-    ln -s /data/slavici/00-reads fastq
-
-
-You created a `symbolic link` named ``fastq`` with ``/data/slavici/00-reads`` as a `target`.
-Check it by typing::
-
-  ls -l
-
-.. note::
-
-   You should use bash `autocomplete` feature, when typing paths. It is easier, faster
-   and less prone to error. Type a part of the path, like ``/da`` and press the ``tab``
-   key. When nothing appears, press ``tab`` once more. There is either no possible completion
-   or more possibilities, that will be displayed on the second press.
-
-It is possible to create a bad link. There is no validation on the target:
-
-.. code-block:: bash
-
-  ln -s /nothing_here bad-link
-
-  # the bad link has a different color in the output
-  ls -l
-
-  # get rid of the bad link
-  rm bad-link
-
 Installing software
 -------------------
 The easiest way to install software is via a package manager (eg. ``apt-get`` for all Debian
@@ -446,3 +342,50 @@ This creates a `clone` of the online repository in ``bedtools2`` directory.
 
 The compilation should take a while, so you can flip to your `htop` window with
 ``ctrl-a space`` and watch the CPU spin;)
+
+Exercise
+--------
+
+.. note::
+
+  What is the output of this command ``cd ~/ && ls | wc -l``?
+
+    a) The total count of files in subdirectories in home directory
+    b) The count of lines in files in home directory
+    c) The count of files/directories in home directory
+    d) The count of files/directories in current directory
+
+  How many directories this command ``mkdir {1999-2001}-{1st,2nd,3rd,4th}-{1..5}`` makes?
+
+    a) 56
+    b) 60
+    c) 64
+    d) 72
+
+  When files created using this command ``touch file0{1..9}.txt file{10..30}.txt``, how many files matched by ``ls file?.txt`` and ``ls file*0.txt``
+
+    a) 30 and 0
+    b) 0 and 30
+    c) 30 and 4
+    d) 0 and 3
+
+  Which file would match this pattern ``ls *0?0.*``?
+
+    a) file36500.tab
+    b) file456030
+    c) 5460230.txt
+    d) 456000.tab
+
+  Where do we get with this command ``cd ~/ && cd ../..``?
+
+    a) two levels below home directory
+    b) one level above home directory
+    c) to root directory
+    d) two levels above root directory
+
+  What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt is not empty)
+
+    a) 0
+    b) 1
+    c) 2
+    d) 3
