@@ -1,5 +1,5 @@
-Unix - Introduction
-===================
+Unix - Basics
+=============
 
 This session will give you all the basics that you need
 to smoothly move around when using a UNIX system (in the text mode!).
