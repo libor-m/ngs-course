@@ -22,16 +22,16 @@ Use nightingales FASTQ files:
 
 	< data/fastq/HRTMUOC01.RL12.00.fastq \
 	awk 'BEGIN{
-				OFS="\t"
-			}{
-				if(( NR + 3 ) % 4 == 0 ){
-					id = $0
-				}else{
-					if( (NR + 3) % 4 == 1 ){
-						print id,length($0)
-					}
-				}
-			}' | less
+		OFS="\t"
+	}{
+		if(( NR + 3 ) % 4 == 0 ){
+			id = $0
+		}else{
+			if( (NR + 3) % 4 == 1 ){
+				print id,length($0)
+			}
+		}
+	}' | less
 
 3. Get average read length
 
@@ -39,15 +39,15 @@ Use nightingales FASTQ files:
 
 	< data/fastq/HRTMUOC01.RL12.00.fastq \
 	awk 'BEGIN{
-			OFS="\t"; l=0; n=0
-		}{
-	    if( ( NR + 3 ) % 4 == 1 ){
-	      l = l + length($0);
-	      n = n + 1;
-	    }
-	  }END{
-	    print "Average read length:", l/n
-	  }'
+		OFS="\t"; l=0; n=0
+	}{
+		if( ( NR + 3 ) % 4 == 1 ){
+			l = l + length($0);
+			n = n + 1;
+		}
+	}END{
+		print "Average read length:", l/n
+	}'
 
 4. Filter out short sequences (set the minimum size allowed)
 
