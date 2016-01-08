@@ -136,20 +136,17 @@ Pipes
 -----
 
 Using the ``|`` (pipe) character you instruct the shell to take the output of the first command
-and use it as an input for the second command. You can also use ``less`` as a part of the
-pipeline::
-
-  head -4 G59B7NP01.fastq | less -S
+and use it as an input for the second command.
 
 The complement to ``head`` is ``tail``. It displays last lines of the input.
 It can be readily combined with ``head`` to show the second sequence in the file.
 
 .. code-block:: bash
 
-    head -8 G59B7NP01.fastq | tail -4 | less -S
+    head -8 data/fastq/HRTMUOC01.RL12.00.fastq | tail -4 | less -S
 
     # or the third sequence data ;)
-    head -12 G59B7NP01.fastq | tail -4 | less -S
+    < data/fastq/HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
 **Exercise (How many reads are there?)**::
 
@@ -163,39 +160,34 @@ Our data is in three separate files. To merge them on the fly we'll use another 
 stream of the data that was in the files (there is no way to tell where one file ends
 from the stream).
 
-.. code-block:: bash
-
-    ls
-
 # now double click on each file name in the listing,
 # and click right mouse button to paste (insert space in between)
-cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
+
+.. code-block:: bash
+
+  cat G59B7NP01.fastq GS60IET02.RL1.fastq GS60IET02.RL2.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes
 four lines). And there is even a built-in calculator in bash::
 
+.. code-block:: bash
+
   echo $(( 788640 / 4 ))
   expr 788640 / 4
-
-Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
-the names! There is a feature that comes to rescue. It's called `globbing`. It allows
-you to specify more filenames at once by defining some common pattern. All your
-read files have ``.fastq`` extension::
-
-echo *.fastq
-
-``echo`` is no magic, it outputs whatever you give it (try ``echo ahoj``). The magic
-is done by bash - whenever it sees an asterisk (``*``), it tries to expand it by
-matching to the files and directories. ``*.fastq`` means *a file named by any number of
-characters followed by '.fastq'*.
 
 Globbing
 --------
 
+Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
+the names! There is a feature that comes to rescue. It's called `globbing`. It allows
+you to specify more filenames at once by defining some common pattern. All your
+read files have ``.fastq`` extension. ``*.fastq`` means *a file named by any number of
+characters followed by '.fastq'*.
+
 .. code-block:: bash
 
   ls *.fastq
-  ls *.fast?
+  ls *.fastq
 
 Producing list in Unix
 ----------------------
@@ -227,7 +219,7 @@ Variables & Loops
 
 .. code-block:: bash
 
-  list=`ls HRTMUOC01.RL12.0{1..9}.fastq`
+  list=`ls data/fastq/HRTMUOC01.RL12.0{1..9}.fastq`
 
   for i in $list
   do
@@ -348,42 +340,42 @@ Exercise
 
 .. note::
 
-  What is the output of this command ``cd ~/ && ls | wc -l``?
+  1. What is the output of this command ``cd ~/ && ls | wc -l``?
 
     a) The total count of files in subdirectories in home directory
     b) The count of lines in files in home directory
     c) The count of files/directories in home directory
     d) The count of files/directories in current directory
 
-  How many directories this command ``mkdir {1999-2001}-{1st,2nd,3rd,4th}-{1..5}`` makes?
+  2. How many directories this command ``mkdir {1999-2001}-{1st,2nd,3rd,4th}-{1..5}`` makes?
 
     a) 56
     b) 60
     c) 64
     d) 72
 
-  When files created using this command ``touch file0{1..9}.txt file{10..30}.txt``, how many files matched by ``ls file?.txt`` and ``ls file*0.txt``
+  3. When files created using this command ``touch file0{1..9}.txt file{10..30}.txt``, how many files matched by ``ls file?.txt`` and ``ls file*0.txt``
 
     a) 30 and 0
     b) 0 and 30
     c) 30 and 4
     d) 0 and 3
 
-  Which file would match this pattern ``ls *0?0.*``?
+  4. Which file would match this pattern ``ls *0?0.*``?
 
     a) file36500.tab
     b) file456030
     c) 5460230.txt
     d) 456000.tab
 
-  Where do we get with this command ``cd ~/ && cd ../..``?
+  5. Where do we get with this command ``cd ~/ && cd ../..``?
 
     a) two levels below home directory
     b) one level above home directory
     c) to root directory
     d) two levels above root directory
 
-  What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt is not empty)
+  6. What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt is not empty)
 
     a) 0
     b) 1
