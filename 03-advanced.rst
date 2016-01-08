@@ -53,10 +53,8 @@ Scripting in one line (awk)
 
 .. code-block:: bash
 
-	LENGTH=80
-
 	< data/fastq/HRTMUOC01.RL12.00.fastq \
-	awk -v l=$LENGTH '{
+	awk -v l=80 '{
     if( (NR + 3) % 4 == 0 ){
       id=$0;
     }else if( (NR + 3) % 4 == 1 ){
