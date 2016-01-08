@@ -8,7 +8,7 @@ writing functions and scripts in shell, and running procedures in parallel.
 Scripting in one line (awk)
 ---------------------------
 
-Use nightingales FASTQ files:
+*Use nightingale FASTQ files:*
 
 1. Extract IDs of a FASTQ file and count the number of reads
 
