@@ -104,8 +104,8 @@ Use nightingale variant call file (VCF)
 
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
-Joining multiple file (paste, join)
------------------------------------
+Joining multiple file (paste, join) + subshell
+----------------------------------------------
 
 Use nightingale FASTQ file
 
@@ -122,19 +122,37 @@ Use nightingale FASTQ file
 .. block-code:: bash
 
   # Command 1
-
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > count_vars_chrom.txt
 
   # Command 2
-
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r | \
   uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 > count_vars_pass_fail.txt
 
+  # Command 3
+  join -1 2 -2 3 count_vars_chrom.txt count_vars_pass_fail.txt | wc -l
 
-The commands for this session are in the talk's slide deck.
+  # How many lines did you retrieved?
 
-How many bases were sequenced? => GREP EXERCISE FOR SATURDAY
-------------------------------
+  # You have to sort the data before sending to ``join`` - subshell
+  join -1 2 -2 3 <( sort -k2,2 count_vars_chrom.txt ) <( sort -k3,3 count_vars_pass_fail.txt ) | tr " " "\t" > count_all.txt
+
+All three commands together using subshell:
+
+.. block-code:: bash
+
+  join -1 2 -2 3 <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1 | sort | uniq -c | \
+  sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
+  <( < lp2-var-filtered-rand2.vcf grep -v '^#' | cut -f 1,7 | sort -r | uniq -c | \
+  sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 | \
+  sort -k3,3  ) | tr " " "\t" > count_all.txt
+
+
+Exercise
+--------
+
+How many bases were sequenced?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``wc`` can count characters (think bases) as well. But to get a reasonable number,
 we have to get rid of the other lines that are not bases.
 
