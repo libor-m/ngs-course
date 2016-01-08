@@ -189,15 +189,16 @@ characters followed by '.fastq'*.
   ls *.fastq
   ls *.fastq
 
-Producing list in Unix
-----------------------
+Producing lists
+---------------
+
+What do these commands do?
 
 .. code-block:: bash
 
-  touch dir-{1..12}
-  touch dir-0{1..9} dir-{10..12}
-  touch {2013..2015}-0{1..9} {2013..2015}-{10..12}
-  touch {2013..2014}-0{1..9}-{a..c} {2013..2014}-{10..12}-{a..c}
+  touch file-0{1..9}.txt file-{10..20}.txt
+  touch 0{1..9}-{a..f}.txt {10..12}-{a..f}.txt
+  touch 0{1..9}-{jan,feb,mar}.txt {10..12}-{jan,feb,mar}.txt
 
 **Exercise**::
 
