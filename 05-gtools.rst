@@ -125,6 +125,7 @@ VCFtools
 - http://vcftools.sourceforge.net
 
 Prepare data files
+
 .. code-block:: bash
 
 	cd
