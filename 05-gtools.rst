@@ -184,7 +184,7 @@ Select subset of samples and SNPs based on physical position in genome
 	--to-bp 23000000 \
 	--keep euro_samps.txt \
 	--recode \
-	--stdout | \
+	--stdout |
 	less -S
 
 Select subset of samples and then select SNPs with no missing data
@@ -215,9 +215,19 @@ and with minor allele frequency (MAF) no less than 0.2
 	--stdout \
 	> popdata_mda_euro.vcf
 
-	## Calculate Fst
+Use the newly created ``popdata_mda_euro.vcf`` representing variants
+only for a subset of individuals and variantsCalculate to calculate Fst index.
+In order for vcftools to calculate Fst index the populations
+have to be specified in the output - each one with a separate file
+(``--weir-fst-pop pop1.txt`` and ``--weir-fst-pop pop2.txt``).
 
-	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt --weir-fst-pop domesticus_samps.txt --stdout | less -S
+.. code-block:: bash
+
+	vcftools --vcf popdata_mda_euro.vcf \
+	--weir-fst-pop musculus_samps.txt \
+	--weir-fst-pop domesticus_samps.txt
+	--stdout |
+	less -S
 
 Exercise
 --------
