@@ -123,18 +123,18 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
   sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
 
   # sed -r (extended regular expressions)
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
   sort | uniq -c | sed -r 's/^ +//' | tr " " "\t" | sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | \
+  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 |
   cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
 .. note::
@@ -181,12 +181,12 @@ Use ``paste``, ``join`` commands.
 .. code-block:: bash
 
   # Command 1
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
   sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > data/count_vars_chrom.txt
 
   # Command 2
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r | \
-  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | \
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r |
+  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | 
   cut --complement -f 2,3,6 > data/count_vars_pass_fail.txt
 
   # Command 3
@@ -202,15 +202,15 @@ All three commands together using subshell:
 
 .. code-block:: bash
 
-  IN=luscinia_vars_flags.vcf
-  join -1 2 -2 3 <( < $IN grep -v '^#' | cut -f 1 | \
+  IN=data/luscinia_vars_flags.vcf
+  join -1 2 -2 3 <( < $IN grep -v '^#' | cut -f 1 |
   sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
-  <( < $IN grep -v '^#' | cut -f 1,7 | sort -r | uniq -c | \
-  sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 | \
+  <( < $IN grep -v '^#' | cut -f 1,7 | sort -r | uniq -c |
+  sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 |
   sort -k3,3  ) | tr " " "\t" > data/count_all.txt
 
   # and indented a bit more nicely
-  IN=luscinia_vars_flags.vcf
+  IN=data/luscinia_vars_flags.vcf
   join -1 2 -2 3 \
       <( <$IN  grep -v '^#' |
         cut -f 1 |
