@@ -8,18 +8,35 @@ proved beneficial to the authors.
 
 Easiest ways to get UNIX
 ------------------------
+
+To get the most basic UNIX tools, you can download an install  `Git for
+Windows <https://git-scm.com/download/win>`_. It comes with a nice terminal
+emulator, and installs to your right-click menu as 'Git Bash here' - which
+runs terminal in the folder that you clicked. Git itself is meant for managing 
+versions of directories, but it cannot live without the UNIX environment, so
+someone did the hard work and packaged it all nicely together.
+
+If you need more complete UNIX environment with many packages 'inside' your
+Windows,  you can use `Cygwin <https://www.cygwin.com/>`_. But it is quite
+complete, which leads you to believe that it can replace native UNIX, which
+you'll find painfully later is not true;)
+
 An easy way of getting UNIX environment in Windows is to install a basic Linux
-into a virtual machine. It's much more convenient that the dual boot configurations,
-and the risk of completely breaking your computer is lower. You can be using UNIX while
-having all your familiar stuff at hand. The only downside is that you have to transfer
-all the data as if the image was a remote machine. Unless you're able to set up windows 
-file sharing on the Linux machine. This is the way the author prefers (you can ask;).
+into a virtual machine as you have seen in the course. It's much more
+convenient that the dual boot configurations, and the risk of completely
+breaking your computer is lower. You can be using UNIX while having all your
+familiar stuff at hand. The only downside is that you have to transfer all the
+data as if the image was a remote machine. Unless you're able to set up
+windows  file sharing on the Linux machine. This is the way the author prefers
+(you can ask;).
 
-It's much more convenient to use a normal terminal like PuTTY to connect to the 
-machine rather than typing the commands into the virtual screen of VirtualBox (It's usually
-lacking clipboard support, you cannot change the size of the window, etc.)
+It's much more convenient to use a normal terminal like PuTTY to connect to
+the  machine rather than typing the commands into the virtual screen of
+VirtualBox - It's usually lacking clipboard support, you cannot change the size
+of the window, etc.
 
-Mac OS X and Linux are UNIX based, you just have to know how to start your terminal program.
+Mac OS X and Linux are UNIX based, you just have to know how to start your
+terminal program (``konsole``, ``xterm``, ``Terminal`` ...).
 
 Essentials
 ----------
