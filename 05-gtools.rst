@@ -69,7 +69,6 @@ within these sliding windows.
 
 	# Make 1Mb sliding windows (step 200kb)
 	bedtools makewindows \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-g genome.fa.fai \
 	-w 1000000 \
 	-s 200000 \
@@ -78,7 +77,6 @@ within these sliding windows.
 
 	# Make 2.5Mb sliding windows (step 500kb)
 	bedtools makewindows \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-g genome.fa.fai \
 	-w 2500000 \
 	-s 500000 \
@@ -87,7 +85,6 @@ within these sliding windows.
 
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-g genome.fa.fai \
 	-w 5000000 \
 	-s 1000000 \
