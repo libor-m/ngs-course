@@ -2,7 +2,7 @@ Unix - Advanced I
 =================
 
 This session focuses on plain text file data extraction/modification
-using build-in Unix tools.
+using built-in Unix tools.
 
 Pattern search & regular expressions
 ------------------------------------
@@ -30,19 +30,19 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   cd ~
-  sudo cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data/.
+  cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data
   gunzip data/Mus_musculus.NCBIM37.67.gtf.gz
   less -S data/Mus_musculus.NCBIM37.67.gtf
 
 .. note::
 
-  Permissions to work with file:
-  .. code-block::
+  You can check file permissions by typing ``ll`` instead of ``ls``.
+  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
+  for *User*, *Group*, and *Others*. The two names you see next to the 
+  permissions are file's owner user and group. 
 
-    sudo chmod ugo+r data/Mus_musculus.NCBIM37.67.gtf.gz
-
-    # Check the permissions by:
-    ls -l
+  You can change the permissions - if you have the permission to do so - 
+  by e.g. ``chmod go+w`` - "add write permission to group and others".
 
 1. Count the number of records on the chromosome X
 
@@ -68,7 +68,7 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   cd ~
-  sudo cp /data/mus_mda/05-fst2genes/luscinia_vars_flags.vcf.gz ~/data/.
+  cp /data/mus_mda/05-fst2genes/luscinia_vars_flags.vcf.gz ~/data
   gunzip data/luscinia_vars_flags.vcf.gz
   less -S data/luscinia_vars_flags.vcf
 
@@ -103,24 +103,19 @@ Cutting out, sorting and replacing text
 
 We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``.
 
-.. note:
-
-  Difference between ``sed`` and ``tr``:
-
-  ``tr`` replaces/deletes individual characters: Ideal for replacing/removing
-  ends of lines (``\n``) or TAB-seprator (``\t``).
-
-  ``sed`` replaces/deletes complex patterns.
-
 .. note::
 
-  ``sed`` (Text Stream Editor): It knows to do a lot of things, however,
-  pattern replacement is the best thing to use it for.
+  ``sed`` (text Stream EDitor) can do a lot of things, however,
+  pattern replacement is the best thing to use it for. The 'sed language'
+  consists of single character commands, and is no fun to code and even less 
+  fun to read (what does ``sed 'h;G;s/\n//'`` do?;). Use ``awk`` for more 
+  complex processing.
 
   General syntax:
+
   .. code-block:: bash
 
-    sed 's/old_pattern/new_pattern/'
+    sed 's/pattern/replacement/'
 
     # Replace one or more A or C or G or T by N
     sed 's/^[AGCT]\{1,\}/N/'
@@ -149,6 +144,16 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | \
   cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
+.. note:
+
+  Difference between ``sed`` and ``tr``:
+
+  ``tr`` (from TRansliterate) replaces/deletes individual characters: Ideal
+  for replacing/removing line ends (``tr -d "\n"``) or replacing some 
+  separator to TAB (``tr ";" "\t"``).
+
+  ``sed`` replaces (deletes) complex patterns.
+
 Joining multiple files + subshell
 ---------------------------------
 
@@ -156,8 +161,9 @@ Use ``paste``, ``join`` commands.
 
 .. note::
 
-  Subshell enables to fork processes, i.e. run multiple
-  processes before inputing into parent process:
+  Shell substitution is a nice way to pass a pipeline in a place where a file
+  is expected, be it input or output file (Just use the appropriate sign).
+  Multiple pipelines can be used in a single command:
 
   .. code-block:: bash
 
@@ -169,9 +175,11 @@ Use ``paste``, ``join`` commands.
 
 .. code-block:: bash
 
+  # repeating input in paste causes it to take more lines from the same source
   < cat *.fastq | paste - - - - | cut -f 1-3 | less
 
 2. Make a TAB-separated file having four columns:
+
     1. chromosome name
     2. number of variants in total for given chromosome
     3. number of variants which pass
@@ -207,6 +215,27 @@ All three commands together using subshell:
   sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 | \
   sort -k3,3  ) | tr " " "\t" > count_all.txt
 
+  # and indented a bit more nicely
+  IN=lp2-var-filtered-rand2.vcf
+  join -1 2 -2 3 \
+      <( <$IN  grep -v '^#' |
+        cut -f 1 | 
+        sort | 
+        uniq -c | 
+        sed 's/^ \{1,\}//' | 
+        tr " " "\t" | 
+        sort -k2,2 ) \
+      <( <$IN grep -v '^#' | 
+        cut -f 1,7 | 
+        sort -r | 
+        uniq -c | 
+        sed 's/^ \{1,\}//' | 
+        tr " " "\t" | 
+        paste - - | 
+        cut --complement -f 2,3,6 | 
+        sort -k3,3  ) |
+    tr " " "\t" \
+  > count_all.txt
 
 Exercise
 --------
