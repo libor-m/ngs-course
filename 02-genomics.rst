@@ -38,10 +38,10 @@ Pattern search & regular expressions
 
   You can check file permissions by typing ``ll`` instead of ``ls``.
   ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
-  for *User*, *Group*, and *Others*. The two names you see next to the 
-  permissions are file's owner user and group. 
+  for *User*, *Group*, and *Others*. The two names you see next to the
+  permissions are file's owner user and group.
 
-  You can change the permissions - if you have the permission to do so - 
+  You can change the permissions - if you have the permission to do so -
   by e.g. ``chmod go+w`` - "add write permission to group and others".
 
 1. Count the number of records on the chromosome X
@@ -100,8 +100,8 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
   ``sed`` (text Stream EDitor) can do a lot of things, however,
   pattern replacement is the best thing to use it for. The 'sed language'
-  consists of single character commands, and is no fun to code and even less 
-  fun to read (what does ``sed 'h;G;s/\n//'`` do?;). Use ``awk`` for more 
+  consists of single character commands, and is no fun to code and even less
+  fun to read (what does ``sed 'h;G;s/\n//'`` do?;). Use ``awk`` for more
   complex processing.
 
   General syntax:
@@ -142,7 +142,7 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   Difference between ``sed`` and ``tr``:
 
   ``tr`` (from TRansliterate) replaces (or deletes) individual characters:
-  Ideal for removing line ends (``tr -d "\n"``) or replacing some 
+  Ideal for removing line ends (``tr -d "\n"``) or replacing some
   separator to TAB (``tr ";" "\t"``).
 
   ``sed`` replaces (or deletes) complex patterns.
@@ -169,7 +169,7 @@ Use ``paste``, ``join`` commands.
 .. code-block:: bash
 
   # repeating input in paste causes it to take more lines from the same source
-  < cat *.fastq | paste - - - - | cut -f 1-3 | less
+  cat *.fastq | paste - - - - | cut -f 1-3 | less
 
 2. Make a TAB-separated file having four columns:
 
@@ -212,20 +212,20 @@ All three commands together using subshell:
   IN=lp2-var-filtered-rand2.vcf
   join -1 2 -2 3 \
       <( <$IN  grep -v '^#' |
-        cut -f 1 | 
-        sort | 
-        uniq -c | 
-        sed 's/^ \{1,\}//' | 
-        tr " " "\t" | 
+        cut -f 1 |
+        sort |
+        uniq -c |
+        sed 's/^ \{1,\}//' |
+        tr " " "\t" |
         sort -k2,2 ) \
-      <( <$IN grep -v '^#' | 
-        cut -f 1,7 | 
-        sort -r | 
-        uniq -c | 
-        sed 's/^ \{1,\}//' | 
-        tr " " "\t" | 
-        paste - - | 
-        cut --complement -f 2,3,6 | 
+      <( <$IN grep -v '^#' |
+        cut -f 1,7 |
+        sort -r |
+        uniq -c |
+        sed 's/^ \{1,\}//' |
+        tr " " "\t" |
+        paste - - |
+        cut --complement -f 2,3,6 |
         sort -k3,3  ) |
     tr " " "\t" \
   > count_all.txt
