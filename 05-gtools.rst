@@ -47,7 +47,7 @@ Prepare files
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-3. Count the number of open chromatin regions in merged file overlapping with genes
+3. Count the number of merged open chromatin regions file overlapping with genes
 
 .. code-block:: bash
 
@@ -107,41 +107,85 @@ within these sliding windows.
 	-b windows_5mb.bed \
 	> gdens_windows_5mb.tab
 
+The gene densities can be visualized in R
+
+.. code-block:: R
+
+	# Set working directory
+	setwd("~/data/bed")
+
+	# Load libraries
+	library(ggplot2)
+
+VCFtools
+--------
+
 **Explore vcftools functionality**
 
 - http://vcftools.sourceforge.net
 
+Prepare data files
 .. code-block:: bash
 
-	## Prepare data files
-
 	cd
-	mkdir data/diff
+	mkdir data/vcf
 
-	cp /data/mus_mda/00-popdata/*.txt data/diff/.
-	cp /data/mus_mda/00-popdata/popdata_mda.vcf.gz data/diff/.
+	cp /data/mus_mda/00-popdata/* data/vcf/.
 
-	cd data/diff/
+	cd data/vcf
 
-	## vcf file statistics - i.e. number of samples, number of SNPs
+	# View and explore the files within the 'vcf' directory
+	ls
+
+Obtaining the basic file statistics (number of variants & number of samples)
+
+.. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz
 
-	## Open compressed (.gz) vcf file and view it in less
+Viewing and printing out the content of the VCF file
 
-	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
+.. code-block:: bash
 
-	## Open compressed (.gz) vcf file and save it as a new file
+	# To print out the content of the VCF file
 
 	vcftools --gzvcf popdata_mda.vcf.gz --recode --out new_vcf
 
-	## Select subset of samples
+	# To view the content directly
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | less -S
+	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
 
-	## Select subset of samples and SNPs based on physical position in genome
+Basic data filtering - use of appropriate flags:
 
-	vcftools --gzvcf popdata_mda.vcf.gz --chr 11 --from-bp 22000000 --to-bp 23000000 --keep euro_samps.txt --recode --stdout | less -S
+.. code-block:: bash
+
+	--keep ind.txt # Keep these individuals
+	--remove ind.txt # Remove these individuals
+	--snps snps.txt # Keep these SNPs
+	--snps snps.txt –-exclude # Remove these SNPs
+
+To select a subset of samples
+
+.. code-block:: bash
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	less -S
+
+Select subset of samples and SNPs based on physical position in genome
+
+.. code-block:: bash
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--chr 11
+	--from-bp 22000000 \
+	--to-bp 23000000 \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout | \
+	less -S
 
 	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
 
