@@ -7,7 +7,7 @@ using built-in Unix tools.
 Pattern search & regular expressions
 ------------------------------------
 
-``grep`` useful tool to search pattern using regular expressions.
+``grep`` is a useful tool to search for patterns using a mini-language called **regular expressions**.
 
 .. code-block:: bash
 
@@ -144,15 +144,15 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 | \
   cut --complement -f 1-9 | tr "\t" "\n" | wc -l
 
-.. note:
+.. note::
 
   Difference between ``sed`` and ``tr``:
 
-  ``tr`` (from TRansliterate) replaces/deletes individual characters: Ideal
-  for replacing/removing line ends (``tr -d "\n"``) or replacing some 
+  ``tr`` (from TRansliterate) replaces (or deletes) individual characters:
+  Ideal for removing line ends (``tr -d "\n"``) or replacing some 
   separator to TAB (``tr ";" "\t"``).
 
-  ``sed`` replaces (deletes) complex patterns.
+  ``sed`` replaces (or deletes) complex patterns.
 
 Joining multiple files + subshell
 ---------------------------------
@@ -283,4 +283,4 @@ Additionally ``tr -d`` (delete) can remove characters:
 
   cat *.fastq | grep '^[ACGTN]*$' | tr -d "\n" | wc -c
 
-.. note::  If you like regular expressions, you can hone your skills at https://regex.alf.nu/.
+.. note::  If you like regular expressions, you can hone your skills at http://regex.alf.nu/.
