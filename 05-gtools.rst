@@ -9,7 +9,8 @@ Genome feature arithmetics & summary
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 
-Prepare files:
+Prepare files
+
 .. code-block:: bash
 
 	cd
@@ -18,6 +19,7 @@ Prepare files:
 	cd data/bed
 
 1. Merge the overlapping open chromatin regions in encode.bed file
+
 .. code-block:: bash
 
 	# Count the number of regions before the merging
