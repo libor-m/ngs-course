@@ -91,13 +91,6 @@ Pattern search & regular expressions
 
   < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
 
-4. Count the number of records on large autosomes which passed quality threshold
-
-.. code-block:: bash
-
- < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chr[1-9]\{1,2\}\s' | wc -l
-
-
 Cutting out, sorting and replacing text
 ---------------------------------------
 
