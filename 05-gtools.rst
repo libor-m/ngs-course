@@ -25,7 +25,7 @@ Prepare files
 	# Explore the encode.bed file
 	less encode.bed
 
-	# Count the number of regions before the merging
+	# Count the number of regions before merging
 	wc -l encode.bed
 
 	# The data has to be sorted: use subshell to sort data before merging
@@ -43,7 +43,7 @@ Prepare files
 
 	# Count the number of open chromatin regions overlapping with genes
 	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed \) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
@@ -52,7 +52,7 @@ Prepare files
 .. code-block:: bash
 
 	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed \) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) -wb |
 	cut -f 7 |
 	sort -u |
