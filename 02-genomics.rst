@@ -31,6 +31,13 @@ Pattern search & regular expressions
 
   cd ~
   cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data
+  # does not work, let's investigate
+  
+  ll /data/mus_mda/05-fst2genes
+  
+  # the permissions are not right..fix it
+  sudo chmod o+r /data/mus_mda/Mus_musculus.NCBIM37.67.gtf.gz
+
   gunzip data/Mus_musculus.NCBIM37.67.gtf.gz
   less -S data/Mus_musculus.NCBIM37.67.gtf
 
