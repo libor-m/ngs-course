@@ -187,17 +187,40 @@ Select subset of samples and SNPs based on physical position in genome
 	--stdout | \
 	less -S
 
-	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
+Select subset of samples and then select SNPs with no missing data
+and with minor allele frequency (MAF) no less than 0.2
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout | less -S
+.. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	vcftools \
+	--vcf - \
+	--max-missing 1 \
+	--maf 0.2 \
+	--recode \
+	--stdout |
+	less -S
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	vcftools --vcf - \
+	--max-missing 1 \
+	--maf 0.2 \
+	--recode \
+	--stdout \
+	> popdata_mda_euro.vcf
 
 	## Calculate Fst
 
 	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt --weir-fst-pop domesticus_samps.txt --stdout | less -S
 
-**Exercise: Population differentiation**
+Exercise
+--------
 
 .. code-block:: bash
 
