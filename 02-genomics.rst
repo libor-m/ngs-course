@@ -202,14 +202,15 @@ All three commands together using subshell:
 
 .. code-block:: bash
 
-  join -1 2 -2 3 <( < luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 | \
+  IN=luscinia_vars_flags.vcf
+  join -1 2 -2 3 <( < $IN grep -v '^#' | cut -f 1 | \
   sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
-  <( < luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r | uniq -c | \
+  <( < $IN grep -v '^#' | cut -f 1,7 | sort -r | uniq -c | \
   sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 | \
   sort -k3,3  ) | tr " " "\t" > data/count_all.txt
 
   # and indented a bit more nicely
-  IN=lp2-var-filtered-rand2.vcf
+  IN=luscinia_vars_flags.vcf
   join -1 2 -2 3 \
       <( <$IN  grep -v '^#' |
         cut -f 1 |
@@ -228,7 +229,7 @@ All three commands together using subshell:
         cut --complement -f 2,3,6 |
         sort -k3,3  ) |
     tr " " "\t" \
-  > count_all.txt
+  > data/count_all.txt
 
 Exercise
 --------
