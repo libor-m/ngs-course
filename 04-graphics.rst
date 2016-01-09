@@ -27,7 +27,12 @@ tools.
 
 .. code-block:: bash
 
+   # we'll be reusing the same long file name, store it into a variable
    IN=/data/mus_mda/00-popdata/popdata_mda.vcf.gz
+
+   # create a new 'project' directory in data
+   mkdir -p ~/projects/plotvcf/data
+   cd ~/projects/plotvcf
 
    # check the file once again, and find the obligatory VCF columns
    <$IN zcat | less -S
@@ -64,19 +69,6 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
 
 .. code-block:: bash
 
-   # create a new 'project' directory in data
-   mkdir ~/projects/plotvcf
-   cd ~/projects/plotvcf
-
-   #
-   # subset the huge dataset to european mice
-   #
-   # find the 
-
-   mkdir data
-   </data/mus_mda/00-popdata/popdata_mda.vcf.gz zcat > data/popdata_mda.vcf
-
-   # we'll be reusing the same long file name, store it into a variable
    IN=data/popdata_mda_euro.vcf
 
    # get rid of the '##' lines (quotes have to be there, otherwise
