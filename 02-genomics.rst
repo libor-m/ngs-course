@@ -186,7 +186,7 @@ Use ``paste``, ``join`` commands.
 
   # Command 2
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r |
-  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | 
+  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - |
   cut --complement -f 2,3,6 > data/count_vars_pass_fail.txt
 
   # Command 3
@@ -201,13 +201,6 @@ Use ``paste``, ``join`` commands.
 All three commands together using subshell:
 
 .. code-block:: bash
-
-  IN=data/luscinia_vars_flags.vcf
-  join -1 2 -2 3 <( < $IN grep -v '^#' | cut -f 1 |
-  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k2,2 ) \
-  <( < $IN grep -v '^#' | cut -f 1,7 | sort -r | uniq -c |
-  sed 's/^ \{1,\}//' | tr " " "\t" | paste - - | cut --complement -f 2,3,6 |
-  sort -k3,3  ) | tr " " "\t" > data/count_all.txt
 
   # and indented a bit more nicely
   IN=data/luscinia_vars_flags.vcf
