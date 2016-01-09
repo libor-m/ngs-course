@@ -22,6 +22,9 @@ Prepare files
 
 .. code-block:: bash
 
+	# Explore the encode.bed file
+	less encode.bed
+
 	# Count the number of regions before the merging
 	wc -l encode.bed
 
@@ -30,6 +33,82 @@ Prepare files
 
 	# Count the number of regions after merging
 	wc -l encode-merged.bed
+
+2. Count the number of open chromatin regions in merged file overlapping with genes
+
+.. code-block:: bash
+
+	# Explore the Ensembl.NCBIM37.67.bed file
+	less Ensembl.NCBIM37.67.bed
+
+	# Count the number of open chromatin regions overlapping with genes
+	bedtools intersect \
+	-a <( sortBed -i encode-merged.bed \) \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
+	wc -l
+
+3. Count the number of open chromatin regions in merged file overlapping with genes
+
+.. code-block:: bash
+
+	bedtools intersect \
+	-a <( sortBed -i encode-merged.bed \) \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) -wb |
+	cut -f 7 |
+	sort -u |
+	wc -l
+
+4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
+with the step size 0.2 by the size of the window and obtain gene density
+within these sliding windows.
+
+.. code-block:: bash
+
+	# Explore fasta index file
+	less genome.fa.fai
+
+	# Make 1Mb sliding windows (step 200kb)
+	bedtools makewindows \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
+	-g genome.fa.fai \
+	-w 1000000 \
+	-s 200000 \
+	-i winnum \
+	> windows_1mb.bed
+
+	# Make 2.5Mb sliding windows (step 500kb)
+	bedtools makewindows \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
+	-g genome.fa.fai \
+	-w 2500000 \
+	-s 500000 \
+	-i winnum \
+	> windows_2-5mb.bed
+
+	# Make 5Mb sliding windows (step 1Mb)
+	bedtools makewindows \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) \
+	-g genome.fa.fai \
+	-w 5000000 \
+	-s 1000000 \
+	-i winnum \
+	> windows_5mb.bed
+
+	# Obtain densities of genes within individual windows
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_1mb.bed \
+	> gdens_windows_1mb.tab
+
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_2-5mb.bed \
+	> gdens_windows_2-5mb.tab
+
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_5mb.bed \
+	> gdens_windows_5mb.tab
 
 **Explore vcftools functionality**
 
