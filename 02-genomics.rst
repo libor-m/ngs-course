@@ -196,7 +196,7 @@ Use ``paste``, ``join`` commands.
 
   # You have to sort the data before sending to ``join`` - subshell
   join -1 2 -2 3 <( sort -k2,2 data/count_vars_chrom.txt ) \
-  <( sort -k3,3 data/count_vars_pass_fail.txt ) | tr " " "\t" > count_all.txt
+  <( sort -k3,3 data/count_vars_pass_fail.txt ) | tr " " "\t" > data/count_all.txt
 
 All three commands together using subshell:
 
