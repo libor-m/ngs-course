@@ -66,9 +66,9 @@ Course contents:
    02-genomics
    03-advanced
    04-graphics
+   05-gtools
 
 .. ::
-   05-gtools
    06-quality
 
 Additional reference materials:
