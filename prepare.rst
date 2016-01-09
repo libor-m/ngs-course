@@ -117,7 +117,7 @@ Login as user (can be done by ``su user`` in root shell):
   echo "TZ='Europe/Prague'; export TZ" >> ~/.profile
 
   # some screen settings
-  cat >~/.screenrc <<EOF
+  cat >~/.screenrc << 'EOF'
   hardstatus alwayslastline
   hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
 
@@ -129,7 +129,7 @@ Login as user (can be done by ``su user`` in root shell):
   # everyone likes git and screen
   sudo apt-get install git screen pv curl wget
   
-  # add important stuff to python
+  # add important stuff to python - this also installs GCC
   sudo apt-get install python-dev python-pip python-virtualenv
 
   # java because of fastqc
@@ -151,20 +151,19 @@ R is best used in RStudio - server version can be used in web browser.
 
   # install latest R
   # http://cran.r-project.org/bin/linux/debian/README.html
-  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian wheezy-cran3/' >> /etc/apt/sources.list"
+  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian jessie-cran3/' >> /etc/apt/sources.list"
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key 381BA480
   sudo apt-get update
   sudo apt-get install r-base
+
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
   > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne", "tidyr", "shiny"))
 
   # RStudio with prerequisities
-  wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_i386.deb
-  sudo dpkg -i libssl0.9.8_0.9.8o-4squeeze14_i386.deb
   sudo apt-get install gdebi-core
-  wget http://download2.rstudio.org/rstudio-server-0.98.1081-i386.deb
-  sudo gdebi rstudio-server-0.98.1081-i386.deb
+  wget https://download2.rstudio.org/rstudio-server-0.99.491-i386.deb
+  sudo gdebi rstudio-server-0.99.491-i386.deb
 
 There are packages that are not in the standard repos, or the versions in the repos is very obsolete.
 It's worth it to install such packages by hand, when there is not much dependencies.
@@ -172,21 +171,23 @@ It's worth it to install such packages by hand, when there is not much dependenc
 .. code-block:: bash
 
   # pipe viewer
+  cd ~/sw
   wget -O - http://www.ivarch.com/programs/sources/pv-1.5.7.tar.bz2 | tar xvj
   cd pv-1.5.7/
   ./configure
   make
   sudo make install
-  cd ..
 
   # parallel
+  cd ~/sw
   wget -O - http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2|tar xvj
-  cd parallel-20141022/
+  cd parallel-*/
   ./configure
   make
   sudo make install
 
   # tabtk
+  cd ~/sw
   git clone https://github.com/lh3/tabtk.git
   cd tabtk/
   # no configure in the directory
@@ -197,16 +198,36 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # fastqc
   cd ~/sw
-  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.3.zip
-  unzip fastqc_v0.11.3.zip
-  rm fastqc_v0.11.3.zip
+  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.4.zip
+  unzip fastqc_v0.11.4.zip
+  rm fastqc_v0.11.4.zip
   chmod +x FastQC/fastqc
+
+  # vcftools
+  cd ~/sw
+  sudo apt-get install pkg-config
+  wget -O - https://github.com/vcftools/vcftools/releases/download/v0.1.14/vcftools-0.1.14.tar.gz | tar xvz
+  cd vcftools*
+  ./configure
+  make
+  sudo make install
 
   # and some more:
   # bcftools, samtools, vcftools, htslib
 
+Check what are the largest packages::
+
+  dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+
 Sample datasets
 ^^^^^^^^^^^^^^^
+Pull some data from SRA. This is prety difficult;)
+
+.. code-block:: bash
+
+  sraget () { wget -O $1.sra http://sra-download.ncbi.nlm.nih.gov/srapub/$1 ;}
+
+
 Use data from my nightingale project, subset the data for two selected chromosomes.
 
 .. code-block:: bash
@@ -230,7 +251,6 @@ Prepare the ``/data`` folder.
 .. code-block:: bash
 
   sudo mkdir /data
-  sudo chmod user:user /data
 
 Transfer the files to the VirtualBox image, /data directory using WinSCP.
 

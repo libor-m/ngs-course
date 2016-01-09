@@ -9,3 +9,28 @@ tidyr, ggplot2, shiny, magrittr, knitr, dplyr, reshape2
 
 http://www.rstudio.com/resources/cheatsheets/
 http://blogs.nature.com/methagora/2013/07/data-visualization-points-of-view.html?WT.mc_id=TWT_NatureMethods
+
+# more resources on graphics/data viz
+
+- distribute points of view and ggplot2 book
+- check ggplot2 book @github 
+
+http://bioconnector.org/workshops/lessons/r/r-viz/
+
+# etherpad?
+
+https://public.etherpad-mozilla.org/p/ngs-course
+
+# sequence assembly
+Some sequence assembly games?
+
+http://www.compbio.dundee.ac.uk/gigsaw/cgi-bin/gigsaw.pl
+http://ivory.idyll.org/blog/the-assembly-exercise.html
+https://github.com/lexnederbragt/INF-BIO9120_fall2013_de_novo_assembly/blob/master/practicals/01_Assembly_using_velvet.md
+
+# velvet
+velveth 01-velvet-k21 21 -fastq -short -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq -fastq -short -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
+velvetg 01-velvet-k21
+
+velveth 02-velvet-k31-paired 31 -fastq -shortPaired -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
+velvetg 02-velvet-k31-paired -exp_cov auto -ins_length 150
