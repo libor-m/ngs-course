@@ -75,7 +75,7 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   cd ~
-  cp /data/mus_mda/05-fst2genes/luscinia_vars_flags.vcf.gz ~/data
+  cp /data/vcf_examples/luscinia_vars_flags.vcf.gz ~/data
   gunzip data/luscinia_vars_flags.vcf.gz
   less -S data/luscinia_vars_flags.vcf
 
