@@ -1,8 +1,11 @@
 Unix - Advanced II
 ==================
 
-Scripting session: scripting in one line using ``awk``,
-writing functions and scripts in shell, and running procedures in parallel.
+Scripting session: 
+
+- scripting in one line using ``awk``
+- writing functions and scripts in shell
+- speeding up your processing by running in parallel
 
 
 Scripting in one line (awk)
@@ -70,10 +73,16 @@ Scripting in one line (awk)
 
 Functions in Shell
 ------------------
+Create a command ``uniqt`` that will behave as ``uniq``, but there
+will be no padding (spaces) in front of the numbers, and numbers will 
+be separated by <tab>, so eg. ``cut`` will work.
+
+Do not use the same name as the original command, otherwise you'll create
+an endless loop.
 
 .. code-block:: bash
 
-	uniq(){ uniq -c | sed -r 's/^ *([0-9]+) /\1\t/'; }
+	uniqt(){ uniq -c | sed -r 's/^ *([0-9]+) /\1\t/'  ;}
 
 Shell Scripts
 -------------
@@ -82,8 +91,8 @@ Shell Scripts
 
 	nano script.sh
 
-Make a script ``filter_fastq.sh`` which reads a FASTQ file, filter out short sequences
-and print as standard output:
+Make a script ``filter_fastq.sh`` which reads a FASTQ file, filters out short
+sequences and saves to a file named ``$INPUT-filtered``:
 
 .. code-block:: bash
 
@@ -113,21 +122,36 @@ To run the script:
 
 .. code-block:: bash
 
+    chmod +x filter_fastq.sh
+    # check with ls, filter_fastq.sh should be green now
+    # and using ll you should see the 'x' (eXecutable) permission
+	./filter_fastq.sh data/fastq/HRTMUOC01.RL12.00.fastq 80
+
+	# or, without a need for the shebang line (#!) in the file
+	# and without +x permission
 	bash filter_fastq.sh data/fastq/HRTMUOC01.RL12.00.fastq 80
 
 Parallel
 --------
 
-Running programs/scripts/commands in parallel mode:
+Runs one instance of the command per each CPU in your machine. Regretably your
+**virtual** machine has only one CPU, so this won't help much. But modern
+machines do have  four and more CPUs, and then it really helps.
+
+Do control the number of jobs (``-j``) only when sharing the machine with
+someone, or when you're sure that yout task is IO bound. Otherwise
+``parallel`` does a good job choosing the number of tasks to run.
 
 .. code-block:: bash
 
- parallel –j 5 'bash script.sh {input} {output}.out' ::: {1..10}
+  parallel 'bash script.sh {} > {}.out' ::: {1..10}
 
 Run the ``filter_fastq.sh`` in parallel:
 
 .. code-block:: bash
 
-	parallel -j 1 'bash filter_scripts.sh {} 80' ::: data/fastq/*.fastq
+  parallel 'bash filter_fastq.sh {} 80' ::: data/fastq/*.fastq
 
-That's it for this session...
+There is a lot of magic to be done with ``{.}, {/}, {#}`` placeholders,
+check ``man parallel``. If your data is a single file, but the processing 
+of one line is not dependent on the other lines, ``split`` will help.
