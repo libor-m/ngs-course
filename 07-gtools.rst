@@ -425,8 +425,9 @@ than or equal to 99% of the data.
 	## Call variable
 	echo $q500
 
-	grep 500kb windows2snps_fst.bed |
+	grep 500kb windows_mean_fst.tab |
 	awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	sortBed |
 	bedtools merge -i stdin > signif_500kb.bed
 
 Use the mouse gene annotation file to retrieve genes within
@@ -434,12 +435,12 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf .
+	< /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf zcat Mus_musculus.NCBIM37.67.gtf
 
 	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
 	grep protein_coding |
-	cut -f 1,2,3,4,13 |
+	cut -f 1,2,3,4,12 |
 	cut -d ' ' -f 1,3,9 |
 	tr -d '";' |
 	sort -u \
-	> fst2genes.tab
+	> candidate_genes.tab
