@@ -387,12 +387,11 @@ also plot the average Fst values along the chromosomes.
 
 		library(ggplot2)
 
-		setwd("~/data/diff")
+		setwd("~/projects/diff")
 
-		fst <- read.table("windows_mean_fst.tab", header=F,sep="\t")
+		fst <- read.table("windows_mean_fst.tab", header=F, sep="\t")
 
-		# Alternative for TAB separated files
-
+		# shorthand for TAB separated files
 		fst <- read.delim("windows_mean_fst.tab", header=F)
 
 		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
