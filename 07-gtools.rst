@@ -19,7 +19,7 @@ Prepare files - we work with mouse genome data:
 	cd projects/bed_examples
 
 
-1. Merge the overlapping open chromatin regions in encode.bed file
+1. Merge the overlapping open chromatin regions in ``encode.bed`` file
 
 In this first exercise we will work with open chromatin regions
 based on DNaseI hypersensitive sites in file ``encode.bed`` obtained
@@ -68,7 +68,7 @@ database or are within 1000 bp on each side of a gene.
 
 3. Count the number of merged open chromatin regions file overlapping with genes
 
-Here, we are supposed to do the reversed - count the number of genes
+Here, we are supposed to do right the opposite, i.e. count the number of genes
 containing open chromatin region from the ENCODE dataset.
 
 .. code-block:: bash
