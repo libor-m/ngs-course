@@ -235,7 +235,7 @@ and with minor allele frequency (MAF) no less than 0.2:
 	> popdata_mda_euro.vcf
 
 Use the newly created ``popdata_mda_euro.vcf`` representing variants
-only for a subset of individuals and variantsCalculate to calculate Fst index.
+only for a subset of individuals and variants to calculate Fst index.
 In order for vcftools to calculate Fst index the populations
 have to be specified in the output - each one with a separate file
 (``--weir-fst-pop pop1.txt`` and ``--weir-fst-pop pop2.txt``).
