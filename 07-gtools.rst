@@ -9,7 +9,7 @@ Genome feature arithmetics & summary
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 
-Prepare files:
+Prepare files - we work with mouse genome data:
 
 .. code-block:: bash
 
@@ -18,7 +18,15 @@ Prepare files:
 	cp /data/bed_examples/* projects/bed_examples/.
 	cd projects/bed_examples
 
-1. Merge the overlapping open chromatin regions in encode.bed file:
+
+1. Merge the overlapping open chromatin regions in encode.bed file
+
+In this first exercise we will work with open chromatin regions
+based on DNaseI hypersensitive sites in file ``encode.bed`` obtained
+from ENCODE database. As this database contains open chromatin regions
+from multiple experiments, the open chromatin regions may overlap.
+In our analysis we want to merge these regions so that the same/similar
+regions is present only once. You can use ``bedtools merge`` tool:
 
 .. code-block:: bash
 
@@ -34,7 +42,11 @@ Prepare files:
 	# Count the number of regions after merging
 	wc -l encode-merged.bed
 
-2. Count the number of open chromatin regions in merged file overlapping with genes:
+2. Count the number of open chromatin regions in merged file overlapping with genes
+
+In the second exercise we would like to parse and count those open
+chromatin regions which overlap with known genes retrieved from Ensembl
+database or are within 1000 bp on each side of a gene.
 
 .. code-block:: bash
 
@@ -54,7 +66,10 @@ Prepare files:
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-3. Count the number of merged open chromatin regions file overlapping with genes:
+3. Count the number of merged open chromatin regions file overlapping with genes
+
+Here, we are supposed to do the reversed - count the number of genes
+containing open chromatin region from the ENCODE dataset.
 
 .. code-block:: bash
 
