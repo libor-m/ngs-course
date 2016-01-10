@@ -578,9 +578,9 @@ and *M. m. domesticus* within a given sliding window and find candidate
 genes within highly differentiated regions
 	1. use vcftools to filter data and calculate Fst for individual SNPs
 	2. use bedtools makewindows to create sliding windows of three sizes
-		100 kb + 10 kb step
-		500 kb + 50 kb step
-		1 Mb + 100 kb step
+		a) 100 kb + 10 kb step
+		b) 500 kb + 50 kb step
+		c) 1 Mb + 100 kb step
 	3. calculate average Fst for each window
 	4. use Rstudio and ggplot2 to plot Fst values across the genome
 	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
