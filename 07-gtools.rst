@@ -379,7 +379,9 @@ If you like you can visualize data in R-Studio:
 
 		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
 
-		qplot(fst, data=fst, geom="density",fill=I("blue")) + facet_wrap(~win_size)
+		ggplot(data=fst, aes(x=avg_fst)) +
+			geom_density(fill=I("blue")) +
+			facet_wrap(~win_size)
 
 	.. image:: _static/fst_dist.png
 			:align: center
