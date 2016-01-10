@@ -67,7 +67,7 @@ Prepare files
 
 4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
 with the step size 0.2 by the size of the window and obtain gene density
-within these sliding windows.
+within these sliding windows. To speed up the process we focus only on chromosome X.
 
 .. code-block:: bash
 
@@ -76,7 +76,7 @@ within these sliding windows.
 
 	# Make 1Mb sliding windows (step 200kb)
 	bedtools makewindows \
-	-g genome.fa.fai \
+	-g <( grep '^X' genome.fa.fai ) \
 	-w 1000000 \
 	-s 200000 \
 	-i winnum \
@@ -84,7 +84,7 @@ within these sliding windows.
 
 	# Make 2.5Mb sliding windows (step 500kb)
 	bedtools makewindows \
-	-g genome.fa.fai \
+	-g <( grep '^X' genome.fa.fai ) \
 	-w 2500000 \
 	-s 500000 \
 	-i winnum \
@@ -92,7 +92,7 @@ within these sliding windows.
 
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
-	-g genome.fa.fai \
+	-g <( grep '^X' genome.fa.fai ) \
 	-w 5000000 \
 	-s 1000000 \
 	-i winnum \
