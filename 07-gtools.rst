@@ -274,7 +274,7 @@ and filtered out variants with missing genomes and low minor allele frequency).
 
 Calculate Fst values for variants between *M. m. musculus*
 and *M. m. domesticus* populations (populations specified in
-``musculus_samps.txt`` and ``domesticus_samps.txt``)
+``musculus_samps.txt`` and ``domesticus_samps.txt``):
 
 .. code-block:: bash
 
@@ -287,7 +287,7 @@ and *M. m. domesticus* populations (populations specified in
 	> popdata_mda_euro_fst.bed
 
 Make the three sets of sliding windows (100 kb, 500 kb, 1 Mb)
-and concatenate them into a single file.
+and concatenate them into a single file:
 
 .. code-block:: bash
 
@@ -320,7 +320,7 @@ and concatenate them into a single file.
 	## Concatenate windows of all sizes
 	cat windows_*.bed > windows.bed
 
-Calculate average Fst within the sliding windows
+Calculate average Fst within the sliding windows:
 
 .. code-block:: bash
 
