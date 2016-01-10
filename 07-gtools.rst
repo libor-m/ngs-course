@@ -346,7 +346,9 @@ Calculate average Fst within the sliding windows:
 	## Input files for bedtools groupby need to be sorted
 
 	# Join Fst values and the 'windows.bed' file
-	bedtools intersect -a <( sortBed -i windows.bed ) -b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb > windows_fst.tab
+	bedtools intersect -a <( sortBed -i windows.bed ) \
+	-b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb \
+	> windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
 	bedtools groupby -i <( sort -k4,4 windows_fst.tab ) \
