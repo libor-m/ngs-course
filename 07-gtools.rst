@@ -252,7 +252,7 @@ have to be specified in the output - each one with a separate file
 
 	vcftools --vcf popdata_mda_euro.vcf \
 	--weir-fst-pop musculus_samps.txt \
-	--weir-fst-pop domesticus_samps.txt
+	--weir-fst-pop domesticus_samps.txt \
 	--stdout |
 	less -S
 
