@@ -374,8 +374,8 @@ If you like you can visualize data in R-Studio:
 			geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
-		.. image:: _static/fst_on_chroms.png
-				:align: center
+	.. image:: _static/fst_on_chroms.png
+			:align: center
 
 
 
