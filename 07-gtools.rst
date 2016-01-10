@@ -18,7 +18,7 @@ Prepare files
 	cp /data/bed_examples/* projects/bed_examples/.
 	cd projects/bed_examples
 
-1. Merge the overlapping open chromatin regions in encode.bed file
+1. Merge the overlapping open chromatin regions in encode.bed file:
 
 .. code-block:: bash
 
@@ -34,7 +34,7 @@ Prepare files
 	# Count the number of regions after merging
 	wc -l encode-merged.bed
 
-2. Count the number of open chromatin regions in merged file overlapping with genes
+2. Count the number of open chromatin regions in merged file overlapping with genes:
 
 .. code-block:: bash
 
@@ -54,7 +54,7 @@ Prepare files
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-3. Count the number of merged open chromatin regions file overlapping with genes
+3. Count the number of merged open chromatin regions file overlapping with genes:
 
 .. code-block:: bash
 
@@ -137,13 +137,13 @@ Prepare data files into ``~projects/diff`` directory:
 	# View and explore the files within the 'vcf' directory
 	ls
 
-Obtaining the basic file statistics (number of variants & number of samples)
+Obtaining the basic file statistics (number of variants & number of samples):
 
 .. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz
 
-Viewing and printing out the content of the VCF file
+Viewing and printing out the content of the VCF file:
 
 .. code-block:: bash
 
@@ -164,7 +164,7 @@ Basic data filtering - use of appropriate flags:
 	--snps snps.txt # Keep these SNPs
 	--snps snps.txt –-exclude # Remove these SNPs
 
-To select a subset of samples
+To select a subset of samples:
 
 .. code-block:: bash
 
@@ -174,7 +174,18 @@ To select a subset of samples
 	--stdout |
 	less -S
 
-Select subset of samples and SNPs based on physical position in genome
+Select subset of samples and SNPs based on physical position in genome:
+
+.. code-blcok:: bash
+
+	# Flags you can use:
+	--chr 11 # Keep just this chromosome
+	--not-chr 11 # Remove this chromosome
+	--not-chr 11 –not-chr 2 # Remove these two chromosomes
+	--from-bp 20000000 # Keep SNPs from this position
+	--to-bp 22000000 # Keep SNPs to this position
+	--bed keep.bed # Keep only SNPs overlapping with locations listed in a file
+	--exclude-bed remove.bed # The opposite of the previous
 
 .. code-block:: bash
 
@@ -188,7 +199,15 @@ Select subset of samples and SNPs based on physical position in genome
 	less -S
 
 Select subset of samples and then select SNPs with no missing data
-and with minor allele frequency (MAF) no less than 0.2
+and with minor allele frequency (MAF) no less than 0.2:
+
+.. code-block:: bash
+
+	# Flags you can use:
+	--maf 0.2 # Keep just variants with Minor Allele Freq higher than 0.2
+	--hwe 0.05 # Keep just variants which do not deviate from HW equilibrium (p-value = 0.05)
+	--max-missing (0-1) # Remove SNPs with given proportion of missing data (0 = allowed completely missing, 1 = no missing data allowed)
+	--minQ 20 # Minimal quality allowed (Phred score)
 
 .. code-block:: bash
 
@@ -220,6 +239,14 @@ only for a subset of individuals and variantsCalculate to calculate Fst index.
 In order for vcftools to calculate Fst index the populations
 have to be specified in the output - each one with a separate file
 (``--weir-fst-pop pop1.txt`` and ``--weir-fst-pop pop2.txt``).
+
+.. code-block:: bash
+
+	# Flags you can use:
+	--site-pi # Calculates per-site nucleotide diversity (π)
+	--window-pi 1000000 --window-pi-step 250000 # Calculates per-site nucleotide diversity for windows of 1Mb with 250Kb step
+	--weir-fst-pop pop1.txt --weir-fst-pop pop2.txt # Calculates Weir & Cockerham's Fst
+	--fst-window-size 1000000 –-fst-window-step 250000 # Calculates Fst for windows of 1Mb with 250Kb step
 
 .. code-block:: bash
 
