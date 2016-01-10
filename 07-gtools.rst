@@ -284,7 +284,7 @@ genes within highly differentiated regions:
 		a) 100 kb + 10 kb step
 		b) 500 kb + 50 kb step
 		c) 1 Mb + 100 kb step
-		
+
 	3. calculate average Fst for each window
 	4. use R-Studio and ggplot2 to plot Fst values across the genome
 	5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
@@ -458,7 +458,7 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	< /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat Mus_musculus.NCBIM37.67.gtf
+	< /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat > Mus_musculus.NCBIM37.67.gtf
 
 	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
 	grep protein_coding |
