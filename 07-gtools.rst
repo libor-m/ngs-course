@@ -284,7 +284,7 @@ genes within highly differentiated regions:
 		c) 1 Mb + 100 kb step
 	3. calculate average Fst for each window
 	4. use Rstudio and ggplot2 to plot Fst values across the genome
-	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
+	5. use R or ``tabtk`` to obtain 99th percentile and use it to obtain a set of candidate genomic regions
 	6. use ``bedtools intersect`` to get a list of candidate genes
 
 Extract genotype data for European mouse individuals and filter out
