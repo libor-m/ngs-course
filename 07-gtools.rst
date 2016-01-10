@@ -351,6 +351,9 @@ If you like you can visualize data in R-Studio:
 
 		qplot(fst, data=fst, geom="density",fill=I("blue")) + facet_wrap(~win_size)
 
+	.. image:: _static/fst_dist.png
+			:align: center
+
 	.. code-block:: bash
 
 		ggplot(fst, aes(y=fst, x=start, colour=win_size)) +
@@ -365,6 +368,12 @@ If you like you can visualize data in R-Studio:
 			facet_wrap(~chrom, nrow=2) +
 			geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
+
+		.. image:: _static/fst_on_chroms.png
+				:align: center
+
+
+
 
 Find 99th percentile of genome-wide distribution of Fst values
 in order to guess possible outlier genome regions. 99th percentile
