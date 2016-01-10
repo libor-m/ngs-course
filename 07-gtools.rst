@@ -373,7 +373,10 @@ Calculate average Fst within the sliding windows:
 	-o mean |
 	tr ":" "\t" > windows_mean_fst.tab
 
-If you like you can visualize data in `R-Studio <http://localhost:8787>`_:
+Visualize average Fst values within the sliding windows of the three sizes
+between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
+Plot the distribution of the Fst values for the three window sizes in
+a separate windows. Plot the average Fst values along the chromosomes.
 
 .. note:: R ggplot2 commands to plot population differentiation
 
