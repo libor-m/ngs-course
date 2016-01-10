@@ -283,8 +283,8 @@ genes within highly differentiated regions:
 		b) 500 kb + 50 kb step
 		c) 1 Mb + 100 kb step
 	3. calculate average Fst for each window
-	4. use Rstudio and ggplot2 to plot Fst values across the genome
-	5. use R or ``tabtk`` to obtain 99th percentile and use it to obtain a set of candidate genomic regions
+	4. use R-Studio and ggplot2 to plot Fst values across the genome
+	5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
 	6. use ``bedtools intersect`` to get a list of candidate genes
 
 Extract genotype data for European mouse individuals and filter out
@@ -421,7 +421,7 @@ also plot the average Fst values along the chromosomes.
 	.. image:: _static/fst_on_chroms.png
 			:align: center
 
-Find 99th percentile of genome-wide distribution of Fst values
+Find the 99th percentile of genome-wide distribution of Fst values
 in order to guess possible outlier genome regions. 99th percentile
 can be obtained running R as command line or by using ``tabtk``.
 The output would be a list of windows having Fst higher
