@@ -313,8 +313,8 @@ and *M. m. domesticus* populations (populations specified in
 .. code-block:: bash
 
 	vcftools --vcf popdata_mda_euro.vcf \
-	--weir-fst-pop musculus_samps.txt  -\
-	-weir-fst-pop domesticus_samps.txt \
+	--weir-fst-pop musculus_samps.txt   \
+	--weir-fst-pop domesticus_samps.txt \
 	--stdout |
 	tail -n +2 |
 	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
@@ -330,7 +330,7 @@ and concatenate them into a single file:
 	## Create windows of 1 Mb with 100 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
 	-w 1000000 \
-	-s 100000 \
+	-s 100000  \
 	-i winnum |
 	awk '{print $0":1000kb"}' \
 	> windows_1000kb.bed
@@ -338,7 +338,7 @@ and concatenate them into a single file:
 	## Create windows of 500 kb with 500 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
 	-w 500000 \
-	-s 50000 \
+	-s 50000  \
 	-i winnum |
 	awk '{print $0":500kb"}' \
 	> windows_500kb.bed
@@ -346,7 +346,7 @@ and concatenate them into a single file:
 	## Create windows of 100 kb with 10 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
 	-w 100000 \
-	-s 10000 \
+	-s 10000  \
 	-i winnum | \
 	awk '{print $0":100kb"}' \
 	> windows_100kb.bed
@@ -361,8 +361,9 @@ Calculate average Fst within the sliding windows:
 	## Input files for bedtools groupby need to be sorted
 
 	# Join Fst values and the 'windows.bed' file
-	bedtools intersect -a <( sortBed -i windows.bed ) \
-	-b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb \
+	bedtools intersect \
+	  -a <( sortBed -i windows.bed ) \
+	  -b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb \
 	> windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
@@ -372,11 +373,9 @@ Calculate average Fst within the sliding windows:
 	-o mean |
 	tr ":" "\t" > windows_mean_fst.tab
 
-If you like you can visualize data in R-Studio:
+If you like you can visualize data in `R-Studio <http://localhost:8787>`_:
 
 .. note:: R ggplot2 commands to plot population differentiation
-
-	Get to the Rstudio by typing `localhost:8787` in your web browser.
 
 	.. code-block:: bash
 
@@ -441,7 +440,7 @@ than or equal to 99% of the data.
 	tabtk num -c 6 -Q |
 	cut -f 13 )
 
-	## Call variable
+	## Inspect the variable
 	echo $q500
 
 	grep 500kb windows_mean_fst.tab |
