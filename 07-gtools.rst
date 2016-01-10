@@ -377,9 +377,6 @@ If you like you can visualize data in R-Studio:
 	.. image:: _static/fst_on_chroms.png
 			:align: center
 
-
-
-
 Find 99th percentile of genome-wide distribution of Fst values
 in order to guess possible outlier genome regions. 99th percentile
 can be obtained running R as command line or by using ``tabtk``.
