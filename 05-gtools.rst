@@ -1,106 +1,250 @@
 Genomic tools session
 =====================
 
+Genome feature arithmetics & summary
+------------------------------------
+
 **Explore bedtools & bedops functionality**
 
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 
+Prepare files
+
 .. code-block:: bash
-	
-	## Prepare files (features.bed, genes.bed, my.genome)
-	
+
 	cd
-	
 	mkdir data/bed
-	cp /data/bed/* data/bed/.
-	cd data/bed/
-	
-	## Get parts of features that overlap
-	
-	bedops --intersect genes.bed features.bed
-	bedtools intersect -a genes.bed -b features.bed
-	
-	## Merge entire features
-	
-	bedops --merge genes.bed features.bed
-	
-	cat *.bed | sortBed > features2.bed
-	bedtools merge -i features2.bed
-	
-	## Get complement features
-	
-	bedops --complement genes.bed features.bed
-	
-	cat *.bed | sortBed > features2.bed
-	bedtools complement -i features2.bed -g my.genome
-	
-	## Report A which overlaps B
-	
-	bedops --element-of 1 genes.bed features.bed
-	bedtools intersect -u -a genes.bed -b features.bed
-	
-	## Report B which overlpas A
-	
-	bedops --element-of 1 features.bed genes.bed
-	bedtools intersect -u -a features.bed -b genes.bed
-	
-	## Report A,B which overlap each other
-	
-	bedtools intersect -wa -wb -a genes.bed -b features.bed
-	
-	## What is the base coverage of features within genes?
-	
-	bedmap --echo --count --bases-uniq genes.bed features.bed
-	coverageBed -b genes.bed -a features.bed
-	
+	cp /data/bed_examples/* data/bed/.
+	cd data/bed
+
+1. Merge the overlapping open chromatin regions in encode.bed file
+
+.. code-block:: bash
+
+	# Explore the encode.bed file
+	less encode.bed
+
+	# Count the number of regions before merging
+	wc -l encode.bed
+
+	# The data has to be sorted: use subshell to sort data before merging
+	bedtools merge -i <( sortBed -i encode.bed ) > encode-merged.bed
+
+	# Count the number of regions after merging
+	wc -l encode-merged.bed
+
+2. Count the number of open chromatin regions in merged file overlapping with genes
+
+.. code-block:: bash
+
+	# Explore the Ensembl.NCBIM37.67.bed file
+	less Ensembl.NCBIM37.67.bed
+
+	# Count the number of open chromatin regions overlapping with genes
+	bedtools intersect \
+	-a <( sortBed -i encode-merged.bed ) \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
+	wc -l
+
+3. Count the number of merged open chromatin regions file overlapping with genes
+
+.. code-block:: bash
+
+	bedtools intersect \
+	-a <( sortBed -i encode-merged.bed ) \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) -wb |
+	cut -f 7 |
+	sort -u |
+	wc -l
+
+4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
+with the step size 0.2 by the size of the window and obtain gene density
+within these sliding windows.
+
+.. code-block:: bash
+
+	# Explore fasta index file
+	less genome.fa.fai
+
+	# Make 1Mb sliding windows (step 200kb)
+	bedtools makewindows \
+	-g genome.fa.fai \
+	-w 1000000 \
+	-s 200000 \
+	-i winnum \
+	> windows_1mb.bed
+
+	# Make 2.5Mb sliding windows (step 500kb)
+	bedtools makewindows \
+	-g genome.fa.fai \
+	-w 2500000 \
+	-s 500000 \
+	-i winnum \
+	> windows_2-5mb.bed
+
+	# Make 5Mb sliding windows (step 1Mb)
+	bedtools makewindows \
+	-g genome.fa.fai \
+	-w 5000000 \
+	-s 1000000 \
+	-i winnum \
+	> windows_5mb.bed
+
+	# Obtain densities of genes within individual windows
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_1mb.bed \
+	> gdens_windows_1mb.tab
+
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_2-5mb.bed \
+	> gdens_windows_2-5mb.tab
+
+	bedtools coverage \
+	-a Ensembl.NCBIM37.67.bed \
+	-b windows_5mb.bed \
+	> gdens_windows_5mb.tab
+
+The gene densities can be visualized in R
+
+.. code-block:: R
+
+	# Set working directory
+	setwd("~/data/bed")
+
+	# Load libraries
+	library(ggplot2)
+
+VCFtools
+--------
+
 **Explore vcftools functionality**
 
 - http://vcftools.sourceforge.net
 
+Prepare data files
+
 .. code-block:: bash
 
-	## Prepare data files
-	
 	cd
-	mkdir data/diff
+	mkdir data/vcf
 
-	cp /data/mus_mda/00-popdata/*.txt data/diff/.
-	cp /data/mus_mda/00-popdata/popdata_mda.vcf.gz data/diff/.
+	cp /data/mus_mda/00-popdata/* data/vcf/.
 
-	cd data/diff/
-	
-	## vcf file statistics - i.e. number of samples, number of SNPs
+	cd data/vcf
+
+	# View and explore the files within the 'vcf' directory
+	ls
+
+Obtaining the basic file statistics (number of variants & number of samples)
+
+.. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz
 
-	## Open compressed (.gz) vcf file and view it in less
-	
-	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
-	
-	## Open compressed (.gz) vcf file and save it as a new file
-	
+Viewing and printing out the content of the VCF file
+
+.. code-block:: bash
+
+	# To print out the content of the VCF file
+
 	vcftools --gzvcf popdata_mda.vcf.gz --recode --out new_vcf
-	
-	## Select subset of samples
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | less -S
+	# To view the content directly
 
-	## Select subset of samples and SNPs based on physical position in genome
+	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
 
-	vcftools --gzvcf popdata_mda.vcf.gz --chr 11 --from-bp 22000000 --to-bp 23000000 --keep euro_samps.txt --recode --stdout | less -S
+Basic data filtering - use of appropriate flags:
 
-	## Select subset of samples and then select SNPs with no missing data and with minor allele frequency (MAF) no less than 0.2
+.. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout | less -S
+	--keep ind.txt # Keep these individuals
+	--remove ind.txt # Remove these individuals
+	--snps snps.txt # Keep these SNPs
+	--snps snps.txt –-exclude # Remove these SNPs
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+To select a subset of samples
 
-	## Calculate Fst
-	
-	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt --weir-fst-pop domesticus_samps.txt --stdout | less -S
-	
-**Exercise: Population differentiation**
+.. code-block:: bash
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	less -S
+
+Select subset of samples and SNPs based on physical position in genome
+
+.. code-block:: bash
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--chr 11
+	--from-bp 22000000 \
+	--to-bp 23000000 \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	less -S
+
+Select subset of samples and then select SNPs with no missing data
+and with minor allele frequency (MAF) no less than 0.2
+
+.. code-block:: bash
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	vcftools \
+	--vcf - \
+	--max-missing 1 \
+	--maf 0.2 \
+	--recode \
+	--stdout |
+	less -S
+
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode \
+	--stdout |
+	vcftools --vcf - \
+	--max-missing 1 \
+	--maf 0.2 \
+	--recode \
+	--stdout \
+	> popdata_mda_euro.vcf
+
+Use the newly created ``popdata_mda_euro.vcf`` representing variants
+only for a subset of individuals and variantsCalculate to calculate Fst index.
+In order for vcftools to calculate Fst index the populations
+have to be specified in the output - each one with a separate file
+(``--weir-fst-pop pop1.txt`` and ``--weir-fst-pop pop2.txt``).
+
+.. code-block:: bash
+
+	vcftools --vcf popdata_mda_euro.vcf \
+	--weir-fst-pop musculus_samps.txt \
+	--weir-fst-pop domesticus_samps.txt
+	--stdout |
+	less -S
+
+Exercise
+--------
+
+Get a population differentiation calculated as Fst between *M. m. musculus*
+and *M. m. domesticus* within a given sliding window and find candidate
+genes within highly differentiated regions
+	1. use vcftools to filter data and calculate Fst for individual SNPs
+	2. use bedtools makewindows to create sliding windows of three sizes
+		100 kb + 10 kb step
+		500 kb + 50 kb step
+		1 Mb + 100 kb step
+	3. calculate average Fst for each window
+	4. use Rstudio and ggplot2 to plot Fst values across the genome
+	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
+	6. use bedtools intersect to get a list of candidate genes
 
 .. code-block:: bash
 
@@ -119,10 +263,10 @@ Genomic tools session
 
 	## Create windows of 500 kb with 500 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{print $0":500kb"}' > windows_500kb.bed
-	
-	## Create windows of 100 kb with 10 kb step		
+
+	## Create windows of 100 kb with 10 kb step
 	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{print $0":100kb"}' > windows_100kb.bed
-	
+
 .. code-block:: bash
 
 	## Concatenate windows of all sizes
@@ -153,36 +297,36 @@ Genomic tools session
 		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
 
 		qplot(fst, data=fst, geom="density",fill=I("blue")) + facet_wrap(~win_size)
-	
-	.. code-block:: bash	
-	
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 
-			geom_line() + 
-			facet_wrap(~chrom, nrow=2) + 
+
+	.. code-block:: bash
+
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) +
+			geom_line() +
+			facet_wrap(~chrom, nrow=2) +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 		q <- quantile(subset(fst,win_size=="500kb",select="fst")[,1],prob=0.99)[[1]]
 
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) + 
-			geom_line() + 
-			facet_wrap(~chrom, nrow=2) + 
+		ggplot(fst, aes(y=fst, x=start, colour=win_size)) +
+			geom_line() +
+			facet_wrap(~chrom, nrow=2) +
 			geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
-		
+
 .. code-block:: bash
 
 	## Use of variables: var=value
 	## $() can be used to assign output of command as a variable
 	## do not use ` (backticks) please, they're depracated and confusing..:)
 	q500=$( grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' | cut -d " " -f 2 )
-	
+
 	## Call variable
 	echo $q500
-	
+
 	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' | bedtools merge -i stdin > signif_500kb.bed
-	
+
 .. code-block:: bash
-	
+
 	cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf .
-	
+
 	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb | grep protein_coding | cut -f 1,2,3,4,13 | cut -d ' ' -f 1,3,9 | tr -d '";' | sort -u > fst2genes.tab

@@ -69,10 +69,9 @@ Course contents:
    03-advanced
    04-graphics
    05-quality
-   06-assembly
-
-.. ::
    05-gtools
+   06-assembly
+   08-var-quality
 
 Additional reference materials:
 
