@@ -176,7 +176,7 @@ To select a subset of samples:
 
 Select subset of samples and SNPs based on physical position in genome:
 
-.. code-blcok:: bash
+.. code-block:: bash
 
 	# Flags you can use:
 	--chr 11 # Keep just this chromosome
