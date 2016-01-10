@@ -114,15 +114,7 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-b windows_5mb.bed \
 	> gdens_windows_5mb.tab
 
-The gene densities can be visualized in R
-
-.. code-block:: R
-
-	# Set working directory
-	setwd("~/data/bed")
-
-	# Load libraries
-	library(ggplot2)
+The gene density can be visualized in R-Studio.
 
 VCFtools
 --------
