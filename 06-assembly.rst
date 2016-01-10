@@ -81,4 +81,7 @@ sequence available, we can compare the size of the reference sequence
 with our assembly - the more similar, the better;) 4.6 Mbp is quite close to 
 4,561,418 ... nice.
 
-.. mauve image?
+Using ``Mauve`` we can try to align the result with the reference *E. coli* genome:
+
+.. image:: _static/mauve.png
+   :align: center
