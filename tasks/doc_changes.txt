@@ -34,3 +34,8 @@ velvetg 01-velvet-k21
 
 velveth 02-velvet-k31-paired 31 -fastq -shortPaired -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
 velvetg 02-velvet-k31-paired -exp_cov auto -ins_length 150
+
+
+## notes
+- too much 'data' directories is not good
+- do more practice/explanations with directory structure, use digraph 'clovece'

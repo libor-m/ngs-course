@@ -36,7 +36,7 @@ self learning.
 +--------------+--------------------------------------------+
 | Afternoon II | Data Visualization                         |
 +--------------+--------------------------------------------+
-| **Saturday (9:00-18:00)**                                 |
+| **Sunday (9:00-18:00)**                                   |
 +--------------+--------------------------------------------+
 | Morning      | Introduction to NGS                        |
 +--------------+--------------------------------------------+
@@ -59,6 +59,8 @@ Initial instructions:
 
 Course contents:
 
+`Etherpad <https://public.etherpad-mozilla.org/p/ngs-course>`_ with 'live' code.
+
 .. toctree::
    :maxdepth: 2
 
@@ -66,10 +68,10 @@ Course contents:
    02-genomics
    03-advanced
    04-graphics
-   05-gtools
-
-.. ::
-   06-quality
+   05-quality
+   06-assembly
+   07-gtools
+   08-var-quality
 
 Additional reference materials:
 
