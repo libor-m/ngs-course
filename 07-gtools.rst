@@ -396,9 +396,16 @@ also plot the average Fst values along the chromosomes.
 
 		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
 
+		# the 'old' way
 		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
 
-		ggplot(data=fst, aes(x=avg_fst)) +
+		# dplyr version of the command above
+		library(dplyr)
+		fst %>%
+		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb")) ->
+		  fst
+
+		ggplot(fst, aes(avg_fst)) +
 			geom_density(fill=I("blue")) +
 			facet_wrap(~win_size)
 
@@ -417,7 +424,7 @@ also plot the average Fst values along the chromosomes.
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=q,colour="black") +
+			geom_hline(yintercept=q, colour="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 	.. image:: _static/fst_on_chroms.png
@@ -436,34 +443,37 @@ than or equal to 99% of the data.
 
 	# Calculate 99th percentile by R
 	q500=$( grep 500kb windows_mean_fst.tab |
-	cut -f 6 |
-	Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' |
-	cut -d " " -f 2 )
+	  cut -f 6 |
+	  Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' |
+	  cut -d " " -f 2 )
 
 	# Calculate 99th percentile by tabtk
 	q500=$( grep 500kb windows_mean_fst.tab |
-	tabtk num -c 6 -Q |
-	cut -f 13 )
+	  tabtk num -c 6 -Q |
+	  cut -f 13 )
 
 	## Inspect the variable
 	echo $q500
 
 	grep 500kb windows_mean_fst.tab |
-	awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
-	sortBed |
-	bedtools merge -i stdin > signif_500kb.bed
+	  awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	  sortBed |
+	  bedtools merge -i stdin \
+	> signif_500kb.bed
 
 Use the mouse gene annotation file to retrieve genes within
 the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	< /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf zcat Mus_musculus.NCBIM37.67.gtf
+	</data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat > Mus_musculus.NCBIM37.67.gtf
 
-	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
-	grep protein_coding |
-	cut -f 1,2,3,4,12 |
-	cut -d ' ' -f 1,3,9 |
-	tr -d '";' |
-	sort -u \
+	bedtools intersect \
+	    -a signif_500kb.bed \
+	    -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
+	  grep protein_coding |
+	  cut -f 1,2,3,4,12 |
+	  cut -d ' ' -f 1,3,9 |
+	  tr -d '";' |
+	  sort -u \
 	> candidate_genes.tab
