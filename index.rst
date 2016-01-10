@@ -36,7 +36,7 @@ self learning.
 +--------------+--------------------------------------------+
 | Afternoon II | Data Visualization                         |
 +--------------+--------------------------------------------+
-| **Saturday (9:00-18:00)**                                 |
+| **Sunday (9:00-18:00)**                                   |
 +--------------+--------------------------------------------+
 | Morning      | Introduction to NGS                        |
 +--------------+--------------------------------------------+
@@ -66,10 +66,11 @@ Course contents:
    02-genomics
    03-advanced
    04-graphics
+   05-quality
+   06-assembly
 
 .. ::
    05-gtools
-   06-quality
 
 Additional reference materials:
 

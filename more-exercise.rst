@@ -89,15 +89,12 @@ actually doing.
 
 Load and visualize your data set
 --------------------------------
-Let's link the project directory to your own data directory::
-
-  ln -s /data/banana/ ~/data
 
 Now you can go to R and load the data:
 
 .. code-block:: r
 
-  setwd('~/data/banana')
+  setwd('~/projects/banana')
   d <- read.csv("webapp/data/rotated.csv")
 
 Plot the data to look what we've got:
@@ -169,7 +166,7 @@ Shiny
 And now there is something you definitely wanted, while you were trying to find 
 the good values for rotation of your object::
 
-  setwd('/data/banana/webapp/')
+  setwd('webapp')
 
 Now ``File > Open``, and open ``server.R``. There should be a green ``Run App`` 
 button at the top right of the editor window. Click that button!

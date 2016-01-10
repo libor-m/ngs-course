@@ -12,15 +12,14 @@ tech documents (Your mileage may vary).
     cd varq
     cat /data/slavici/02-variants/*.vcf | grep -v '^#' > pure-data.vcf
     
-    <pure-data.vcf cut -f 1-6 > cols1-6.tsv
-    <pure-data.vcf egrep -o 'DP=[^;]*' | sed 's/DP=//' > col-dp.tsv
-    <pure-data.vcf egrep -o 'TYPE=[^;]*' | sed 's/TYPE=//' > col-type.tsv
-    
+    IN=/data/vcf_examples/luscinia_vars.vcf.gz
+    <$IN zcat | cut -f 1-6 > cols1-6.tsv
+    <$IN zcat | egrep -o 'DP=[^;]*' | sed 's/DP=//' > col-dp.tsv
+    # <$IN zcat | egrep -o 'TYPE=[^;]*' | sed 's/TYPE=//' > col-type.tsv
+    <$IN zcat | grep -v '^#' | mawk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}' > col-type.tsv
+
     # check if all the files are of the same length
     wc -l *.tsv
-    #  62313 col-dp.tsv
-    #  62313 col-type.tsv
-    #  62313 cols1-6.tsv
     paste cols1-6.tsv col-dp.tsv col-type.tsv > cols-all.tsv
     
 
@@ -35,13 +34,24 @@ The data is ready, switch to R to visualize.
     d <- read.delim("cols-all.tsv", 
                     col.names=c("chrom", "pos", "dot", "ref", "alt", "qual", "DP", "TYPE"))
     
-    # alpha=0.1 makes the points transparent
-    # and thus helps with overplotting (too much points in the same place)
+    # few plots to try
     d %>%
-      filter(!grepl(",", TYPE)) %>%
-      ggplot(aes(DP, qual)) + 
-      geom_point(alpha=0.1) + 
-      facet_wrap(~TYPE) +
-      scale_x_log10() +
+      ggplot(aes(TYPE)) + 
+      geom_bar()
+
+    d %>%
+      ggplot(aes(TYPE, DP)) + 
+      geom_boxplot() +
       scale_y_log10()
-      
+
+    d %>%
+      ggplot(aes(DP)) + 
+      geom_histogram() +
+      scale_x_log10()
+
+    d %>%
+      filter(qual < 900) %>%
+      ggplot(aes(qual)) + 
+      geom_histogram() +
+      scale_x_log10() + 
+      facet_wrap(~TYPE, scales="free_y")
