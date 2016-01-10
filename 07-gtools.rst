@@ -100,17 +100,17 @@ within these sliding windows.
 
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
-	-a Ensembl.NCBIM37.67.bed \
+	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-b windows_1mb.bed \
 	> gdens_windows_1mb.tab
 
 	bedtools coverage \
-	-a Ensembl.NCBIM37.67.bed \
+	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-b windows_2-5mb.bed \
 	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
-	-a Ensembl.NCBIM37.67.bed \
+	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
 	-b windows_5mb.bed \
 	> gdens_windows_5mb.tab
 
