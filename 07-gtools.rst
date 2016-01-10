@@ -14,9 +14,9 @@ Prepare files
 .. code-block:: bash
 
 	cd
-	mkdir data/bed
-	cp /data/bed_examples/* data/bed/.
-	cd data/bed
+	mkdir projects/bed_examples
+	cp /data/bed_examples/* projects/bed_examples/.
+	cd projects/bed_examples
 
 1. Merge the overlapping open chromatin regions in encode.bed file
 
@@ -131,16 +131,16 @@ VCFtools
 
 - http://vcftools.sourceforge.net
 
-Prepare data files
+Prepare data files into ``~projects/diff`` directory:
 
 .. code-block:: bash
 
 	cd
-	mkdir data/vcf
+	mkdir projects/diff
 
-	cp /data/mus_mda/00-popdata/* data/vcf/.
+	cp /data/mus_mda/00-popdata/* projects/diff/.
 
-	cd data/vcf
+	cd projects/diff
 
 	# View and explore the files within the 'vcf' directory
 	ls
@@ -255,8 +255,12 @@ genes within highly differentiated regions:
 
 Extract genotype data for European mouse individuals and filter out
 variants having more than one missing genotype and minor allele frequency 0.2
+(we have already started - you should have prepared VCF file with European samples
+and filtered out variants with missing genomes and low minor allele frequency).
 
 .. code-block:: bash
+
+	cd ~/projects/diff
 
 	vcftools --gzvcf popdata_mda.vcf.gz \
 	--keep euro_samps.txt \
