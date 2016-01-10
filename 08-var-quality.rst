@@ -13,17 +13,18 @@ Your task now is:
 - extract the sequencing depth ``DP`` from the ``INFO`` column
 - extract variant type by checking if the ``INFO`` column contains ``INDEL`` string
 - load these two columns together with the first six columns of the VCF into R
-- explore graphically (barchart of variant types)
+- explore graphically (barchart of variant types, histogram of qualities for INDELs and SNPs, ...)
 
 And a bit of guidance here:
+
 - create a new project directory in your ``projects``
 - get rid of the comments (they start with ``#``, that is ``^#`` regular expression)
-- filter lines (``grep``)
-- extact the first 6 columns (``cut``)
+- filter lines based on chromosomes (``grep -e chr1 -e chrZ``)
+- extact the first 6 columns (``cut -f1-6``)
 - extract ``DP`` column (``egrep -o 'DP=[^;]*' | sed 's/DP=//'``)
 - check each line for ``INDEL`` (``awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}'``)
-- merge the data before loading to R (``paste``)
-- add column names while loading the data with ``read.delim``
+- merge the data (columns) before loading to R (``paste``)
+- add column names while loading the data with ``read.delim(..., col.names=c(...))``
 
 .. pull-quote:: Good luck! (We will help you;)
 
