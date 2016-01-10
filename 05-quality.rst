@@ -232,3 +232,8 @@ yourself:
 
 Now you can think for a while about what is better about the bar chart, and what
 is better about the line chart.
+
+Now check the quality of reads in (create the commands on your own, modyfying the provided ones)::
+
+  /data/ecoli
+
