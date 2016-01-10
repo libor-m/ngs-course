@@ -263,7 +263,8 @@ variants having more than one missing genotype and minor allele frequency 0.2
 	--recode --stdout |
 	vcftools --vcf - \
 	--max-missing 1 \
-	--maf 0.2 --recode \
+	--maf 0.2 \
+	--recode \
 	--stdout \
 	> popdata_mda_euro.vcf
 
@@ -343,7 +344,11 @@ If you like you can visualize data in R-Studio:
 
 		setwd("~/data/diff")
 
-		fst <- read.table("windows2snps_fst.bed", header=F,sep="\t")
+		fst <- read.read("windows2snps_fst.bed", header=F,sep="\t")
+
+		# Alternative for TAB separated files
+
+		fst <- read.delim("windows2snps_fst.bed")
 
 		names(fst) <- c("chrom", "start", "end", "win_id", "win_size", "fst", "cnt_snps")
 
