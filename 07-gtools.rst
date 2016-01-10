@@ -253,6 +253,9 @@ genes within highly differentiated regions
 	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
 	6. use bedtools intersect to get a list of candidate genes
 
+Extract genotype data for European mouse individuals and filter out
+variants having more than one missing genotype and minor allele frequency 0.2
+
 .. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz \
@@ -264,6 +267,10 @@ genes within highly differentiated regions
 	--stdout \
 	> popdata_mda_euro.vcf
 
+Calculate Fst values for variants between *M. m. musculus*
+and *M. m. domesticus* populations (populations specified in
+``musculus_samps.txt`` and ``domesticus_samps.txt``)
+
 .. code-block:: bash
 
 	vcftools --vcf popdata_mda_euro.vcf \
@@ -273,6 +280,9 @@ genes within highly differentiated regions
 	tail -n +2 |
 	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-$1,$2,$1":"$2,$3}' \
 	> popdata_mda_euro_fst.bed
+
+Make the three sets of sliding windows (100 kb, 500 kb, 1 Mb)
+and concatenate them into a single file.
 
 .. code-block:: bash
 
@@ -302,10 +312,10 @@ genes within highly differentiated regions
 	awk '{print $0":100kb"}' \
 	> windows_100kb.bed
 
-.. code-block:: bash
-
 	## Concatenate windows of all sizes
 	cat windows_*.bed > windows.bed
+
+Calculate average Fst within the sliding windows
 
 .. code-block:: bash
 
@@ -314,7 +324,14 @@ genes within highly differentiated regions
 	# Join Fst values and the 'windows.bed' file
 	bedtools intersect -a <( windows.bed ) -b <( popdata_mda_euro_fst.bed ) -wb > windows_fst.tab
 
-	bedtools groupby -i <( sort -kX,X windows_fst.tab ) -g X -c mean -o X > windows_mean_fst.bed
+	# Run bedtools groupby command to obtain average values of Fst
+	bedtools groupby -i <( sort -kX,X windows_fst.tab ) \
+	-g X \
+	-c mean \
+	-o X \
+	> windows_mean_fst.bed
+
+If you like you can visualize data in R-Studio:
 
 .. note:: R ggplot2 commands to plot population differentiation
 
@@ -349,20 +366,42 @@ genes within highly differentiated regions
 			geom_hline(yintercept=q,colout="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
+Find 99th percentile of genome-wide distribution of Fst values
+in order to guess possible outlier genome regions. 99th percentile
+can be obtained running R as command line or by using ``tabtk``.
+The output would be a list of windows having Fst higher
+than or equal to 99% of the data.
+
 .. code-block:: bash
 
 	## Use of variables: var=value
 	## $() can be used to assign output of command as a variable
 	## do not use ` (backticks) please, they're depracated and confusing..:)
-	q500=$( grep 500kb windows2snps_fst.bed | cut -f 6 | Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' | cut -d " " -f 2 )
+	q500=$( grep 500kb windows2snps_fst.bed |
+					cut -f 6 |
+					Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' |
+					cut -d " " -f 2 )
+
+	q500=$( grep 500kb windows2snps_fst.bed | tabtk num -c 6 -Q 99.0% )
 
 	## Call variable
 	echo $q500
 
-	grep 500kb windows2snps_fst.bed | awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' | bedtools merge -i stdin > signif_500kb.bed
+	grep 500kb windows2snps_fst.bed |
+	awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	bedtools merge -i stdin > signif_500kb.bed
+
+Use the mouse gene annotation file to retrieve genes within
+the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
 	cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf .
 
-	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb | grep protein_coding | cut -f 1,2,3,4,13 | cut -d ' ' -f 1,3,9 | tr -d '";' | sort -u > fst2genes.tab
+	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
+	grep protein_coding |
+	cut -f 1,2,3,4,13 |
+	cut -d ' ' -f 1,3,9 |
+	tr -d '";' |
+	sort -u \
+	> fst2genes.tab
