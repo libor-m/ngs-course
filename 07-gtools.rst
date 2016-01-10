@@ -245,9 +245,9 @@ and *M. m. domesticus* within a given sliding window and find candidate
 genes within highly differentiated regions
 	1. use vcftools to filter data and calculate Fst for individual SNPs
 	2. use bedtools makewindows to create sliding windows of three sizes
-		100 kb + 10 kb step
-		500 kb + 50 kb step
-		1 Mb + 100 kb step
+		a) 100 kb + 10 kb step
+		b) 500 kb + 50 kb step
+		c) 1 Mb + 100 kb step
 	3. calculate average Fst for each window
 	4. use Rstudio and ggplot2 to plot Fst values across the genome
 	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
@@ -255,24 +255,52 @@ genes within highly differentiated regions
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
+	vcftools --gzvcf popdata_mda.vcf.gz \
+	--keep euro_samps.txt \
+	--recode --stdout |
+	vcftools --vcf - \
+	--max-missing 1 \
+	--maf 0.2 --recode \
+	--stdout \
+	> popdata_mda_euro.vcf
 
 .. code-block:: bash
 
-	vcftools --vcf popdata_mda_euro.vcf --weir-fst-pop musculus_samps.txt  --weir-fst-pop domesticus_samps.txt --stdout | tail -n +2 | awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-$1,$2,$1":"$2,$3}' > popdata_mda_euro_fst.bed
+	vcftools --vcf popdata_mda_euro.vcf \
+	--weir-fst-pop musculus_samps.txt  -\
+	-weir-fst-pop domesticus_samps.txt \
+	--stdout |
+	tail -n +2 |
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-$1,$2,$1":"$2,$3}' \
+	> popdata_mda_euro_fst.bed
 
 .. code-block:: bash
 
 	cp /data/mus_mda/02-windows/genome.fa.fai .
 
 	## Create windows of 1 Mb with 100 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 1000000 -s 100000 -i winnum | awk '{print $0":1000kb"}' > windows_1000kb.bed
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	-w 1000000 \
+	-s 100000 \
+	-i winnum |
+	awk '{print $0":1000kb"}' \
+	> windows_1000kb.bed
 
 	## Create windows of 500 kb with 500 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 500000 -s 50000 -i winnum | awk '{print $0":500kb"}' > windows_500kb.bed
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	-w 500000 \
+	-s 50000 \
+	-i winnum |
+	awk '{print $0":500kb"}' \
+	> windows_500kb.bed
 
 	## Create windows of 100 kb with 10 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) -w 100000 -s 10000 -i winnum | awk '{print $0":100kb"}' > windows_100kb.bed
+	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	-w 100000 \
+	-s 10000 \
+	-i winnum | \
+	awk '{print $0":100kb"}' \
+	> windows_100kb.bed
 
 .. code-block:: bash
 
@@ -281,11 +309,12 @@ genes within highly differentiated regions
 
 .. code-block:: bash
 
-	## Input files for bedops need to be sorted
-	sort-bed windows.bed > windows_sorted.bed
-	sort-bed popdata_mda_euro_fst.bed > popdata_mda_euro_fst_sorted.bed
+	## Input files for bedtools groupby need to be sorted
 
-	bedmap --echo --mean --count windows_sorted.bed popdata_mda_euro_fst_sorted.bed | grep -v NA | tr "|:" "\t" > windows2snps_fst.bed
+	# Join Fst values and the 'windows.bed' file
+	bedtools intersect -a <( windows.bed ) -b <( popdata_mda_euro_fst.bed ) -wb > windows_fst.tab
+
+	bedtools groupby -i <( sort -kX,X windows_fst.tab ) -g X -c mean -o X > windows_mean_fst.bed
 
 .. note:: R ggplot2 commands to plot population differentiation
 
@@ -337,4 +366,3 @@ genes within highly differentiated regions
 	cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf .
 
 	bedtools intersect -a signif_500kb.bed -b Mus_musculus.NCBIM37.67.gtf -wa -wb | grep protein_coding | cut -f 1,2,3,4,13 | cut -d ' ' -f 1,3,9 | tr -d '";' | sort -u > fst2genes.tab
-	
