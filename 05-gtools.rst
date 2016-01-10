@@ -42,6 +42,13 @@ Prepare files
 	less Ensembl.NCBIM37.67.bed
 
 	# Count the number of open chromatin regions overlapping with genes
+	# or are within 1000 bp window on each side of a gene
+	bedtools window -w 1000 \
+	-a <( sortBed -i encode-merged.bed ) \
+	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
+	wc -l
+
+	# Count the number of open chromatin regions overlapping with genes
 	bedtools intersect \
 	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
