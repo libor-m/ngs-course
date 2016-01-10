@@ -373,7 +373,7 @@ Calculate average Fst within the sliding windows:
 	-o mean |
 	tr ":" "\t" > windows_mean_fst.tab
 
-Visualize average Fst values within the sliding windows of the three sizes
+Visualize the average Fst values within the sliding windows of the three sizes
 between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
 Plot the distribution of the Fst values for the three window sizes in
 a separate windows. Plot the average Fst values along the chromosomes.
