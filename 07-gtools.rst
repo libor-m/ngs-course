@@ -415,13 +415,13 @@ than or equal to 99% of the data.
 	## Use of variables: var=value
 	## Use $() to pass the output of command/pipeline to a variable
 
-	# Calculate 99th % by R
+	# Calculate 99th percentile by R
 	q500=$( grep 500kb windows_mean_fst.tab |
 	cut -f 6 |
 	Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' |
 	cut -d " " -f 2 )
 
-	# Calculate 99th % by tabtk
+	# Calculate 99th percentile by tabtk
 	q500=$( grep 500kb windows_mean_fst.tab |
 	tabtk num -c 6 -Q |
 	cut -f 13 )
