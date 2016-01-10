@@ -233,6 +233,19 @@ have to be specified in the output - each one with a separate file
 Exercise
 --------
 
+Get a population differentiation calculated as Fst between *M. m. musculus*
+and *M. m. domesticus* within a given sliding window and find candidate
+genes within highly differentiated regions
+	1. use vcftools to filter data and calculate Fst for individual SNPs
+	2. use bedtools makewindows to create sliding windows of three sizes
+		100 kb + 10 kb step
+		500 kb + 50 kb step
+		1 Mb + 100 kb step
+	3. calculate average Fst for each window
+	4. use Rstudio and ggplot2 to plot Fst values across the genome
+	5. use R to obtain 99th percentile and use it to obtain a set of candidate genomic regions
+	6. use bedtools intersect to get a list of candidate genes
+
 .. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz --keep euro_samps.txt --recode --stdout | vcftools --vcf - --max-missing 1 --maf 0.2 --recode --stdout > popdata_mda_euro.vcf
