@@ -302,7 +302,7 @@ and *M. m. domesticus* populations (populations specified in
 	-weir-fst-pop domesticus_samps.txt \
 	--stdout |
 	tail -n +2 |
-	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-$1,$2,$1":"$2,$3}' \
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
 	> popdata_mda_euro_fst.bed
 
 Make the three sets of sliding windows (100 kb, 500 kb, 1 Mb)
@@ -346,14 +346,14 @@ Calculate average Fst within the sliding windows:
 	## Input files for bedtools groupby need to be sorted
 
 	# Join Fst values and the 'windows.bed' file
-	bedtools intersect -a <( windows.bed ) -b <( popdata_mda_euro_fst.bed ) -wb > windows_fst.tab
+	bedtools intersect -a <( sortBed -i windows.bed ) -b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb > windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
-	bedtools groupby -i <( sort -kX,X windows_fst.tab ) \
-	-g X \
-	-c mean \
-	-o X \
-	> windows_mean_fst.bed
+	bedtools groupby -i <( sort -k4,4 windows_fst.tab ) \
+	-g 1,2,3,4 \
+	-c 9 \
+	-o mean |
+	tr ":" "\t" > windows_mean_fst.tab
 
 If you like you can visualize data in R-Studio:
 
@@ -367,13 +367,13 @@ If you like you can visualize data in R-Studio:
 
 		setwd("~/data/diff")
 
-		fst <- read.read("windows2snps_fst.bed", header=F,sep="\t")
+		fst <- read.table("windows_mean_fst.tab", header=F,sep="\t")
 
 		# Alternative for TAB separated files
 
-		fst <- read.delim("windows2snps_fst.bed")
+		fst <- read.delim("windows_mean_fst.tab", header=F)
 
-		names(fst) <- c("chrom", "start", "end", "win_id", "win_size", "fst", "cnt_snps")
+		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
 
 		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
 
@@ -384,17 +384,17 @@ If you like you can visualize data in R-Studio:
 
 	.. code-block:: bash
 
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) +
+		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
-		q <- quantile(subset(fst,win_size=="500kb",select="fst")[,1],prob=0.99)[[1]]
+		q <- quantile(subset(fst,win_size=="500kb",select="avg_fst")[,1],prob=0.99)[[1]]
 
-		ggplot(fst, aes(y=fst, x=start, colour=win_size)) +
+		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=q,colout="black") +
+			geom_hline(yintercept=q,colour="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 	.. image:: _static/fst_on_chroms.png
