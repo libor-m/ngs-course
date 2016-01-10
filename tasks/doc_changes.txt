@@ -37,4 +37,5 @@ velvetg 02-velvet-k31-paired -exp_cov auto -ins_length 150
 
 
 ## notes
-too much 'data' directories is not good
+- too much 'data' directories is not good
+- do more practice/explanations with directory structure, use digraph 'clovece'

@@ -59,6 +59,8 @@ Initial instructions:
 
 Course contents:
 
+`Etherpad <https://public.etherpad-mozilla.org/p/ngs-course>`_ with 'live' code.
+
 .. toctree::
    :maxdepth: 2
 
