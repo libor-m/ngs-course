@@ -9,7 +9,7 @@ Genome feature arithmetics & summary
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 
-Prepare files
+Prepare files:
 
 .. code-block:: bash
 
