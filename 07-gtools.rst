@@ -190,7 +190,7 @@ Select subset of samples and SNPs based on physical position in genome:
 .. code-block:: bash
 
 	vcftools --gzvcf popdata_mda.vcf.gz \
-	--chr 11
+	--chr 11 \
 	--from-bp 22000000 \
 	--to-bp 23000000 \
 	--keep euro_samps.txt \
