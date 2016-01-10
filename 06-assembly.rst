@@ -81,7 +81,12 @@ sequence available, we can compare the size of the reference sequence
 with our assembly - the more similar, the better;) 4.6 Mbp is quite close to 
 4,561,418 ... nice.
 
-Using ``Mauve`` we can try to align the result with the reference *E. coli* genome:
+Using ``Mauve`` we can align the result with the reference *E. coli* genome:
 
 .. image:: _static/mauve.png
    :align: center
+
+Here you can get the genome yourself. If there is time, we can try to map our reads to it::
+
+  wget -O ecoli.fa.gz https://owncloud.cesnet.cz/public.php?service=files&t=0c7d291a4ad1ff39911ef1fa8793c106&download
+
