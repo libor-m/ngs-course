@@ -13,13 +13,9 @@ http://blogs.nature.com/methagora/2013/07/data-visualization-points-of-view.html
 # more resources on graphics/data viz
 
 - distribute points of view and ggplot2 book
-- check ggplot2 book @github 
+- check ggplot2 book @github
 
 http://bioconnector.org/workshops/lessons/r/r-viz/
-
-# etherpad?
-
-https://public.etherpad-mozilla.org/p/ngs-course
 
 # sequence assembly
 Some sequence assembly games?
@@ -28,14 +24,20 @@ http://www.compbio.dundee.ac.uk/gigsaw/cgi-bin/gigsaw.pl
 http://ivory.idyll.org/blog/the-assembly-exercise.html
 https://github.com/lexnederbragt/INF-BIO9120_fall2013_de_novo_assembly/blob/master/practicals/01_Assembly_using_velvet.md
 
-# velvet
-velveth 01-velvet-k21 21 -fastq -short -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq -fastq -short -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
-velvetg 01-velvet-k21
+- https://flxlexblog.wordpress.com/2015/08/31/active-learning-strategies-for-bioinformatics-teaching-2/
 
-velveth 02-velvet-k31-paired 31 -fastq -shortPaired -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
-velvetg 02-velvet-k31-paired -exp_cov auto -ins_length 150
-
-
-## notes
+## what to do next
 - too much 'data' directories is not good
 - do more practice/explanations with directory structure, use digraph 'clovece'
+- some 'game' to reinforce using of <tab> autocompletion (/you_can_press_tab_twice_if_ambiguous)
+- put back the putty control to the beginning
+
+
+## unix joke
+unzip, strip, touch, finger, grep, mount, fsck, more, yes, fsck, fsck, fsck, umount, sleep
+
+who && gawk && uname && talk && date && wine && touch && unzip && strip && touch && finger && mount && fsck && more && yes; yes; more; yes; umount && make clean && sleep
+
+## session recording
+https://asciinema.org/
+
