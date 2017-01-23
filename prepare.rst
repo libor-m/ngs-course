@@ -1,5 +1,5 @@
 Course materials preparation
-============================ 
+============================
 This section contains the steps that we did to produce the materials that course participants
 got ready-made. That is the **linux machine image**, **online documentation** and the **slide deck**.
 
@@ -15,17 +15,17 @@ Clone the project to local machine and initialize `sphinx` docs. Choose ``SSH`` 
   git clone git@github.com:libor-m/ngs-course.git
 
   cd ngs-course
-  
+
   # use default answers to all the questions
   # enter project name and version 1.0
   sphinx-quickstart
 
 
-Now track all files created by `sphinx-quickstart` in current directory with `git` and publish 
+Now track all files created by `sphinx-quickstart` in current directory with `git` and publish
 to GitHub.
 
 .. code-block:: bash
-  
+
   git add .
   git commit -m 'empty sphinx project'
 
@@ -33,20 +33,20 @@ to GitHub.
   echo _build >> .gitignore
   git add .gitignore
   git commit -m 'ignore _build directory'
-  
+
   # publish the first docs
   # setting up argument less git pull with '-u'
   git push -u origin master
-  
-To get live view of the documents, login to https://readthedocs.org. Your `GitHub` account can be paired with 
-`Read the Docs` account in `Edit Profile/Social Accounts`, then you can simply 'import' new projects 
+
+To get live view of the documents, login to https://readthedocs.org. Your `GitHub` account can be paired with
+`Read the Docs` account in `Edit Profile/Social Accounts`, then you can simply 'import' new projects
 from your GitHub with one click. Import the new project and wait for it to build. After the build
 the docs can be found at http://ngs-course.readthedocs.org (or click the ``View`` button).
-  
+
 Now write the docs, commit and push. Rinse and repeat. Try to keep the commits small, just one change a time.
 
 .. code-block:: bash
-  
+
   git add _whatever_new_files_
   git commit -m '_your meaningful description of what you did here_'
   git push
@@ -57,6 +57,21 @@ References that may come handy:
 
 Use http://goo.gl to shorten a link to www.seznam.cz, to get a tracking counter
 url for the network connectivity test.
+
+Adding another instance
+^^^^^^^^^^^^^^^^^^^^^^^
+Check out the version which will serve as starting material, create and publish new branch.
+
+.. code-block:: bash
+
+  git pull
+  git checkout praha-january-2016
+  git checkout -b praha-january-2017
+  git push -u origin praha-january-2017:praha-january-2017
+
+Log in to `Read the Docs`, go to `Admin > Versions
+<https://readthedocs.org/dashboard/ngs-course/versions/>`_,
+make the new version 'Active', set as the default version.
 
 VirtualBox image
 ----------------
@@ -104,7 +119,7 @@ Login as user (can be done by ``su user`` in root shell):
   # colrize prompt - uncomment force_color_prompt=yes
   # add ll alias - uncomment alias ll='ls -l'
   # fast sort and uniq
-  # export LC_ALL=C 
+  # export LC_ALL=C
   # maximal width of man
   # export MANWIDTH=120
   # # wget impersonating normal browser
@@ -128,7 +143,7 @@ Login as user (can be done by ``su user`` in root shell):
 
   # everyone likes git and screen
   sudo apt-get install git screen pv curl wget
-  
+
   # add important stuff to python - this also installs GCC
   sudo apt-get install python-dev python-pip python-virtualenv
 
