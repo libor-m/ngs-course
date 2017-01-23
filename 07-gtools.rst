@@ -466,11 +466,7 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-<<<<<<< HEAD
 	</data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat > Mus_musculus.NCBIM37.67.gtf
-=======
-	< /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat > Mus_musculus.NCBIM37.67.gtf
->>>>>>> 846199b186f60274b900bb7f5554a1f2a03c0eab
 
 	bedtools intersect \
 	    -a signif_500kb.bed \
