@@ -4,8 +4,8 @@ Unix - Basics
 This session will give you all the basics that you need
 to smoothly move around when using a UNIX system (in the text mode!).
 
-Basic orientation - begining
-----------------------------
+Basic orientation
+-----------------
 
 Check your keyboard
 ^^^^^^^^^^^^^^^^^^^
