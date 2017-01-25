@@ -27,7 +27,7 @@ https://github.com/lexnederbragt/INF-BIO9120_fall2013_de_novo_assembly/blob/mast
 - https://flxlexblog.wordpress.com/2015/08/31/active-learning-strategies-for-bioinformatics-teaching-2/
 
 ## what to do next
-- too much 'data' directories is not good
+- too much 'data' directories is not good - use ~/my_work
 - do more practice/explanations with directory structure, use digraph 'clovece'
 - some 'game' to reinforce using of <tab> autocompletion (/you_can_press_tab_twice_if_ambiguous)
 - put back the putty control to the beginning
@@ -41,3 +41,8 @@ who && gawk && uname && talk && date && wine && touch && unzip && strip && touch
 ## session recording
 https://asciinema.org/
 
+## update to use git for win
+- best practice
+- intro
+
+## copy paste instructions in the beginning!
