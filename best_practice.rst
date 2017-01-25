@@ -140,4 +140,4 @@ Parallelization
 Many tasks, especially in Big Data and NGS, are 'data parallel' - that means you can split the data in pieces,
 compute the results on each piece separately and then combine the results to get the complete result.
 This makes very easy to exploit the full power of modern multi core machines, speeding up your processing e.g. 10 times.
-``GNU parallel`` is a nice tool that helps to parallelize bash pipelines, check the manual.
+``GNU parallel`` is a nice tool that helps to parallelize bash pipelines, check the manual: ``man parallel_tutorial``.
