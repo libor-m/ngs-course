@@ -132,19 +132,34 @@ Login as user (can be done by ``su user`` in root shell):
   echo "TZ='Europe/Prague'; export TZ" >> ~/.profile
 
   # some screen settings
-  cat >~/.screenrc << 'EOF'
+  cat > ~/.screenrc << 'EOF'
   hardstatus alwayslastline
-  hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%m/%d %{W}%C%A%{g}]'
+  hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%d.%m. %{W}%c%{g}]'
 
   defscrollback 20000
 
   startup_message off
   EOF
 
-  # everyone likes git and screen
-  sudo apt-get install git screen pv curl wget
+  # MOTD
+  sudo su
+  cat > /etc/motd <<EOF
 
-  # add important stuff to python - this also installs GCC
+    _ __   __ _ ___        ___ ___  _   _ _ __ ___  ___
+   | '_ \ / _` / __|_____ / __/ _ \| | | | '__/ __|/ _ \
+   | | | | (_| \__ \_____| (_| (_) | |_| | |  \__ \  __/
+   |_| |_|\__, |___/      \___\___/ \__,_|_|  |___/\___|
+          |___/
+  EOF
+  exit
+
+  # everyone likes git and screen
+  sudo apt-get install git screen pv curl wget jq
+
+  # build tools
+  sudo apt-get install build-essential pkg-config autoconf
+
+  # add important stuff to python
   sudo apt-get install python-dev python-pip python-virtualenv
 
   # java because of fastqc
@@ -171,14 +186,16 @@ R is best used in RStudio - server version can be used in web browser.
   sudo apt-get update
   sudo apt-get install r-base
 
+  sudo apt-get install libxml2-dev libcurl4-openssl-dev libssl-dev
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
-  > install.packages(c("ggplot2", "dplyr", "reshape2", "GGally", "stringr", "vegan", "svd", "tsne", "tidyr", "shiny"))
+  > install.packages(c("tidyverse", "shiny", "reshape2", "vegan"))
+  > exit()
 
   # RStudio with prerequisities
   sudo apt-get install gdebi-core
-  wget https://download2.rstudio.org/rstudio-server-0.99.491-i386.deb
-  sudo gdebi rstudio-server-0.99.491-i386.deb
+  wget https://download2.rstudio.org/rstudio-server-1.0.136-i386.deb
+  sudo gdebi rstudio-server-1.0.136-i386.deb
 
 There are packages that are not in the standard repos, or the versions in the repos is very obsolete.
 It's worth it to install such packages by hand, when there is not much dependencies.
@@ -187,19 +204,17 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # pipe viewer
   cd ~/sw
-  wget -O - http://www.ivarch.com/programs/sources/pv-1.5.7.tar.bz2 | tar xvj
-  cd pv-1.5.7/
+  wget -O - http://www.ivarch.com/programs/sources/pv-1.6.0.tar.bz2 | tar xj
+  cd pv-*
   ./configure
-  make
-  sudo make install
+  make && sudo make install
 
   # parallel
   cd ~/sw
-  wget -O - http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2|tar xvj
+  wget -O - http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2|tar xj
   cd parallel-*/
   ./configure
-  make
-  sudo make install
+  make && sudo make install
 
   # tabtk
   cd ~/sw
@@ -213,22 +228,65 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # fastqc
   cd ~/sw
-  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.4.zip
-  unzip fastqc_v0.11.4.zip
-  rm fastqc_v0.11.4.zip
+  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
+  unzip fastqc_*.zip
+  rm fastqc_*.zip
   chmod +x FastQC/fastqc
 
   # vcftools
   cd ~/sw
-  sudo apt-get install pkg-config
-  wget -O - https://github.com/vcftools/vcftools/releases/download/v0.1.14/vcftools-0.1.14.tar.gz | tar xvz
+  wget -O - https://github.com/vcftools/vcftools/tarball/master | tar xz
   cd vcftools*
+  ./autogen.sh
   ./configure
-  make
-  sudo make install
+  make && sudo make install
 
-  # and some more:
-  # bcftools, samtools, vcftools, htslib
+  # samtools
+  cd ~/sw
+  wget -O - https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 | tar xj
+  cd samtools*
+  ./configure
+  make && sudo make install
+
+  # bcftools
+  cd ~/sw
+  wget -O - https://github.com/samtools/bcftools/releases/download/1.3.1/bcftools-1.3.1.tar.bz2 | tar xj
+  cd bcftools*
+  ./configure
+  make && sudo make install
+
+  # htslib (tabix)
+  cd ~/sw
+  wget -O - https://github.com/samtools/htslib/releases/download/1.3.2/htslib-1.3.2.tar.bz2 | tar xj
+  cd htslib*
+  ./configure
+  make && sudo make install
+
+  # bwa
+  cd ~/sw
+  wget -O - https://github.com/lh3/bwa/releases/download/v0.7.15/bwa-0.7.15.tar.bz2 | tar xj
+  cd bwa*
+  # add -msse2 to CFLAGS
+  nano Makefile
+  sudo cp bwa /usr/local/bin
+  # copy the man
+  sudo bash -c "<bwa.1 gzip > /usr/share/man/man1/bwa.1.gz"
+
+  # velvet
+  cd ~/sw
+  wget -O - https://www.ebi.ac.uk/~zerbino/velvet/velvet_1.2.10.tgz | tar xz
+  cd velvet*
+  # comment out the -m64 line, we're on x86
+  nano Makefile
+  make
+  sudo cp velveth velvetg /usr/bin/local
+
+
+
+TODO - future proofing of the installs with getting the latest - but release
+quality code with something like this (does not work with tags yet)::
+
+  gh-get-release() { echo $1 | cut -d/ -f4,5 | xargs -I{} curl -s https://api.github.com/repos/{}/releases/latest | jq -r .tarball_url | xargs -I{} curl -Ls {} | tar xz ;}
 
 Check what are the largest packages::
 
