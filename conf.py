@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'UNIX and NGS'
-copyright = u'2015, Libor Morkovsky, Vaclav Janousek'
+copyright = u'Libor Morkovsky, Vaclav Janousek'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
