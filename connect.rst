@@ -1,58 +1,49 @@
 Connecting to the virtual machine
 =================================
-.. note:: 
+.. note::
   You need to start the virtual machine first!
 
 .. _ssh_connect:
 
 Connect to control the machine
 ------------------------------
-To control the machine, you need to connect to the ssh service. 
+To control the machine, you need to connect to the ssh service.
 This is also referred to as 'logging in'.
 
-In Windows this is done with PuTTY.
-
-- start PuTTY
-- fill Host Name: ``localhost``
-- fill Port: ``2222``
-- click Open or press <Enter>
-
-.. image:: _static/putty-config.png
-
-In the black wnidow that appears, type your credentials:
-
-- login as: ``user``
-- user@localhost’s password: ``user``
-
-.. image:: _static/putty.png
-
-In Mac OS X or Linux, you start your terminal program first ('Terminal', 'Konsole', 'xterm').
-In the terminal window your shell is running (probably 'bash'). Here you use ssh to connect 
-to the virtual machine::
+In **Windows** this is done with ``Git Bash`` from the ``Git for Windows``
+package. When you run it, you get a so-called terminal window. Type the
+following command and press ``Enter``.::
 
   ssh -p 2222 user@localhost
+
+Type in your password when prompted with ``user@localhost's password:`` - it's
+the same as the username - ``user``. The password entry is 'silent', nothing
+appears as you type - so no one can see how many characters your password has.
+
+.. image:: _static/win-terminal.png
+
+In **Mac OS X** your terminal program is called 'Terminal', in **Linux** you have several options like 'Konsole', 'xterm' etc.
 
 Testing the Internet connection
 -------------------------------
 When you're logged in, check your internet connection from the virtual machine. Your main
-computer has to be connected to the internet, of course. Copy the following command, and 
+computer has to be connected to the internet, of course. Copy the following command, and
 paste it to the command prompt (click right mouse button in PuTTY window).
 
 .. code-block:: bash
 
-  wget -q -O - http://goo.gl/n8XK2Y | head -1
-  # <!DOCTYPE html>
+  wget -q -O - http://goo.gl/n8XK2Y | grep '<title>'
+  #                     <title>Seznam - najdu tam, co neznám</title>
 
-If the ``<!DOCTYPE html>`` does not appear, something is probably wrong with the connection.
+If the ``<title>...`` does not appear, something is probably wrong with the connection.
 
 Connect to copy files
 ---------------------
-In Windows, WinSCP is used to copy files to Linux machines. You use the same information
-as for PuTTY to log in.
+In Windows, WinSCP can be used to copy files to Linux machines.
 
 .. image:: _static/winscp.png
 
-In Mac OS X or Linux, the most simple command to copy a file into 
+In Mac OS X or Linux, the most simple command to copy a file into
 a home directory of ``user`` on a running virtual machine is::
 
   scp -P 2222 myfile user@localhost:~

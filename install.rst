@@ -9,7 +9,7 @@ We will be using a virtual computer pre-installed with Debian Linux and sample d
 Installation steps (it should take about 10 minutes):
 
 - Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
-- Download the virtual machine image from this link: https://goo.gl/ugMHB0 You'll get a single 
+- Download the virtual machine image from this link: https://goo.gl/ugMHB0 You'll get a single
   file with ``.ova`` extension on your hard drive.
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
   Follow the instructions after the import is started.
@@ -27,28 +27,27 @@ You don't need to type anything into that window, just checking that it looks li
 
 How to access the machine
 -------------------------
-Because it is much more comfortable to use a native terminal application than the small VM screen,
-you will connect to the machine depending on what system you are using.
-
-Machine configuration details:
-
-- Administrative user: `root`, password: `debian`
-- Normal user: `user`, password: `user`
-- ssh on port 2222
-- RStudio on port 8787
-
-In case of any problems try to find contact the tutors, we'll try to resolve all problems before the course.
+It is much more comfortable to use a native terminal application, rather than
+the small VirtualBox 'monitor'. You will connect to the machine differently,
+depending on what operating system you are using.
 
 Windows
--------
-Install PuTTY and WinSCP. PuTTY will be used to control the virtual computer. WinSCP will be used to transfer
-files between your computer and the virtual computer.
+^^^^^^^
+Install `Git for Windows <https://git-scm.com/download/win>`_. We'll use it to
+control the virtual computer.
 
-- PuTTY (http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html - look for putty.exe)
-- WinSCP (http://winscp.net/eng/download.php - look for Installation package).
+Be sure to check ``Git Bash Here``, keep the default settings in the other screens.
+
+.. image:: _static/git-for-win-1.png
+
+.. image:: _static/git-for-win-2.png
+
+Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
+``Installation package``).  WinSCP will be used to transfer files between your
+'host' computer and the virtual computer.
 
 Mac OS X and Linux
-------------------
+^^^^^^^^^^^^^^^^^^
 Ssh is used to control the virtual computer. It should be installed in your computer.
 
 Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended)
