@@ -281,9 +281,13 @@ It's worth it to install such packages by hand, when there is not much dependenc
   make
   sudo cp velveth velvetg /usr/bin/local
 
+  # bedtools
+  cd ~/sw
+  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz | tar xz
+  cd bedtools2/
+  make && sudo make install
 
-
-TODO - future proofing of the installs with getting the latest - but release
+TODO - future proofing of the installs with getting the latest - but release -
 quality code with something like this (does not work with tags yet)::
 
   gh-get-release() { echo $1 | cut -d/ -f4,5 | xargs -I{} curl -s https://api.github.com/repos/{}/releases/latest | jq -r .tarball_url | xargs -I{} curl -Ls {} | tar xz ;}
