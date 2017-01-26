@@ -77,7 +77,7 @@ And now for something completely different -
 
 Functions in Shell
 ------------------
-Create a command ``uniqt`` that will behave as ``uniq``, but there
+Create a command ``uniqt`` that will behave as ``uniq -c``, but there
 will be no padding (spaces) in front of the numbers, and numbers will 
 be separated by <tab>, so eg. ``cut`` will work.
 
