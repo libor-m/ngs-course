@@ -12,9 +12,14 @@ This is also referred to as 'logging in'.
 
 In **Windows** this is done with ``Git Bash`` from the ``Git for Windows``
 package. When you run it, you get a so-called terminal window. Type the
-following command and press ``Enter``.::
+following command and press ``Enter``::
 
   ssh -p 2222 user@localhost
+
+  # when asked about the 'authenticity', type yes
+  The authenticity of host '[localhost]:2222 ([127.0.0.1]:2222)' can't be established.
+  ECDSA key fingerprint is SHA256:txmEQW0xgqGF4u8lzWjaGJPXVni9yKNBOBN6FxWyCQU.
+  Are you sure you want to continue connecting (yes/no)? yes
 
 Type in your password when prompted with ``user@localhost's password:`` - it's
 the same as the username - ``user``. The password entry is 'silent', nothing

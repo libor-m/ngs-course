@@ -42,6 +42,11 @@ Be sure to check ``Git Bash Here``, keep the default settings in the other scree
 
 .. image:: _static/git-for-win-2.png
 
+To set up your terminal run the ``Git Bash`` from Start menu,
+run this and exit the terminal (``exit``)::
+
+  curl -sL https://goo.gl/684ar0 > ~/.minttyrc
+
 Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
 ``Installation package``).  WinSCP will be used to transfer files between your
 'host' computer and the virtual computer.
