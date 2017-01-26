@@ -30,7 +30,7 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   cd ~
-  cp /data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data
+  cp /data-shared/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data
   # does not work, let's investigate
 
   ll /data/mus_mda/05-fst2genes
@@ -75,9 +75,9 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   cd ~
-  cp /data/vcf_examples/luscinia_vars_flags.vcf.gz ~/data
-  gunzip data/luscinia_vars_flags.vcf.gz
-  less -S data/luscinia_vars_flags.vcf
+  cp /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz ~/projects/.
+  gunzip projects/luscinia_vars_flags.vcf.gz
+  less -S projects/luscinia_vars_flags.vcf
 
 1. Count the number variants in the file
 
@@ -89,14 +89,14 @@ Pattern search & regular expressions
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | wc -l
-  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'FAIL' | wc -l
+  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | wc -l
+  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'FAIL' | wc -l
 
 3. Count the number of variants on the chromosome Z passing the quality threshold
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
+  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
 
 Cutting out, sorting and replacing text
 ---------------------------------------
