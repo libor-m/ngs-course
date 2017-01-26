@@ -12,7 +12,7 @@ Easiest ways to get UNIX
 To get the most basic UNIX tools, you can download an install  `Git for
 Windows <https://git-scm.com/download/win>`_. It comes with a nice terminal
 emulator, and installs to your right-click menu as 'Git Bash here' - which
-runs terminal in the folder that you clicked. Git itself is meant for managing 
+runs terminal in the folder that you clicked. Git itself is meant for managing
 versions of directories, but it cannot live without the UNIX environment, so
 someone did the hard work and packaged it all nicely together.
 
@@ -40,19 +40,19 @@ terminal program (``konsole``, ``xterm``, ``Terminal`` ...).
 
 Essentials
 ----------
-Always use ``screen`` for any serious work. Failing to use screen will cause your
+Always use ``screen`` for any serious work. Not using screen will cause your
 jobs being interrupted when the network link fails (given you're working remotely),
 and it will make you keep your home computer running even if your calculation is running
 on a remote server.
 
 Track system resources usage with ``htop``. System that is running low on memory won't
-perform fast. System with many cores where only one core ('CPU') is used should be used for 
+perform fast. System with many cores where only one core ('CPU') is used should be used for
 more tasks - or can finish your task much faster, if used correctly.
 
 Data organization
 -----------------
-Make a new directory for each project. Put all your data into subdirectories. Use 
-symbolic links to reference huge data that are reused by more projects in your current 
+Make a new directory for each project. Put all your data into subdirectories. Use
+symbolic links to reference huge data that are reused by more projects in your current
 project directory.
 Prefix your directory names with 2 digit numbers, if your projects have more than few
 subdirectories. Increase the number as the data inside is more and more 'processed'.
@@ -65,24 +65,15 @@ Example of genomic pipeline data directory follows:
 
     00-raw --> /data/slavici/all-reads
     01-fastqc
-    02-mm-cleaning
-    03-sff
-    10-mid-split
-    11-fastqc
-    12-cutadapt
+    10-trim-adaptors
     13-fastqc
-    22-newbler
-    30-tg-gmap
-    31-tg-sim4db
-    32-liftover
-    33-scaffold
-    40-map-smalt
-    50-variants
-    51-variants
-    60-gff-primers
+    20-assembly-newbler
+    30-map-reads-gmap
+    31-map-reads-bwa
+    50-variants-samtools
 
 Take care to note all the code used to produce all the intermediate data files.
-This has two benefits: 
+This has two benefits:
 1) your results will be really **reproducible**
 2) it will **save you much work** when doing the same again, or trying different settings
 
@@ -92,13 +83,13 @@ was the one that was actually working.
 
 Building command lines
 ----------------------
-Build the pipelines command by command, keeping ``| less -S`` (or ``| head`` if you don't expect lines 
-of the output to be longer than your terminal width) at the end. Every time you check if the 
+Build the pipelines command by command, keeping ``| less -S`` (or ``| head`` if you don't expect lines
+of the output to be longer than your terminal width) at the end. Every time you check if the
 output is what you expect, and only after that add the next command. If there is a ``sort`` in
 your pipeline, you have to put ``head`` in front of the ``sort``, because otherwise sort has to process
 all the data before it gives out any output.
 
-I (Libor) do prefer the 'input first' syntax (``<file command | comm2 | comm3
+I (Libor) do prefer the 'input first' syntax (``<file command | command2 | command3
 >out``) which improves legibility, resembles the real world pipeline (garden
 hose, input tap -> garden hose -> garden sprinkler) more, and when changing
 the input file names when reusing the pipeline, the names are easier to find.
@@ -113,7 +104,7 @@ otherwise all your output would go to the screen instead of a file.
     uniq -c -s64 |
     sort -k1rn,1 \
   >out
-  
+
 You can get a nice progress bar if you use ``pv`` (pipe viewer) instead of ``cat`` at the beginning
 of the pipeline. But again, if there is a ``sort`` in your pipeline, it has to consume all the data
 before it starts to work.
@@ -125,19 +116,23 @@ in the process, or the argument is supposed to be tuned:
 
   FILE=/data/00-reads/GS60IET02.RL1.fastq
   THRESHOLD=300
-  
+
   # count sequences in file
   <$FILE awk '(NR % 4 == 2)' | wc -l
-  # 42308  
+  # 42308
 
-  # count sequences longer that 
+  # count sequences longer that
   <$FILE awk '(NR % 4 == 2 && length($0) > $THRESHOLD)' | wc -l
   # 14190
 
 
 Parallelization
 ---------------
-Many tasks, especially in Big Data and NGS, are 'data parallel' - that means you can split the data in pieces,
-compute the results on each piece separately and then combine the results to get the complete result.
-This makes very easy to exploit the full power of modern multi core machines, speeding up your processing e.g. 10 times.
-``GNU parallel`` is a nice tool that helps to parallelize bash pipelines, check the manual: ``man parallel_tutorial``.
+
+Many tasks, especially in Big Data and NGS, are 'data parallel' - that means
+you can split the data in pieces, compute the results on each piece separately
+and then combine the results to get the complete result. This makes very easy
+to exploit the full power of modern multi core machines, speeding up your
+processing e.g. 10 times. ``GNU parallel`` is a nice tool that helps to
+parallelize bash pipelines, check the manual for some examples: ``man
+parallel_tutorial``.

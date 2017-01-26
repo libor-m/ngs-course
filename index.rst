@@ -79,7 +79,7 @@ Additional reference materials:
    :maxdepth: 1
 
    links
-   best_practice
+   best-practice
    reference
    formats
    more-exercise
