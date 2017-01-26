@@ -533,3 +533,80 @@ The ``NR`` built-in variable can be used to capture each second line in a file t
            }' > introns.txt
 
   In the ``BEGIN{}`` part we set TAB as output field separator. Further, using ``NR==1`` test we set GeneID for first line into ``x`` variable and intron start into end1 variable. Otherwise we do nothing. For others records ``NR > 1`` condition ``x==$1`` test if we are still within the same gene. If so we print exon end from previous line (``end1``) as intron start and exon start of current line we use as intron end. Next, we set new intron start (i.e. exon end from current line) into end1. If we have already moved into new one ``x<>$1``) we repeat procedure for the first line and print nothing waiting for next line.
+
+Joining multiple files + subshell
+---------------------------------
+
+Use ``paste``, ``join`` commands.
+
+.. note::
+
+  Shell substitution is a nice way to pass a pipeline in a place where a file
+  is expected, be it input or output file (Just use the appropriate sign).
+  Multiple pipelines can be used in a single command:
+
+  .. code-block:: bash
+
+    cat <( cut -f 1 file.txt | sort -n ) <( cut -f 1 file2.txt | sort -n ) | less
+
+*Use nightingale FASTQ file*
+
+1. Join all nightingale FASTQ files and create a TAB separated file with one line per read
+
+.. code-block:: bash
+
+  # repeating input in paste causes it to take more lines from the same source
+  cat *.fastq | paste - - - - | cut -f 1-3 | less
+
+2. Make a TAB-separated file having four columns:
+
+    1. chromosome name
+    2. number of variants in total for given chromosome
+    3. number of variants which pass
+    4. number of variants which fails
+
+.. code-block:: bash
+
+  # Command 1
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
+  sort | uniq -c | sed -r 's/^ +//' | tr " " "\t" > data/count_vars_chrom.txt
+
+  # Command 2
+  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r |
+  uniq -c | sed -r 's/^ +//' | tr " " "\t" | paste - - |
+  cut --complement -f 2,3,6 > data/count_vars_pass_fail.txt
+
+  # Command 3
+  join -1 2 -2 3 data/count_vars_chrom.txt data/count_vars_pass_fail.txt | wc -l
+
+  # How many lines did you retrieved?
+
+  # You have to sort the data before sending to ``join`` - subshell
+  join -1 2 -2 3 <( sort -k2,2 data/count_vars_chrom.txt ) \
+  <( sort -k3,3 data/count_vars_pass_fail.txt ) | tr " " "\t" > data/count_all.txt
+
+All three commands together using subshell:
+
+.. code-block:: bash
+
+  # and indented a bit more nicely
+  IN=data/luscinia_vars_flags.vcf
+  join -1 2 -2 3 \
+      <( <$IN  grep -v '^#' |
+        cut -f 1 |
+        sort |
+        uniq -c |
+        sed -r 's/^ +//' |
+        tr " " "\t" |
+        sort -k2,2 ) \
+      <( <$IN grep -v '^#' |
+        cut -f 1,7 |
+        sort -r |
+        uniq -c |
+        sed -r 's/^ +//' |
+        tr " " "\t" |
+        paste - - |
+        cut --complement -f 2,3,6 |
+        sort -k3,3  ) |
+    tr " " "\t" \
+  > data/count_all.txt

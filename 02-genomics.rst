@@ -7,7 +7,7 @@ using built-in Unix tools.
 Pattern search & regular expressions
 ------------------------------------
 
-``grep`` is a useful tool to search for patterns using a mini-language called **regular expressions**.
+``grep -E`` is a useful tool to search for patterns using a mini-language called **regular expressions**.
 
 .. code-block:: bash
 
@@ -18,11 +18,11 @@ Pattern search & regular expressions
   [ATGC]     # match A or T or G or C
   .          # match any character
   A*         # match A letter 0 or more times
-  A\{2\}     # match A letter exactly 2 times
-  A\{1,\}    # match A letter 1 or more times
+  A{2}     # match A letter exactly 2 times
+  A{1,}    # match A letter 1 or more times
   A+         # match A letter 1 or more times (extended regular expressions)
-  A\{1,3\}   # match A letter at least 1 times but no more than 3 times
-  AATT\|TTAA # match AATT or TTAA
+  A{1,3}   # match A letter at least 1 times but no more than 3 times
+  AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
 
 *Use mouse annotation file (GTF)*
@@ -62,7 +62,7 @@ Pattern search & regular expressions
 .. code-block:: bash
 
   < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]' | wc -l
-  < data/Mus_musculus.NCBIM37.67.gtf grep '^X\|^Y' | wc -l
+  < data/Mus_musculus.NCBIM37.67.gtf grep -E '^X|^Y' | wc -l
 
 3. Count the number of 'CDS' on the chromosome X
 
@@ -105,7 +105,7 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 .. note::
 
-  ``sed`` (text Stream EDitor) can do a lot of things, however,
+  ``sed -r`` (text Stream EDitor) can do a lot of things, however,
   pattern replacement is the best thing to use it for. The 'sed language'
   consists of single character commands, and is no fun to code and even less
   fun to read (what does ``sed 'h;G;s/\n//'`` do?;). Use ``awk`` for more
@@ -123,17 +123,12 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
     # The same thing using extended regular expressions:
     sed -r 's/^[AGCT]+/N/'
 
-
 *Use nightingale variant call file (VCF)*
 
 1. Which chromosome has the highest and the least number of variants?
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
-  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | sort -k1,1nr
-
-  # sed -r (extended regular expressions)
   < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
   sort | uniq -c | sed -r 's/^ +//' | tr " " "\t" | sort -k1,1nr
 
@@ -155,83 +150,6 @@ Figure out alternative solution for exercise 2.
   separator to TAB (``tr ";" "\t"``).
 
   ``sed`` replaces (or deletes) complex patterns.
-
-Joining multiple files + subshell
----------------------------------
-
-Use ``paste``, ``join`` commands.
-
-.. note::
-
-  Shell substitution is a nice way to pass a pipeline in a place where a file
-  is expected, be it input or output file (Just use the appropriate sign).
-  Multiple pipelines can be used in a single command:
-
-  .. code-block:: bash
-
-    cat <( cut -f 1 file.txt | sort -n ) <( cut -f 1 file2.txt | sort -n ) | less
-
-*Use nightingale FASTQ file*
-
-1. Join all nightingale FASTQ files and create a TAB separated file with one line per read
-
-.. code-block:: bash
-
-  # repeating input in paste causes it to take more lines from the same source
-  cat *.fastq | paste - - - - | cut -f 1-3 | less
-
-2. Make a TAB-separated file having four columns:
-
-    1. chromosome name
-    2. number of variants in total for given chromosome
-    3. number of variants which pass
-    4. number of variants which fails
-
-.. code-block:: bash
-
-  # Command 1
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
-  sort | uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" > data/count_vars_chrom.txt
-
-  # Command 2
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1,7 | sort -r |
-  uniq -c | sed 's/^ \{1,\}//' | tr " " "\t" | paste - - |
-  cut --complement -f 2,3,6 > data/count_vars_pass_fail.txt
-
-  # Command 3
-  join -1 2 -2 3 data/count_vars_chrom.txt data/count_vars_pass_fail.txt | wc -l
-
-  # How many lines did you retrieved?
-
-  # You have to sort the data before sending to ``join`` - subshell
-  join -1 2 -2 3 <( sort -k2,2 data/count_vars_chrom.txt ) \
-  <( sort -k3,3 data/count_vars_pass_fail.txt ) | tr " " "\t" > data/count_all.txt
-
-All three commands together using subshell:
-
-.. code-block:: bash
-
-  # and indented a bit more nicely
-  IN=data/luscinia_vars_flags.vcf
-  join -1 2 -2 3 \
-      <( <$IN  grep -v '^#' |
-        cut -f 1 |
-        sort |
-        uniq -c |
-        sed 's/^ \{1,\}//' |
-        tr " " "\t" |
-        sort -k2,2 ) \
-      <( <$IN grep -v '^#' |
-        cut -f 1,7 |
-        sort -r |
-        uniq -c |
-        sed 's/^ \{1,\}//' |
-        tr " " "\t" |
-        paste - - |
-        cut --complement -f 2,3,6 |
-        sort -k3,3  ) |
-    tr " " "\t" \
-  > data/count_all.txt
 
 Exercise
 --------
