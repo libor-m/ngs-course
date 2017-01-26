@@ -15,13 +15,13 @@ I'd suggest using English keyboard, if you don't want to constantly press right 
 and five random letters before you find the one you need.
 You will definitely need those keys::
 
-  [] - squared brackets
-  {} - curly brackets
-  <> - angle brackets (smaller-than, bigger-than sign)
+  [] - square brackets
+  {} - curly brackets (mustache)
+  <> - angle brackets (less than, greater than)
   () - parentheses
   ~ - tilde
   / - slash
-  \ - back slash
+  \ - backslash
   | - pipe
   ^ - caret
   $ - dollar sign
@@ -29,7 +29,7 @@ You will definitely need those keys::
   ; - semicolon
   . - dot
   , - comma
-  # - hash
+  # - hash, pound
   _ - underscore
   - - dash
   * - asterisk
@@ -37,8 +37,27 @@ You will definitely need those keys::
   ? - question mark
   & - ampersand
   @ - at sign
-  '' - quotation mark single
-  "" - quotation mark double
+  ' - single quote
+  " - double quote
+  ` - back tick
+
+Be safe when the network fails
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When you are disconnected from the machine due to any technical problems,
+all your running programs are killed. To prevent this, we suggest to use
+the ``screen`` tool for all your work.::
+
+  screen
+
+To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
+To attach again type::
+
+  screen -dr
+
+.. note::
+
+   Keyboard shortcuts notation: ``ctrl+a d`` means press ``ctrl`` key and ``a`` key
+   simultaneously and ``d`` key after you release both of the previous keys.
 
 Directory structure
 ^^^^^^^^^^^^^^^^^^^
@@ -82,11 +101,11 @@ Helpful commands (dir content and its size, disc usage)
 
 .. code-block:: bash
 
-  ls -shaR # list content of a directory
+  ls -shaR # list all contents of directory (including subdirectories)
   du -sh # disc usage (by directory)
-  df -h # disc free
+  df -h # disc free space
   ls | wc -l # what does this command do?
-  locate # find a file/program
+  locate # find a file/program by name
 
 Moving or copying files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -94,7 +113,7 @@ Moving or copying files and directories
 .. code-block:: bash
 
   touch # make a file
-  mkdir -p # make a directory (``-p`` makes missing directory above)
+  mkdir -p some/sub/directories # make nested directories
   rm -r # remove a file/directory
   mv # move a file/directory
   cp -r # copy a file/directory
@@ -192,6 +211,12 @@ characters followed by '.fastq'*.
   cat HRTMUOC01.RL12.0?.fastq | wc -l
   expr XXXX / 4
 
+.. note::
+
+   Copying and pasting in the Windows terminal (Git for Windows) is different
+   than in other programs - especially because ``ctrl+c`` means to kill the current
+   program. To **copy text to clipboard** just select it with your left mouse button.
+   To **paste from clipboard** either click right mouse button, or press ``shift+insert``.
 
 Uncompressing files
 ^^^^^^^^^^^^^^^^^^^
@@ -239,21 +264,6 @@ Loops
   do
     head -n1 $I | wc -c
   done
-
-Use multiple windows (and be safe when the network fails)
----------------------------------------------------------
-
-First, type ``screen`` in your terminal::
-
-  screen
-
-Screen creates the first window for you. To create another one press
-``ctrl+a c``. To switch between the windows press ``ctrl+a space``.
-
-.. note::
-
-   Keyboard shortcuts notation: ``ctrl+a space`` means press ``ctrl`` key and ``a`` key
-   simultaneously and ``space`` key after you release both of the previous keys.
 
 Installing software
 -------------------
