@@ -107,7 +107,7 @@ and copy FASTQ data from common repository:
 
   cd ~
   mkdir -p data/fastq
-  sudo cp -r /data/fastq/fastq.tar.gz data/fastq/.
+  cp -r /data/fastq/fastq.tar.gz data/fastq/.
   cd data/fastq
   ls
 
@@ -121,17 +121,6 @@ and copy FASTQ data from common repository:
    .. image:: _static/sandwich.png
       :align: center
 
-Uncompressing files
-^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  # Compressed tarball archives
-  tar -xzvf fastq.tar.gz
-
-  # gzipped files
-  gunzip file.txt.gz
-
 Viewing plain text file content
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -142,14 +131,6 @@ Viewing plain text file content
   head -n 5
   cat
   nano
-
-Try these commands:
-
-.. code-block:: bash
-
-  cd ~
-  head -n 8 HRTMUOC01.RL12.00.fastq
-  tail -n 8 HRTMUOC01.RL12.00.fastq
 
 Pipes
 ^^^^^
@@ -211,34 +192,21 @@ characters followed by '.fastq'*.
   cat HRTMUOC01.RL12.0?.fastq | wc -l
   expr XXXX / 4
 
-Producing lists
+
+Uncompressing files
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  # Compressed tarball archives
+  tar -xzvf fastq.tar.gz
+
+  # gzipped files
+  gunzip file.txt.gz
+
+
+Variables/Lists
 ^^^^^^^^^^^^^^^
-
-What do these commands do?
-
-.. code-block:: bash
-
-  touch file-0{1..9}.txt file-{10..20}.txt
-  touch 0{1..9}-{a..f}.txt {10..12}-{a..f}.txt
-  touch 0{1..9}-{jan,feb,mar}.txt {10..12}-{jan,feb,mar}.txt
-
-**Exercise**:
-
-Program runs 20 runs of simulations for three datasets (hm, ss, mm) using
-three different sets of values: small (sm), medium sized (md) and large (lg).
-There are three groups of output files, which should go into subdirectory A, B and C.
-Make a directory for each dataset-set of parameters-run-subdirectory.
-Count the number of directories.
-
-Producing lists of subdirectories
-
-.. code-block:: bash
-
-  mkdir –p {2013..2015}/{A..C}
-  mkdir –p {2013..2015}/0{1..9}/{A..C} {2013..2015}/{10..12}/{A..C}
-
-Variables & Loops
-^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -248,21 +216,28 @@ Variables & Loops
   FILE=data/fastq/HRTMUOC01.RL12.00.fastq
   echo $FILE
 
-  FILES=`ls ~/data/fastq/*.fastq`
-  echo $FILES
+  echo file{1..9}.txt
+  LST=$( echo file{1..9}.txt )
+  echo $LST
+
+  LST2=$(ls ~/data/fastq/*.fastq)
+  echo $LST2
+
+Loops
+^^^^^
 
 .. code-block:: bash
 
-  list=`ls ~/data/fastq/HRTMUOC01.RL12.0{1..9}.fastq`
+  LST=$(ls ~/data/fastq/HRTMUOC01.RL12.*.fastq)
 
-  for i in $list
+  for I in $LST
   do
-    echo $i
+    echo $I
   done
 
-  for i in $list
+  for I in $LST
   do
-    head -n1 $i | wc -c
+    head -n1 $I | wc -c
   done
 
 Use multiple windows (and be safe when the network fails)
