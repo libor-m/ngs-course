@@ -7,6 +7,13 @@ to smoothly move around when using a UNIX system (in the text mode!).
 Basic orientation
 -----------------
 
+.. note::
+
+   Copying and pasting in the Windows terminal (Git for Windows) is different
+   than in other programs - especially because ``ctrl+c`` means to kill the current
+   program. To **copy text to clipboard** just select it with your left mouse button.
+   To **paste from clipboard** either click right mouse button, or press ``shift+insert``.
+
 Check your keyboard
 ^^^^^^^^^^^^^^^^^^^
 
@@ -96,17 +103,6 @@ A neat trick to go back where you've been before the last ``cd`` command:
 
 More in :ref:`moving_around`.
 
-Helpful commands (dir content and its size, disc usage)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  ls -shaR # list all contents of directory (including subdirectories)
-  du -sh # disc usage (by directory)
-  df -h # disc free space
-  ls | wc -l # what does this command do?
-  locate # find a file/program by name
-
 Moving or copying files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -117,18 +113,31 @@ Moving or copying files and directories
   rm -r # remove a file/directory
   mv # move a file/directory
   cp -r # copy a file/directory
-  ln -s # make a symbolic link
-
-Prepare data directory in your HOME directory
-and copy FASTQ data from common repository:
 
 .. code-block:: bash
 
-  cd ~
-  mkdir -p data/fastq
-  cp -r /data/fastq/fastq.tar.gz data/fastq/.
-  cd data/fastq
+  cd # Go to home directory
+  mkdir projects/fastq # Make a new directory 'fastq'
+  # Copy a fastq archive to the new directory
+  cp /data/fastq/fastq.tar.gz projects/fastq/.
+  cd projects/fastq
+  tar -zxvf fastq.tar.gz
   ls
+
+Uncompressing files
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  # Compressed tarball archives
+  tar -xzvf fastq.tar.gz
+
+  # gzipped files
+  gunzip file.txt.gz
+
+  # Open gzipped files in pipeline
+  zcat file.txt.gz | less
+
 
 .. note::
 
@@ -162,9 +171,7 @@ It can be readily combined with ``head`` to show the second sequence in the file
 
 .. code-block:: bash
 
-    head -8 HRTMUOC01.RL12.00.fastq | tail -4 | less -S
-
-    # or the third sequence data ;)
+    cd ~/projects/fastq
     < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
 **Exercise (How many reads are there?)**:
@@ -205,30 +212,15 @@ characters followed by '.fastq'*.
 
 .. code-block:: bash
 
+  cd ~/projets/fastq
   cat HRTMUOC01.RL12.*.fastq | wc -l
   expr XXXX / 4
 
   cat HRTMUOC01.RL12.0?.fastq | wc -l
   expr XXXX / 4
 
-.. note::
-
-   Copying and pasting in the Windows terminal (Git for Windows) is different
-   than in other programs - especially because ``ctrl+c`` means to kill the current
-   program. To **copy text to clipboard** just select it with your left mouse button.
-   To **paste from clipboard** either click right mouse button, or press ``shift+insert``.
-
-Uncompressing files
-^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  # Compressed tarball archives
-  tar -xzvf fastq.tar.gz
-
-  # gzipped files
-  gunzip file.txt.gz
-
+  cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
+  expr XXXX / 4
 
 Variables/Lists
 ^^^^^^^^^^^^^^^
@@ -238,14 +230,16 @@ Variables/Lists
   CPU=4
   echo $CPU
 
-  FILE=data/fastq/HRTMUOC01.RL12.00.fastq
+  FILE=~/projects/fastq/HRTMUOC01.RL12.00.fastq
   echo $FILE
+
+.. code-block:: bash
 
   echo file{1..9}.txt
   LST=$( echo file{1..9}.txt )
   echo $LST
 
-  LST2=$(ls ~/data/fastq/*.fastq)
+  LST2=$(ls ~/projects/fastq/*.fastq)
   echo $LST2
 
 Loops
@@ -253,16 +247,12 @@ Loops
 
 .. code-block:: bash
 
-  LST=$(ls ~/data/fastq/HRTMUOC01.RL12.*.fastq)
+  LST=$(ls ~/projects/fastq/HRTMUOC01.RL12.*.fastq)
 
   for I in $LST
   do
-    echo $I
-  done
-
-  for I in $LST
-  do
-    head -n1 $I | wc -c
+    echo $I;
+    head -1 $I | wc -c;
   done
 
 Installing software
@@ -358,7 +348,7 @@ Exercise
     c) to root directory
     d) two levels above root directory
 
-  6. What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt contains a lot of lines)
+  6. What number does this command ``< file.txt head -10 | tail -n+9 | wc -l`` print? (Assume the file.txt contains a lot of lines)
 
     a) 0
     b) 1

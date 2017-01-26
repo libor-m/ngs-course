@@ -610,3 +610,14 @@ All three commands together using subshell:
         sort -k3,3  ) |
     tr " " "\t" \
   > data/count_all.txt
+
+Helpful commands (dir content and its size, disc usage)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  ls -shaR # list all contents of directory (including subdirectories)
+  du -sh # disc usage (by directory)
+  df -h # disc free space
+  ls | wc -l # what does this command do?
+  locate # find a file/program by name
