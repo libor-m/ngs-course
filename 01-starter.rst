@@ -119,7 +119,7 @@ Moving or copying files and directories
   cd # Go to home directory
   mkdir projects/fastq # Make a new directory 'fastq'
   # Copy a fastq archive to the new directory
-  cp /data/fastq/fastq.tar.gz projects/fastq/.
+  cp /data-shared/fastq/fastq.tar.gz projects/fastq/.
   cd projects/fastq
   tar -zxvf fastq.tar.gz
   ls
@@ -137,17 +137,6 @@ Uncompressing files
 
   # Open gzipped files in pipeline
   zcat file.txt.gz | less
-
-
-.. note::
-
-   Normal users cannot change (and break) the (UNIX) system. There is one special
-   user in each system called ``root``, who has the rights to make system wide changes.
-   You can either directly log in as root, or use ``sudo`` (super user do) to execute
-   one command as ``root``.
-
-   .. image:: _static/sandwich.png
-      :align: center
 
 Viewing plain text file content
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -267,6 +256,16 @@ version, it's necessary to take the more difficult path. The canonical UNIX way 
   ./configure                   # check your system and choose the way to build it
   make                          # convert source code to machine code (compile it)
   sudo make install             # copy the results to your system
+
+.. note::
+
+   Normal users cannot change (and break) the (UNIX) system. There is one special
+   user in each system called ``root``, who has the rights to make system wide changes.
+   You can either directly log in as root, or use ``sudo`` (super user do) to execute
+   one command as ``root``.
+
+   .. image:: _static/sandwich.png
+      :align: center
 
 htop
 ^^^^
