@@ -48,7 +48,7 @@ Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
 
 Mac OS X and Linux
 ^^^^^^^^^^^^^^^^^^
-Ssh is used to control the virtual computer. It should be installed in your computer.
+Ssh is used to control the virtual computer. It should be already installed in your computer.
 
 Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended)
 from the command line. `Scp` and `rsync` could be already installed in your system,
