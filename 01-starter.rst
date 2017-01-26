@@ -45,7 +45,7 @@ Be safe when the network fails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 When you are disconnected from the machine due to any technical problems,
 all your running programs are killed. To prevent this, we suggest to use
-the ``screen`` tool for all your work.::
+the ``screen`` tool for all your work::
 
   screen
 

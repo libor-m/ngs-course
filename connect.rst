@@ -33,7 +33,7 @@ Testing the Internet connection
 -------------------------------
 When you're logged in, check your internet connection from the virtual machine. Your main
 computer has to be connected to the internet, of course. Copy the following command, and
-paste it to the command prompt (click right mouse button in PuTTY window).
+paste it to the command prompt (``shift+insert`` in terminal window).
 
 .. code-block:: bash
 
