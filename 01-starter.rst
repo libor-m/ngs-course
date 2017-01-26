@@ -358,7 +358,7 @@ Exercise
     c) to root directory
     d) two levels above root directory
 
-  6. What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt is not empty)
+  6. What number does this command ``< file.txt head -n10 | tail -n+9 | wc -l`` print? (Assume the file.txt contains a lot of lines)
 
     a) 0
     b) 1
