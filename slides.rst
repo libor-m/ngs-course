@@ -5,4 +5,8 @@ Slide decks
 
 :download:`Unix - Basics <_static/unix_basics.pdf>` (Vasek)
 
+:download:`Genomics <_static/genomics.pdf>` (Vasek)
+
+:download:`Unix Advance I <_static/unix_advanced1.pdf>` (Vasek)
+
 :download:`Graphics session <_static/graphics-2016-01.pdf>` (Libor)
