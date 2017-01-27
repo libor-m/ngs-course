@@ -25,22 +25,6 @@ Pattern search & regular expressions
   AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
 
-*Use mouse annotation file (GTF)*
-
-.. code-block:: bash
-
-  cd ~
-  cp /data-shared/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz ~/data
-  # does not work, let's investigate
-
-  ll /data/mus_mda/05-fst2genes
-
-  # the permissions are not right..fix it
-  sudo chmod o+r /data/mus_mda/Mus_musculus.NCBIM37.67.gtf.gz
-
-  gunzip data/Mus_musculus.NCBIM37.67.gtf.gz
-  less -S data/Mus_musculus.NCBIM37.67.gtf
-
 .. note::
 
   You can check file permissions by typing ``ll`` instead of ``ls``.
@@ -51,52 +35,36 @@ Pattern search & regular expressions
   You can change the permissions - if you have the permission to do so -
   by e.g. ``chmod go+w`` - "add write permission to group and others".
 
-1. Count the number of records on the chromosome X
+1. Count the number of variants in the file
 
 .. code-block:: bash
 
-  < data/Mus_musculus.NCBIM37.67.gtf grep '^X' | wc -l
-
-2. Count the number of records on chromosome X and Y
-
-.. code-block:: bash
-
-  < data/Mus_musculus.NCBIM37.67.gtf grep '^[XY]' | wc -l
-  < data/Mus_musculus.NCBIM37.67.gtf grep -E '^X|^Y' | wc -l
-
-3. Count the number of 'CDS' on the chromosome X
-
-.. code-block:: bash
-
-  < data/Mus_musculus.NCBIM37.67.gtf grep 'CDS' | grep '^X' | wc -l
-
-*Use nightingale variant call file (VCF)*
-
-.. code-block:: bash
-
-  cd ~
-  cp /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz ~/projects/.
-  gunzip projects/luscinia_vars_flags.vcf.gz
-  less -S projects/luscinia_vars_flags.vcf
-
-1. Count the number variants in the file
-
-.. code-block:: bash
-
-  < data/luscinia_vars_flags.vcf grep -v '^#' | wc -l
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
+  grep -v '^#' | \
+  wc -l
 
 2. Count the number of variants passing/failing the quality threshold
 
 .. code-block:: bash
 
-  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | wc -l
-  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'FAIL' | wc -l
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
+  grep -v '^#' | \
+  grep 'PASS' | \
+  wc –l
+
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
+  grep -v '^#' | \
+  grep 'FAIL' | \
+  wc -l
 
 3. Count the number of variants on the chromosome Z passing the quality threshold
 
 .. code-block:: bash
 
-  < projects/luscinia_vars_flags.vcf grep -v '^#' | grep 'PASS' | grep '^chrZ\s' | wc -l
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
+  grep -v '^#' | \
+  grep 'PASS' | \
+  grep '^chrZ\s' | wc -l
 
 Cutting out, sorting and replacing text
 ---------------------------------------
@@ -129,15 +97,23 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^#' | cut -f 1 |
-  sort | uniq -c | sed -r 's/^ +//' | tr " " "\t" | sort -k1,1nr
+  < data-shared/luscinia_vars_flags.vcf grep -v '^#' | \
+  cut -f 1 | \
+  sort | \
+  uniq -c | \
+  sed -r 's/^ +//' | \
+  tr " " "\t" | \
+  sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
 .. code-block:: bash
 
-  < data/luscinia_vars_flags.vcf grep -v '^##' | head -n1 |
-  cut --complement -f 1-9 | tr "\t" "\n" | wc -l
+  < data-shared/luscinia_vars_flags.vcf grep -v '^##' | \
+  head -n1 |
+  cut --complement -f 1-9 | \
+  tr "\t" "\n" | \
+  wc -l
 
 Figure out alternative solution for exercise 2.
 
