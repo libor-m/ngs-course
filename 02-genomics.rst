@@ -7,7 +7,8 @@ using built-in Unix tools.
 Pattern search & regular expressions
 ------------------------------------
 
-``grep -E`` is a useful tool to search for patterns using a mini-language called **regular expressions**.
+``grep -E`` is a useful tool to search for patterns using a mini-language called
+**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
 
 .. code-block:: bash
 
@@ -113,7 +114,7 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
   < data-shared/luscinia_vars_flags.vcf grep -v '^##' |
   head -n1 |
   cut --complement -f 1-9 |
-  tr "\t" "\n" | 
+  tr "\t" "\n" |
   wc -l
 
 Figure out alternative solution for exercise 2.
