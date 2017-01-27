@@ -39,32 +39,33 @@ Pattern search & regular expressions
 
 .. code-block:: bash
 
-  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
-  grep -v '^#' | \
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
+  grep -v '^#' |
   wc -l
 
 2. Count the number of variants passing/failing the quality threshold
 
 .. code-block:: bash
 
-  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
-  grep -v '^#' | \
-  grep 'PASS' | \
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
+  grep -v '^#' |
+  grep 'PASS' |
   wc –l
 
-  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
-  grep -v '^#' | \
-  grep 'FAIL' | \
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
+  grep -v '^#' |
+  grep 'FAIL' |
   wc -l
 
 3. Count the number of variants on the chromosome Z passing the quality threshold
 
 .. code-block:: bash
 
-  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat | \
-  grep -v '^#' | \
-  grep 'PASS' | \
-  grep '^chrZ\s' | wc -l
+  < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
+  grep -v '^#' |
+  grep 'PASS' |
+  grep '^chrZ\s' |
+  wc -l
 
 Cutting out, sorting and replacing text
 ---------------------------------------
@@ -97,22 +98,22 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 .. code-block:: bash
 
-  < data-shared/luscinia_vars_flags.vcf grep -v '^#' | \
-  cut -f 1 | \
-  sort | \
-  uniq -c | \
-  sed -r 's/^ +//' | \
-  tr " " "\t" | \
+  < data-shared/luscinia_vars_flags.vcf grep -v '^#' |
+  cut -f 1 |
+  sort |
+  uniq -c |
+  sed -r 's/^ +//' |
+  tr " " "\t" |
   sort -k1,1nr
 
 2. What is the number of samples in the VCF file?
 
 .. code-block:: bash
 
-  < data-shared/luscinia_vars_flags.vcf grep -v '^##' | \
+  < data-shared/luscinia_vars_flags.vcf grep -v '^##' |
   head -n1 |
-  cut --complement -f 1-9 | \
-  tr "\t" "\n" | \
+  cut --complement -f 1-9 |
+  tr "\t" "\n" | 
   wc -l
 
 Figure out alternative solution for exercise 2.
