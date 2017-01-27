@@ -74,6 +74,8 @@ that starts in ``/`` (called root directory). Everything can be reached from the
 The next important directory is ``~`` (called user's home directory). It is
 a shortcut for ``/home/user`` here, ``/home/..your login name..`` in general.
 
+.. image:: _static/paths.png
+
 Your bash session has a `working directory` that can be changed with ``cd`` (change directory)
 and printed with ``pwd`` (print working directory). All filenames and paths you
 type refer to your working directory (relative paths), unless you start them with ``/`` (absolute paths).
