@@ -1,9 +1,10 @@
-digraph paths {
-  size="6,6";
+digraph G {
+  size="12,6";
   node [color=lightblue2, style=filled];
   rankdir = "LR";
   edge [fontname = "Helvetica" fontsize = 18]
   node [fontname = "Helvetica"]
+
 
   "/" [rank = "source" color = "deeppink" ]
 
@@ -16,12 +17,20 @@ digraph paths {
   "/data-shared/ecoli" -> "/data-shared" [label = ".."]
   "/data-shared/ecoli" -> "/data-shared/ecoli" [label = "."]
 
+  "/data-shared" -> "/data-shared/mus_mda" [label = "mus_mda"]
+  "/data-shared/mus_mda" -> "/data-shared" [label = ".."]
+  "/data-shared/mus_mda" -> "/data-shared/mus_mda" [label = "."]
 
   "/" -> "/home" [label = "home"]
   "/home" -> "/" [label = ".."]
   "/home" -> "/home" [label = "."]
 
-  "/home" -> "/home/projects" [label = "projects"]
-  "/home/projects" -> "/home" [label = ".."]
-  "/home/projects" -> "/home/projects" [label = "."]
+  "/home/user" [label = "/home/user \n shorthand: ~"]
+  "/home" -> "/home/user" [label = "user"]
+  "/home/user" -> "/home" [label = ".."]
+  "/home/user" -> "/home/user" [label = "."]
+
+  "/home/user" -> "/home/user/projects" [label = "projects"]
+  "/home/user/projects" -> "/home/user" [label = ".."]
+  "/home/user/projects" -> "/home/user/projects" [label = "."]
 }
