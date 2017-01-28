@@ -43,6 +43,7 @@ by spaces and padded to a fixed width ``awk`` can ignore the whitespace -
 and where ``cut`` also falls short, ``awk`` can reorder the columns:
 
 .. code-block:: bash
+  :caption: Hands on!
 
   # test the smart <tab> auto-complete!
   INPUT=data/Ensembl.NCBIM37.67.bed
