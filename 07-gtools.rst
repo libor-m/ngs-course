@@ -9,16 +9,6 @@ Genome feature arithmetics & summary
 - http://bedtools.readthedocs.org/en/
 - http://bedops.readthedocs.org/en/
 
-Prepare files - we work with mouse genome data:
-
-.. code-block:: bash
-
-	cd
-	mkdir projects/bed_examples
-	cp /data/bed_examples/* projects/bed_examples/.
-	cd projects/bed_examples
-
-
 1. Merge the overlapping open chromatin regions in ``encode.bed`` file
 
 In this first exercise we will work with open chromatin regions
@@ -31,16 +21,19 @@ regions is present only once. You can use ``bedtools merge`` tool:
 .. code-block:: bash
 
 	# Explore the encode.bed file
-	less encode.bed
+	less /data-shared/bed_examples/encode.bed
 
 	# Count the number of regions before merging
-	wc -l encode.bed
+	wc -l /data-shared/bed_examples/encode.bed
 
-	# The data has to be sorted: use subshell to sort data before merging
-	bedtools merge -i <( sortBed -i encode.bed ) > encode-merged.bed
+	# The data has to be sorted before merging
+	mkdir projects/bed_examples
+
+	sortBed -i /data-shared/bed_examples/encode.bed |
+	bedtools merge -i - > projects/bed_examples/encode-merged.bed
 
 	# Count the number of regions after merging
-	wc -l encode-merged.bed
+	wc -l projects/bed_examples/encode-merged.bed
 
 2. Count the number of open chromatin regions in merged file overlapping with genes
 
@@ -51,19 +44,19 @@ database or are within 1000 bp on each side of a gene.
 .. code-block:: bash
 
 	# Explore the Ensembl.NCBIM37.67.bed file
-	less Ensembl.NCBIM37.67.bed
+	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
 	# Count the number of open chromatin regions overlapping with genes
 	# or are within 1000 bp window on each side of a gene
 	bedtools window -w 1000 \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
+	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
 	# Count the number of open chromatin regions overlapping with genes
 	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) |
+	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
 3. Count the number of merged open chromatin regions file overlapping with genes
@@ -74,8 +67,8 @@ containing open chromatin region from the ENCODE dataset.
 .. code-block:: bash
 
 	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i Ensembl.NCBIM37.67.bed ) -wb |
+	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) -wb |
 	cut -f 7 |
 	sort -u |
 	wc -l
@@ -87,47 +80,47 @@ within these sliding windows. To speed up the process we focus only on chromosom
 .. code-block:: bash
 
 	# Explore fasta index file
-	less genome.fa.fai
+	less /data-shared/bed_examples/genome.fa.fai
 
 	# Make 1Mb sliding windows (step 200kb)
 	bedtools makewindows \
-	-g <( grep '^X' genome.fa.fai ) \
+	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
 	-w 1000000 \
 	-s 200000 \
 	-i winnum \
-	> windows_1mb.bed
+	> projects/bed_examples/windows_1mb.bed
 
 	# Make 2.5Mb sliding windows (step 500kb)
 	bedtools makewindows \
-	-g <( grep '^X' genome.fa.fai ) \
+	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
 	-w 2500000 \
 	-s 500000 \
 	-i winnum \
-	> windows_2-5mb.bed
+	> projects/bed_examples/windows_2-5mb.bed
 
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
-	-g <( grep '^X' genome.fa.fai ) \
+	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
 	-w 5000000 \
 	-s 1000000 \
 	-i winnum \
-	> windows_5mb.bed
+	> projects/bed_examples/windows_5mb.bed
 
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
-	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
-	-b windows_1mb.bed \
-	> gdens_windows_1mb.tab
+	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	-b projects/bed_examples/windows_1mb.bed \
+	> projects/bed_examples/gdens_windows_1mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
-	-b windows_2-5mb.bed \
-	> gdens_windows_2-5mb.tab
+	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	-b projects/bed_examples/windows_2-5mb.bed \
+	> projects/bed_examples/gdens_windows_2-5mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i Ensembl.NCBIM37.67.bed ) \
-	-b windows_5mb.bed \
-	> gdens_windows_5mb.tab
+	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	-b projects/bed_examples/windows_5mb.bed \
+	> projects/bed_examples/gdens_windows_5mb.tab
 
 The gene density can be visualized in R-Studio.
 
