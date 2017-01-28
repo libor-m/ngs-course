@@ -346,3 +346,9 @@ individual:
     ggplot(aes(individual, TiTv)) +
     geom_point() +
     theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+.. note::
+
+  Take your time to look at the `wonderful cheat sheets
+  <https://www.rstudio.com/resources/cheatsheets/>`_ compiled by the company
+  behind RStudio!
