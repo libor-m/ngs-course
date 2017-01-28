@@ -40,7 +40,7 @@ awk (pronounced [auk])
 
 ``awk`` is most often used instead of ``cut``, when the fields are separated
 by spaces and padded to a fixed width ``awk`` can ignore the whitespace -
-and where ``cut`` also falls short, ``awk`` can reorder the columns::
+and where ``cut`` also falls short, ``awk`` can reorder the columns:
 
 .. code-block:: bash
 
@@ -59,8 +59,6 @@ then the counts? Enter ``awk``. Every line (called ``record``) is split
 into ``fields``, which are assigned to variables ``$1`` for first field,
 ``$2`` for second etc. The whole line is in ``$0`` if needed. ``awk`` expects
 the program as first argument::
-
-.. code-block:: bash
 
   # note the single quotes, they're important because of $
   your code here | awk '{print $2, $1}'
@@ -84,17 +82,23 @@ record number ``NR`` (starting at 1) and number of fields ``NF``.
   <$INPUT awk '{print NF}' | uniq
 
 
-Let's play with some fastq files. Extract first five files to ``data``::
+Let's play with some fastq files. Extract first five files to ``data``:
+
+.. code-block:: bash
 
   INPUT=/data-shared/fastq/fastq.tar.gz
   <$INPUT tar tz | head -5 | xargs tar xvf $INPUT -C data
 
 Look at the data with ``less`` - these are reads from 454, with varying read lengths.
-Let's check the lengths::
+Let's check the lengths:
+
+.. code-block:: bash
 
   <data/HRTMUOC01.RL12.01.fastq paste - - - - | awk '{print $1, length($2)}' | head
 
-We could do a length histogram easily now... But let's filter on the length::
+We could do a length histogram easily now... But let's filter on the length:
+
+.. code-block:: bash
 
   <data/HRTMUOC01.RL12.01.fastq paste - - - - | # can you figure out?
 
@@ -140,16 +144,16 @@ Take care to give a descriptive name to your script::
    Let's pop-open the matryoshka. What is terminal, what is a shell, what is
    Bash?
 
-   The program which takes care of collecting your keystrokes and
-   rendering the colored characters which come from the server is called a
-   terminal. Famous terminals are ``mintty`` (that's what you're using in
-   Windows now), ``Konsole``, ``Terminal App``... The next doll inside is
-   ``ssh``. It takes care of encrypted communication with the remote server.
-   An interesting alternative for geeks is ``mosh`` (google it yourself;). Now
-   you need a program to talk to on the other side - that is the shell,
-   running on the remote side. We're in ``bash``, sometimes you can meet the
-   simpler cousin ``sh``, and the kool kids are doing ``zsh``. To recap, Bash
-   is to shell what Firefox is to browser.
+   The program which takes care of collecting your keystrokes and rendering
+   the colored characters which come from the server is called a **terminal**.
+   Famous terminals are ``mintty`` (that's what you're using in Windows now),
+   ``Konsole``, ``Terminal App``... The next doll inside is ``ssh``. It takes
+   care of encrypted communication with the remote server. An interesting
+   alternative for geeks is ``mosh`` (google it yourself;). Now you need a
+   program to talk to on the remote side - that is the **shell**. We're in
+   ``bash``, sometimes you can meet the simpler cousin ``sh``, and the kool
+   kids are doing ``zsh``. To recap, Bash is to shell what Firefox is to
+   browser.
 
 Then collect your code from before and paste it below the shebang.
 
@@ -172,8 +176,8 @@ We need to mark the file as executable:
     ll
 
 
-Multi- processing
------------------
+Multi-file, multi-core processing
+---------------------------------
 Multi-file processing is best done with ``find`` and ``xargs``. That's basic
 UNIX. If you install ``parallel``, it substitutes ``xargs`` and does much
 better job, having 'nicer' syntax, and makes multi-file multi-core processing
@@ -206,16 +210,33 @@ someone, or when you're sure that your task is IO bound. Otherwise
   Parallelizing things **IS** difficult. There's no discussion about that.
   There are some rules of thumb, which can help - but if you want to squeeze
   out the maximum performance from your machine, it's still a lot of
-  'try-monitor performance-try again' cycles.
+  '*try - monitor performance - try again*' cycles.
 
   In general, you need a work unit which takes much longer to calculate than
-  it takes to load the data from the hard drive (compare times of
-  ``pv data > /dev/null`` to ``pv data | your-task > /dev/null``) ... TODO
+  it takes to load the data from the hard drive (compare times of ``pv data >
+  /dev/null`` to ``pv data | your-task > /dev/null``), usually  a good work
+  unit takes on the order of minutes. When disk access seems to be  the
+  limiting factor, you can try to compress the data with some fast compressor
+  like ``lz4``. **Do not** parallelize disk intensive tasks, it will make
+  things only  slower! If you still want to use ``parallel``'s syntax, use
+  ``parallel -j1`` to use only single core.
+
+The most powerful thing about parallel is it's substitution strings like
+``{.}``, , ``{/}``, ``{#}`` - check ``man parallel``.
 
 .. code-block:: bash
 
-  # some example here
+  parallel echo Ahoj ::: A B C
 
-There is a lot of magic to be done with ``{.}, {/}, {#}`` placeholders,
-check ``man parallel``. If your data is a single file, but the processing
-of one line is not dependent on the other lines, ``split`` will help.
+  parallel --dry-run echo Ahoj ::: A B C
+
+  parallel echo File: {} found! ::: data/*.fastq
+
+  parallel echo File: {/} found! ::: data/*.fastq
+
+  parallel echo File: {/.} found! ::: data/*.fastq
+
+.. note::
+
+  If your data is a single file, but the processing of one line is not
+  dependent on the other lines, ``split`` command will help.
