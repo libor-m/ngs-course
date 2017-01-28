@@ -42,36 +42,49 @@ awk (pronounced [auk])
 by spaces and padded to a fixed width ``awk`` can ignore the whitespace -
 and where ``cut`` also falls short, ``awk`` can reorder the columns:
 
-.. code-block:: bash
-  :caption: Hands on!
+.. topic:: Hands on!
 
-  # test the smart <tab> auto-complete!
-  INPUT=data/Ensembl.NCBIM37.67.bed
+  .. code-block:: bash
 
-  # $INPUT contains some genome annotations
-  # look aronund the file a bit
-  # - there are chromosome ids in the first column
-  # - we want to count the annotations per each chromosome
+    # test the smart <tab> auto-complete!
+    INPUT=data/Ensembl.NCBIM37.67.bed
 
-  <$INPUT cut -f # complete the rest!!
+    # $INPUT contains some genome annotations
+    # look aronund the file a bit
+    # - there are chromosome ids in the first column
+    # - we want to count the annotations per each chromosome
+
+    <$INPUT cut -f # complete the rest!!
 
 But what if you wanted to have a table which mentions chromosomes first and
 then the counts? Enter ``awk``. Every line (called ``record``) is split
 into ``fields``, which are assigned to variables ``$1`` for first field,
 ``$2`` for second etc. The whole line is in ``$0`` if needed. ``awk`` expects
-the program as first argument::
+the program as first argument:
 
-  # note the single quotes, they're important because of $
-  your code here | awk '{print $2, $1}'
+.. topic:: Hands on!
 
-Additionally you can add conditions when the code is executed::
+  .. code-block:: bash
 
-  .. | awk '($2 < 10) {print $2, $1}'
+    # note the single quotes, they're important because of $
+    your_code_here | awk '{print $2, $1}'
+
+Additionally you can add conditions when the code is executed:
+
+.. topic:: Hands on!
+
+  .. code-block:: bash
+
+    your_code_here | awk '($2 < 10) {print $2, $1}'
 
 Or even leave out the code body, which is the same as one ``{print $0}``
-statement - that is print the matching lines::
+statement - that is print the matching lines:
 
-  .. | awk '($2 < 10)'
+.. topic:: Hands on!
+
+  .. code-block:: bash
+
+    your_code_here | awk '($2 < 10)'
 
 There are some other variables pre-filled for each line, like
 record number ``NR`` (starting at 1) and number of fields ``NF``.
@@ -81,7 +94,6 @@ record number ``NR`` (starting at 1) and number of fields ``NF``.
   # NF comes handy when checking if it's okay to
   # process a file with (say) cut
   <$INPUT awk '{print NF}' | uniq
-
 
 Let's play with some fastq files. Extract first five files to ``data``:
 
@@ -99,37 +111,54 @@ Let's check the lengths:
 
 We could do a length histogram easily now... But let's filter on the length:
 
-.. code-block:: bash
+.. topic:: Hands on!
 
-  <data/HRTMUOC01.RL12.01.fastq paste - - - - | # can you figure out?
+  .. code-block:: bash
 
-  # and we'd like to have a valid fastq file on the output
-  # - what if we replaced all the \t with \n (hint: tr)
+    <data/HRTMUOC01.RL12.01.fastq paste - - - - | # can you figure out?
+
+    # and we'd like to have a valid fastq file on the output
+    # - what if we replaced all the \t with \n (hint: tr)
 
 Functions in the Shell
 ----------------------
-Create a command ``uniqt`` that will behave as ``uniq -c``, but there
-will be no padding (spaces) in front of the numbers, and numbers will
-be separated by <tab>, so e. g. ``cut`` will work.
 
-Do not use the same name as the original command, otherwise you'll create
-an endless loop.
+This create a command called ``uniqt`` that will behave as ``uniq -c``, but
+there will be no padding (spaces) in front of the numbers, and numbers will be
+separated by <tab>, so e. g. ``cut`` will work.
 
 .. code-block:: bash
 
-    uniqt() { uniq -c | sed -r 's/^ *([0-9]+) /\1\t/'  ;}
+  uniqt() { uniq -c | sed -r 's/^ *([0-9]+) /\1\t/' ;}
 
-You can see that the basics of the syntax are ``your-name() { normal commands ;}``.
-What about creating a function called ``fastq-min-length``, with one argument
-(use ``$1`` in the body of the function) giving the minimal length::
 
-  fastq-min-length() { paste - - - - | ... ;}
+Now test it::
+
+  <data/Ensembl.NCBIM37.67.bed cut -f1 | sort | uniqt | head
+
+You can see that the basics of the syntax are ``your-name() { command pipeline ;}``.
+If you want to pass some arguments into the function, use ``$1``, ``$2`` etc.::
+
+  test-function() { echo First argument: $1 ;}
+  test-function my-argument
+
+Now create a function called ``fastq-min-length``, with one argument
+(use ``$1`` in the body of the function) giving the minimal length:
+
+.. topic:: Hands on!
+
+  .. code-block:: bash
+
+    fastq-min-length() { paste - - - - | your_code_here ;}
+
+    # which will be used like this:
+    <data/HRTMUOC01.RL12.01.fastq fastq-min-length 90 > data/filtered.fastq
 
 We'll go through the 'quoting hell' and some methods to solve it here briefly.
 Awk uses ``$1`` for something else than the shell, we need to protect it with
 single quotes, but we still need to get through shell's ``$1`` somehow...
-Awk's ``-v`` argument helps in this case.
-
+Awk's ``-v`` argument helps in this case - use it like ``awk -v min_len=$1
+'(length($2) > min_len)'``.
 
 Shell Scripts
 -------------
@@ -156,26 +185,40 @@ Take care to give a descriptive name to your script::
    kids are doing ``zsh``. To recap, Bash is to shell what Firefox is to
    browser.
 
-Then collect your code from before and paste it below the shebang.
+Then collect your code from before (contents of your function, not the whole
+function) and paste it below the shebang.
 
-.. code-block:: bash
+.. topic:: Hands on!
+
+  .. code-block:: bash
+     :title: fastq-filter-length.sh
 
     #!/bin/bash
 
-    # your code comes here
-    # to stay with the 'tool concept' output the results to stdout
+    # your_code_here
 
-We need to mark the file as executable:
+    echo Replace me with real code!
+    echo Arguments: $1 $2
+
+    # to stay with the 'tool concept'
+    # expect input on stdin and output the results to stdout
+
+We need to mark the file as executable and test it:
 
 .. code-block:: bash
 
-    chmod +x filter_fastq.sh
+    chmod +x fastq-filter-length.sh
 
     # check with ls, filter_fastq.sh should be green now
     # and using ll you should see the 'x' (eXecutable) permission
     ls
     ll
 
+    # and run it (the ./ is important!)
+    ./fastq-filter-length.sh
+
+    # when the final code is there, you need to give it input and output:
+    <data/HRTMUOC01.RL12.01.fastq ./fastq-filter-length.sh 90 > data/filtered.fastq
 
 Multi-file, multi-core processing
 ---------------------------------
