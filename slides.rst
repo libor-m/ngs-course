@@ -10,3 +10,5 @@ Slide decks
 :download:`Unix - Advanced I <_static/unix_advanced1.pdf>` (Vasek)
 
 :download:`Graphics session <_static/graphics-2016-01.pdf>` (Libor)
+
+:download:`Genomic tools <_static/gtools.pdf>` (Vasek)
