@@ -415,11 +415,11 @@ also plot the average Fst values along the chromosomes.
 			group_by(windows) %>%
 			summarize(p=quantile(fst,probs=0.99)) -> fst_quantiles
 
-		## Add quantiles to plot
+		## Add 99% quantiles for 500kb window
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=q, colour="black") +
+			geom_hline(yintercept=fst_quantiles[2,2], colour="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 	.. image:: _static/fst_on_chroms.png
@@ -433,35 +433,22 @@ than or equal to 99% of the data.
 
 .. code-block:: bash
 
-	## Use of variables: var=value
-	## Use $() to pass the output of command/pipeline to a variable
-
-	# Calculate 99th percentile by R
-	q500=$( grep 500kb windows_mean_fst.tab |
-	  cut -f 6 |
-	  Rscript -e 'quantile(as.numeric(readLines("stdin")),probs=0.99)[[1]]' |
-	  cut -d " " -f 2 )
-
-	# Calculate 99th percentile by tabtk
-	q500=$( grep 500kb windows_mean_fst.tab |
-	  tabtk num -c 6 -Q |
-	  cut -f 13 )
-
-	## Inspect the variable
-	echo $q500
+	## Use of variables in AWK: -v q=value
 
 	grep 500kb windows_mean_fst.tab |
-	  awk -v a=$q500 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	  awk -v a=0.9328020 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
 	  sortBed |
 	  bedtools merge -i stdin \
-	> signif_500kb.bed
+		> signif_500kb.bed
 
 Use the mouse gene annotation file to retrieve genes within
 the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	</data/mus_mda/05-fst2genes/Mus_musculus.NCBIM37.67.gtf.gz zcat > Mus_musculus.NCBIM37.67.gtf
+	## Download mouse annotation file:
+	wget ftp://ftp.ensembl.org/pub/release-67/gtf/mus_musculus/Mus_musculus.NCBIM37.67.gtf.gz
+	gunzip Mus_musculus.NCBIM37.67.gtf.gz
 
 	bedtools intersect \
 	    -a signif_500kb.bed \
