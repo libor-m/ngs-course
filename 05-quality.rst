@@ -73,13 +73,12 @@ plots using UNIX and ggplot. You should be able to understand the
 following pipeline, at least by taking it apart with the help of head or less.
 A brief description:
 
-- ``sed`` replaces the leading '@' with an empty string in
-  the first of every four lines and deletes the third of every four lines
-  (the useless '+' line)
-- ``paste`` merges every three lines
+- ``paste`` merges every four lines into one
 - ``awk`` selects only reads longer than 50 bases
+- ``sed`` replaces the leading '@' with an empty string
 - ``head`` takes first 1,000 sequences
-- ``awk`` creates a Phred decoding table, then uses it to decode the values,
+- ``awk`` creates a Phred decoding table in ``BEGIN`` section,
+  then uses the table (``quals``) to decode the values,
   outputs one row for each base (see 'tidy data')
 
 .. code-block:: bash
@@ -87,17 +86,18 @@ A brief description:
     mkdir 02-quality-handmade
     IN=00-reads/HRTMUOC01.RL12.01.fastq
 
-    <$IN sed '1~4s/^@//;3~4d' |
-      paste - - - |
+    <$IN paste - - - - |
       awk 'length($2) > 50' |
+      sed 's/^@//' |
       head -1000 |
-      awk 'BEGIN{OFS="\t";
-             for(i=33;i<127;i++) quals[sprintf("%c", i)] = i - 33;
+      awk 'BEGIN {
+             OFS="\t";
+             for(i = 33; i < 127; i++) quals[sprintf("%c", i)] = i - 33;
            }
            {
              l = length($2)
-             for(i=1;i<=l;i++) {
-               print $1, i, l - i, substr($2, i, 1), quals[substr($3, i, 1)];}
+             for(i = 1; i <= l; i++) {
+               print $1, i, l - i, substr($2, i, 1), quals[substr($4, i, 1)];}
            }'\
     > 02-quality-handmade/quals.tsv
 
@@ -112,7 +112,7 @@ Fire up `R Studio <http://localhost:8787>`_ by clicking the link.
 Create a file where your plotting code will live, ``File > New file > R Script``,
 move to the directory where you're working now (don't forget to use tab completion)::
 
-    setwd('~/projects/quality')
+  setwd('~/projects/quality')
 
 Now save it as ``plots.R``. (Doing setwd first offers the correct directory to save the file.)
 
@@ -126,13 +126,16 @@ First we will read in the data.
            d
 
 We did not include column names in the data file, but it is easy to provide
-them  during the load via ``col.names`` argument. Let's look at base quality
+them  during the load via ``col_names`` argument. Let's look at base quality
 values for first  10 sequences:
 
 .. code-block:: r
 
-  sel <- d$seq %>% unique %>% head(10)
-  ggplot(d %>% filter(seq %in% sel), aes(pos, qual, colour = seq, group = seq)) + geom_line()
+  d$seq %>% unique %>% head(10) -> sel
+  d %>%
+    filter(seq %in% sel) %>%
+    ggplot(aes(pos, qual, colour = seq, group = seq)) +
+    geom_line()
 
 The qualities on sequence level don't seem to be very informative. They're
 rather noisy. A good way to fight noise is aggregation. We will aggregate the
@@ -144,15 +147,20 @@ the intervals:
   # fastqc uses bins with varying size:
   # 1-9 by one, up to 75 by 5, up to 300 by 50, rest by 100
 
-  breaks <- c(0:9, seq(14, 50, by=5), seq(59, 100, by=10), seq(149, 300, by=50), seq(400, 1000, by=100))
+  c(0:9,
+    seq(14, 50, by = 5),
+    seq(59, 100, by = 10),
+    seq(149, 300, by = 50),
+    seq(400, 1000, by=100)) ->
+    breaks
 
   # create nice labels for the intervals
   data.frame(
-      l = breaks[1:length(breaks)-1],
-      r = breaks[2:length(breaks)]) %>%
+      l = breaks %>% head(-1),
+      r = breaks %>% tail(-1)) %>%
     mutate(
       diff = r - l,
-      lab = ifelse(diff > 1, paste0(l+1, "-", r), as.character(r))) ->
+      lab = ifelse(diff > 1, paste0(l + 1, "-", r), as.character(r))) ->
     labs
 
 Check the ``breaks`` and ``labs`` variables. In the FastQC plot there are vertical quality zones,
@@ -178,12 +186,12 @@ Now we can use the breaks to create position bins:
 .. code-block:: r
 
     d %>%
-      mutate(bin=cut(pos, breaks, labels=labs$lab)) ->
+      mutate(bin=cut(pos, breaks, labels = labs$lab)) ->
       dm
 
     # plot the qualities in the bins
     ggplot(dm, aes(bin, qual)) +
-      geom_boxplot(outlier.colour=NA) +
+      geom_boxplot(outlier.colour = NA) +
       ylim(c(0, 45))
 
 Zones and boxplots look ok, we can easily combine those two into one plot.
@@ -195,11 +203,15 @@ load all the data at once.
 .. code-block:: r
 
     ggplot(dm) +
-      geom_rect(xmin=-Inf, xmax=Inf, data=quals, aes(ymin=ymin, ymax=ymax, fill=colour), alpha=0.3) +
+      geom_rect(aes(ymin = ymin, ymax = ymax, fill = colour),
+                xmin = -Inf,
+                xmax = Inf,
+                alpha=0.3,
+                data = quals) +
       scale_fill_identity() +
-      geom_boxplot(aes(bin, qual), outlier.colour=NA, fill="yellow") +
-      geom_smooth(aes(bin, qual, group=1), colour="blue") +
-      theme(axis.text.x=element_text(angle = 40, hjust = 1))
+      geom_boxplot(aes(bin, qual), outlier.colour = NA, fill = "yellow") +
+      geom_smooth(aes(bin, qual, group = 1), colour = "blue") +
+      theme(axis.text.x = element_text(angle = 40, hjust = 1))
 
 .. image:: _static/qual-bars.png
    :align: center
@@ -207,46 +219,38 @@ load all the data at once.
 Now we can do the base frequency plot. We already have the position bins,
 so just throw ggplot at it::
 
-  ggplot(dm, aes(bin, fill=base)) + geom_bar()
+  ggplot(dm, aes(bin, fill = base)) + geom_bar()
 
 We're almost there, just need to normalize the values in each column so they
 sum up to 1. Ggplot can do it for us::
 
-  ggplot(dm, aes(bin, fill=base)) + geom_bar(position="fill")
-
-It's possible to rearrange the  legend by reordering levels of the factor.
-As you can see, the visual fine-tuning added the most of the code:
-
-.. code-block:: r
-
-    levs <- rev(c("A", "C", "G", "T", "N"))
-    dm %>%
-      mutate(baseo=factor(base, levels=rev(levs))) %>%
-      ggplot(aes(bin, fill=baseo, order=factor(baseo, levs))) + geom_bar(position="fill")
+  ggplot(dm, aes(bin, fill = base)) + geom_bar(position = "fill")
 
 If you still want to get the line chart, you need to calculate the relative frequencies
 yourself:
 
 .. code-block:: r
 
-    dm %>%
-      select(base, bin) %>%
-      table %>%
-      data.frame %>%
-      group_by(bin) %>%
-      mutate(Freqn=Freq / sum(Freq)) ->
-      t
+  dm %>%
+    group_by(bin, base) %>%
+    summarise(count = n()) %>%
+    group_by(bin) %>%
+    mutate(`relative frequency` = count / sum(count)) ->
+    dfreq
 
-    t %>%
-      mutate(baseo=factor(base, levels=levs)) %>%
-      ggplot(aes(bin, Freqn, colour=baseo, group=baseo)) + geom_line(size=1.3)
+  dfreq %>%
+    ggplot(aes(bin, `relative frequency`, colour = base, group = base)) +
+    geom_line(size = 1.3)
 
 What is better about the bar chart, and what is better about the line chart?
 
 FastQC exercise
 ---------------
-Now run the FastQC quality check for all reads in ``00-reads``. Write the commands on your own.
-Use `globbing patterns`! Or try to write an alternative command with ``find`` and ``parallel``.
+
+.. topic:: Hands on!
+
+  Now run the FastQC quality check for all reads in ``00-reads``. Write the commands on your own.
+  Use `globbing patterns`! Or try to write an alternative command with ``find`` and ``parallel``.
 
 .. note::
 
