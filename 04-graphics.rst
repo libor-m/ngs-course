@@ -91,7 +91,7 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
 
 Now open RStudio
 ^^^^^^^^^^^^^^^^
-Just click this link (with your middle mouse button): `Open RStudio <http://localhost:8787>`_.
+Just click this link (ctrl-click to keep this manual open): `Open RStudio <http://localhost:8787>`_.
 
 In R Studio choose ``File > New file > R Script``. R has a working directory
 as well. You can change it with ``setwd``. Type this code into the newly
@@ -107,7 +107,7 @@ easily, you'll find them faster than in ``.Rhistory``...
 
 Load and check the input
 ------------------------
-We'll be using a specifc subset of R, recently named ``tidyverse``::
+We'll be using a specifc subset of R, recently packaged into `Tidyverse <http://tidyverse.org/>`_::
 
   library(tidyverse)
 
@@ -116,15 +116,15 @@ type ``read_tsv`` and press ``F1``. Help should pop up. We'll be using the
 ``read.delim``  shorthand, that is preset for loading ``<tab>`` separated data
 with US decimal separator::
 
-  d <- read_tsv('data/popdata_mda_euro.tsv')
+  read_tsv('data/popdata_mda_euro.tsv') -> d
 
 A new entry should show up in the 'Environment' tab. Click the arrow and
-explore. Click the  'd' letter itself.
+explore. Also click the ``d`` letter itself.
 
 You can see that ``CHROM`` was encoded as a number only and it was loaded as
 ``integer``. But in fact it is a factor, not a number (remember e.g.
-chromosome X). Fix this in the ``read.delim`` command, loading the data again
-and overwriting `d`. The plotting would not work otherwise::
+chromosome X). Fix this in the ``mutate`` command, loading the data again
+and overwriting ``d``. The (smart) plotting would not work well otherwise::
 
   read_tsv('data/popdata_mda_euro.tsv') %>%
     mutate(CHROM = as.factor(CHROM)) ->
@@ -273,14 +273,13 @@ To create plots in such a smooth way like in the previous example the data has
 to loosely conform to some simple rules. In short - each column is a variable,
 each row is an observation. You can find more details in the
 `Tidy data <http://vita.had.co.nz/papers/tidy-data.html>`_ paper.
-There is an R package ``tidyr`` that helps you to get the data into the required
-shape.
 
-The vcf is `tidy` when using the ``CHROM`` and ``POS`` variables. Each variant (SNP)
-is a row. The data is not tidy regarding variants in particular individuals.
-Individual identifier is a variable for this case, but it is stored as column name.
-This is not 'wrong', this format was chosen so the data is smaller. But it does not work
-well with ``ggplot``.
+The vcf as is can be considered `tidy` when using the ``CHROM`` and ``POS``
+columns. Each variant (SNP) is a row. The data is not tidy when using variants
+in particular individuals. All individual identifiers should be in single
+column (variable), but there are several columns with individual names. This
+is not 'wrong' per se, this format is more concise. But it does not work well
+with ``ggplot``.
 
 Now if we want to look at genotypes per individual, we need the genotype as a
 single  variable, not 18. ``gather`` takes the values from multiple columns
@@ -294,7 +293,7 @@ the originating column name for each value.
      dm
 
 Look at the data. Now we can plot the counts of reference/heterozygous/alternative
-alleles.
+alleles easily.
 
 .. code-block:: r
 
@@ -341,9 +340,9 @@ individual:
     mutate(vartype = paste(REF, ALT) %in% transitions %>% ifelse("Transition", "Transversion"),
            score = ifelse(genotype == '0/0', 0, ifelse(genotype == '0/1', 1, 2))) %>%
     group_by(individual, vartype) %>%
-    summarise(score=sum(score)) %>%
+    summarise(score = sum(score)) %>%
     spread(vartype, score) %>%
-    mutate(TiTv=Transition / Transversion) %>%
+    mutate(TiTv = Transition / Transversion) %>%
     ggplot(aes(individual, TiTv)) +
     geom_point() +
     theme(axis.text.x = element_text(angle = 30, hjust = 1))

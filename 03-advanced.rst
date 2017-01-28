@@ -222,7 +222,7 @@ someone, or when you're sure that your task is IO bound. Otherwise
   ``parallel -j1`` to use only single core.
 
 The most powerful thing about parallel is it's substitution strings like
-``{.}``, , ``{/}``, ``{#}`` - check ``man parallel``.
+``{.}``, ``{/}``, ``{#}`` - check ``man parallel``.
 
 .. code-block:: bash
 
@@ -239,4 +239,5 @@ The most powerful thing about parallel is it's substitution strings like
 .. note::
 
   If your data is a single file, but the processing of one line is not
-  dependent on the other lines, ``split`` command will help.
+  dependent on the other lines, you can use the ``split`` command to create
+  several files each with defined number of lines from the original file.
