@@ -131,25 +131,19 @@ VCFtools
 
 - http://vcftools.sourceforge.net
 
-Prepare data files into ``~projects/diff`` directory:
+Prepare working directory ``projects/fst``:
 
 .. code-block:: bash
 
 	cd
-	mkdir projects/diff
-
-	cp /data/mus_mda/00-popdata/* projects/diff/.
-
-	cd projects/diff
-
-	# View and explore the files within the 'vcf' directory
-	ls
+	mkdir projects/fst
+	cd projects/fst
 
 Obtaining the basic file statistics (number of variants & number of samples):
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
 
 Viewing and printing out the content of the VCF file:
 
@@ -157,11 +151,15 @@ Viewing and printing out the content of the VCF file:
 
 	# To print out the content of the VCF file
 
-	vcftools --gzvcf popdata_mda.vcf.gz --recode --out new_vcf
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--recode \
+	--out new_vcf
 
 	# To view the content directly
 
-	vcftools --gzvcf popdata_mda.vcf.gz --recode --stdout | less -S
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--recode \
+	--stdout | less -S
 
 Basic data filtering - use of appropriate flags:
 
@@ -176,8 +174,8 @@ To select a subset of samples:
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz \
-	--keep euro_samps.txt \
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \
 	--recode \
 	--stdout |
 	less -S
@@ -197,11 +195,11 @@ Select subset of samples and SNPs based on physical position in genome:
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz \
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
 	--chr 11 \
 	--from-bp 22000000 \
 	--to-bp 23000000 \
-	--keep euro_samps.txt \
+	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \
 	--recode \
 	--stdout |
 	less -S
@@ -219,8 +217,8 @@ and with minor allele frequency (MAF) no less than 0.2:
 
 .. code-block:: bash
 
-	vcftools --gzvcf popdata_mda.vcf.gz \
-	--keep euro_samps.txt \
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \
 	--recode \
 	--stdout |
 	vcftools \
@@ -231,8 +229,8 @@ and with minor allele frequency (MAF) no less than 0.2:
 	--stdout |
 	less -S
 
-	vcftools --gzvcf popdata_mda.vcf.gz \
-	--keep euro_samps.txt \
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \
 	--recode \
 	--stdout |
 	vcftools --vcf - \
@@ -292,8 +290,8 @@ and filtered out variants with missing genomes and low minor allele frequency).
 
 	cd ~/projects/diff
 
-	vcftools --gzvcf popdata_mda.vcf.gz \
-	--keep euro_samps.txt \
+	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
+	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \
 	--recode --stdout |
 	vcftools --vcf - \
 	--max-missing 1 \
@@ -308,9 +306,9 @@ and *M. m. domesticus* populations (populations specified in
 
 .. code-block:: bash
 
-	vcftools --vcf popdata_mda_euro.vcf \
-	--weir-fst-pop musculus_samps.txt   \
-	--weir-fst-pop domesticus_samps.txt \
+	vcftools --vcf /data-shared/mus_mda/00-popdata/popdata_mda_euro.vcf \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/musculus_samps.txt   \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/domesticus_samps.txt \
 	--stdout |
 	tail -n +2 |
 	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
@@ -321,10 +319,9 @@ and concatenate them into a single file:
 
 .. code-block:: bash
 
-	cp /data/mus_mda/02-windows/genome.fa.fai .
-
 	## Create windows of 1 Mb with 100 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	bedtools makewindows \
+	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 1000000 \
 	-s 100000  \
 	-i winnum |
@@ -332,7 +329,8 @@ and concatenate them into a single file:
 	> windows_1000kb.bed
 
 	## Create windows of 500 kb with 500 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	bedtools makewindows \
+	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 500000 \
 	-s 50000  \
 	-i winnum |
@@ -340,7 +338,8 @@ and concatenate them into a single file:
 	> windows_500kb.bed
 
 	## Create windows of 100 kb with 10 kb step
-	bedtools makewindows -g <(grep '^2\|^11' genome.fa.fai) \
+	bedtools makewindows \
+	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 100000 \
 	-s 10000  \
 	-i winnum | \
@@ -379,21 +378,19 @@ also plot the average Fst values along the chromosomes.
 	.. code-block:: bash
 
 		library(ggplot2)
+		library(dplyr)
+		magrittr(magrittr)
 
-		setwd("~/projects/diff")
+		setwd("~/projects/fst")
 
-		fst <- read.table("windows_mean_fst.tab", header=F, sep="\t")
-
-		# shorthand for TAB separated files
+		## Read Fst file and rename names in header
 		fst <- read.delim("windows_mean_fst.tab", header=F)
-
 		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
 
 		# the 'old' way
 		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
 
-		# dplyr version of the command above
-		library(dplyr)
+		# the 'new' way
 		fst %>%
 		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb")) ->
 		  fst
@@ -407,13 +404,18 @@ also plot the average Fst values along the chromosomes.
 
 	.. code-block:: bash
 
+		## Plot Fst values along physical position
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
-		q <- quantile(subset(fst,win_size=="500kb",select="avg_fst")[,1],prob=0.99)[[1]]
+		## Retrieve 99% quantiles
+		fst %>%
+			group_by(windows) %>%
+			summarize(p=quantile(fst,probs=0.99)) -> fst_quantiles
 
+		## Add quantiles to plot
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
