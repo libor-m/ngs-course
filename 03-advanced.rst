@@ -191,7 +191,6 @@ function) and paste it below the shebang.
 .. topic:: Hands on!
 
   .. code-block:: bash
-     :title: fastq-filter-length.sh
 
     #!/bin/bash
 
