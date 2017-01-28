@@ -260,5 +260,3 @@ Use `globbing patterns`! Or try to write an alternative command with ``find`` an
 
     # run the multiqc on the fastqc results
     multiqc -o 03-multiqc 01-quality
-
-

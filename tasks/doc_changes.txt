@@ -36,3 +36,5 @@ unzip, strip, touch, finger, grep, mount, fsck, more, yes, fsck, fsck, fsck, umo
 ## session recording
 https://asciinema.org/
 
+
+# unpack the reads from fastq.tar!
