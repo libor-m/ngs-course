@@ -47,7 +47,9 @@ database or are within 1000 bp on each side of a gene.
 	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
 	# Count the number of open chromatin regions overlapping with genes
-	# or are within 1000 bp window on each side of a gene
+	# or are within 1000 bp window on each side of a gene:
+
+	## Count the number of open chromatin regions within 1000 bp window on each side
 	bedtools window -w 1000 \
 	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
@@ -59,7 +61,7 @@ database or are within 1000 bp on each side of a gene.
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-3. Count the number of merged open chromatin regions file overlapping with genes
+3. Count the number of genes overlapping the set of merged open chromatin regions
 
 Here, we are supposed to do right the opposite, i.e. count the number of genes
 containing open chromatin region from the ENCODE dataset.
