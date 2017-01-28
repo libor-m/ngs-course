@@ -3,9 +3,8 @@ Genome assembly
 
 We'll be assembling a genome of *E. coli* from paired Illumina reads. We're
 using ``Velvet``, which is a bit obsolete, but nice for teaching purposes.
-Runs quite fast and does not consume that much memory. In reality we'd use
-something like ``Megahit`` for prokaryotic organisms or `Spades
-<http://cab.spbu.ru/software/spades/>`_  for the rest today.
+Runs quite fast and does not consume that much memory. State-of-the art
+assembler today is for example `Spades <http://cab.spbu.ru/software/spades/>`_.
 
 You've already got a project directory for the assembly: ``~/projects/assembly``.
 You can find linked ``00-reads`` there with the fastq files, and two assembly
@@ -13,7 +12,11 @@ results should the process would fail for anyone.
 
 .. code-block:: bash
 
+  mkdir -p ~/projects/assembly
   cd ~/projects/assembly
+
+  # link the shared data to current project (no copying)
+  ln -s /data-shared/ecoli/reads 00-reads
 
   # look what's around
   ll
@@ -21,7 +24,7 @@ results should the process would fail for anyone.
 Velvet is used in two phases, the first phase prepares the reads, the second
 phase  does the assembly itself. Open the `Velvet manual
 <https://www.ebi.ac.uk/~zerbino/velvet/Manual.pdf>`_. When using anything more
-complex than a simple notepad you will actually save your time by reading the
+complex than a Notepad you will actually save your time by reading the
 manual. Surprised?;)
 
 Also - run ``screen`` at this point, because you want to continue working,
@@ -61,6 +64,7 @@ on read pairs.
   velveth 04-velvet-k31-paired 31 -fastq -shortPaired -separate 00-reads/MiSeq_Ecoli_MG1655_50x_R1.fastq 00-reads/MiSeq_Ecoli_MG1655_50x_R2.fastq
 
   velvetg 04-velvet-k31-paired -exp_cov auto -ins_length 150 -read_trkg yes
+  # Final graph has 749 nodes and n50 of 64026, max 182119, total 4551702, using 1508279/1546558 reads
 
   # check the expected (assembly) coverage
   ~/sw/velvet_1.2.10/contrib/estimate-exp_cov/velvet-estimate-exp_cov.pl 04-velvet-k31-paired/stats.txt | less
@@ -72,7 +76,11 @@ The ``observed-insert-length.pl`` calculates suggestions for ``-ins_length``
 and ``-ins_length_sd`` parameters to ``velvetg``, so let's try if the suggestions
 improve the assembly::
 
+  velvetg 04-velvet-k31-paired -exp_cov 35 -cov_cutoff 0 -ins_length 297 -ins_length_sd 19.4291558645302 -read_trkg yes
+  # Final graph has 26162 nodes and n50 of 38604, max 155392, total 5412695, using 1501742/1546558 reads
+
   velvetg 04-velvet-k31-paired -exp_cov auto -ins_length 297 -ins_length_sd 19.4291558645302 -read_trkg yes
+  # Final graph has 696 nodes and n50 of 95393, max 209376, total 4561418, using 1508281/1546558 reads
 
 Now the run is really fast, because most of the work is already done.
 The N50 improved significantly, and we also got ~50 contigs less,
@@ -85,8 +93,4 @@ Using ``Mauve`` we can align the result with the reference *E. coli* genome:
 
 .. image:: _static/mauve.png
    :align: center
-
-Here you can get the genome yourself. If there is time, we can try to map our reads to it::
-
-  wget -O ecoli.fa.gz https://owncloud.cesnet.cz/public.php?service=files&t=0c7d291a4ad1ff39911ef1fa8793c106&download
 
