@@ -2,6 +2,8 @@ Important NGS formats
 =====================
 A selection of the most commonly used formats in NSG data processing pipelines.
 
+High throughput specs hub: https://samtools.github.io/hts-specs/
+
 .. image:: _static/ngs-flows.png
 
 FASTQ - Short reads
@@ -18,9 +20,10 @@ SAM - Reads mapped to reference
 SAM stands for Sequence Alignment/Mapping format. It includes parts of the
 original reads, that were mapped to a reference genome, together with the
 position where they belong to. There is an effective binary encoded
-counterpart called **BAM**.
+counterpart called **BAM** and even more compressed **CRAM**.
 
   - http://samtools.github.io/hts-specs/SAMv1.pdf
+  - https://samtools.github.io/hts-specs/CRAMv3.pdf
 
 BED and GFF - Annotations
 -------------------------
