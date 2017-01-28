@@ -290,7 +290,7 @@ and filtered out variants with missing genomes and low minor allele frequency).
 
 .. code-block:: bash
 
-	cd ~/projects/diff
+	cd ~/projects/fst
 
 	vcftools --gzvcf /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz \
 	--keep /data-shared/mus_mda/00-popdata/euro_samps.txt \

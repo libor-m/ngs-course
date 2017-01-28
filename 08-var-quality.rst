@@ -5,9 +5,9 @@ In this part you will be working on your own. You're already familiar with the
 VCF format and some reformatting and plotting tools. There is a file with
 variants from several nightingale individuals::
 
-  /data/vcf_examples/luscinia_vars.vcf.gz
+  /data-shared/vcf_examples/luscinia_vars.vcf.gz
 
-Your task now is: 
+Your task now is:
 
 - pick only data for chromosomes ``chr1`` and ``chrZ``
 - extract the sequencing depth ``DP`` from the ``INFO`` column
