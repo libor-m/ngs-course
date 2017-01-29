@@ -5,7 +5,7 @@ Genome feature arithmetics & summary
 ------------------------------------
 
 There is an issue with the most up-to-date version of bedtools.
-Please run the following code to download and install older version:
+Please run the following code to download and install the older version:
 
 .. code-block:: bash
 
@@ -392,20 +392,17 @@ also plot the average Fst values along the chromosomes.
 
 		library(ggplot2)
 		library(dplyr)
-		magrittr(magrittr)
+		library(magrittr)
 
 		setwd("~/projects/fst")
 
 		## Read Fst file and rename names in header
 		fst <- read.delim("windows_mean_fst.tab", header=F)
-		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
-
-		# the 'old' way
-		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
+		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
 		# the 'new' way
 		fst %>%
-		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb")) ->
+		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb"))) ->
 		  fst
 
 		ggplot(fst, aes(avg_fst)) +
@@ -425,14 +422,14 @@ also plot the average Fst values along the chromosomes.
 
 		## Retrieve 99% quantiles
 		fst %>%
-			group_by(windows) %>%
-			summarize(p=quantile(fst,probs=0.99)) -> fst_quantiles
+			group_by(win_size) %>%
+			summarize(p=quantile(avg_fst,probs=0.99)) -> fst_quantiles
 
 		## Add 99% quantiles for 500kb window
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=fst_quantiles[2,2], colour="black") +
+			geom_hline(yintercept=as.numeric(fst_quantiles[2,2]), colour="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 	.. image:: _static/fst_on_chroms.png
@@ -449,7 +446,7 @@ than or equal to 99% of the data.
 	## Use of variables in AWK: -v q=value
 
 	grep 500kb windows_mean_fst.tab |
-	  awk -v a=0.9328020 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	  awk -v a=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=a{print $2,$3,$4}' |
 	  sortBed |
 	  bedtools merge -i stdin \
 		> signif_500kb.bed
