@@ -273,8 +273,8 @@ have to be specified in the output - each one with a separate file
 .. code-block:: bash
 
 	vcftools --vcf popdata_mda_euro.vcf \
-	--weir-fst-pop musculus_samps.txt \
-	--weir-fst-pop domesticus_samps.txt \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/musculus_samps.txt \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/domesticus_samps.txt \
 	--stdout |
 	less -S
 
@@ -403,11 +403,12 @@ also plot the average Fst values along the chromosomes.
 		fst <- read.delim("windows_mean_fst.tab", header=F)
 		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
-		# the 'new' way
+		# Reorder levels for window size
 		fst %>%
 		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb"))) ->
 		  fst
 
+		# Plot density distribution for average Fst values across windows
 		ggplot(fst, aes(avg_fst)) +
 			geom_density(fill=I("blue")) +
 			facet_wrap(~win_size)
