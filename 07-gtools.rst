@@ -446,7 +446,7 @@ than or equal to 99% of the data.
 	## Use of variables in AWK: -v q=value
 
 	grep 500kb windows_mean_fst.tab |
-	  awk -v a=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=a{print $2,$3,$4}' |
+	  awk -v q=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=q{print $2,$3,$4}' |
 	  sortBed |
 	  bedtools merge -i stdin \
 		> signif_500kb.bed
