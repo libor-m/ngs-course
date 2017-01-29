@@ -44,7 +44,7 @@ regions is present only once. You can use ``bedtools merge`` tool:
 	cd projects/bed_examples
 
 	sortBed -i /data-shared/bed_examples/encode.bed |
-	bedtools merge -i - > encode-merged.bed
+	bedtools merge -i stdin > encode-merged.bed
 
 	# Count the number of regions after merging
 	wc -l encode-merged.bed
