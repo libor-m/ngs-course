@@ -464,7 +464,7 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 	    -a signif_500kb.bed \
 	    -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
 	  grep protein_coding |
-	  cut -f 1,2,3,4,12 |
+	  cut -f 1-3,12 |
 	  cut -d ' ' -f 1,3,9 |
 	  tr -d '";' |
 	  sort -u \
