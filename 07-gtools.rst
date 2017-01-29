@@ -377,7 +377,7 @@ Calculate average Fst within the sliding windows:
 	# Run bedtools groupby command to obtain average values of Fst
 	# (in the globally installed version (2.26) is a bug and groupBy
 	# is not working properly, we compiled older version (2.25)
-	# in sw2 dir and will use it now to run 'groupBy'):
+	# in sw2 dir and will use it now to run 'groupBy')
 	sort -k4,4 -k1,1 -k2,2n windows_fst.tab |
 	~/sw2/bedtools2/bin/groupBy -i - \
 	-g 4,1,2,3 \
