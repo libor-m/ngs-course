@@ -4,6 +4,19 @@ Genomic tools session
 Genome feature arithmetics & summary
 ------------------------------------
 
+There is an issue with the most up-to-date version of bedtools.
+Please run the following code to download and install older version:
+
+.. code-block:: bash
+
+	cd
+	mkdir sw2
+	cd sw2
+	wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+	tar -zxvf bedtools-2.25.0.tar.gz
+	cd bedtools2
+	make
+
 **Explore bedtools & bedops functionality**
 
 - http://bedtools.readthedocs.org/en/
@@ -326,27 +339,24 @@ and concatenate them into a single file:
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 1000000 \
-	-s 100000  \
-	-i winnum |
-	awk '{print $0":1000kb"}' \
+	-s 100000 |
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"1000kb"}' \
 	> windows_1000kb.bed
 
 	## Create windows of 500 kb with 500 kb step
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 500000 \
-	-s 50000  \
-	-i winnum |
-	awk '{print $0":500kb"}' \
+	-s 50000 |
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"500kb"}' \
 	> windows_500kb.bed
 
 	## Create windows of 100 kb with 10 kb step
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 100000 \
-	-s 10000  \
-	-i winnum | \
-	awk '{print $0":100kb"}' \
+	-s 10000 | \
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"100kb"}' \
 	> windows_100kb.bed
 
 	## Concatenate windows of all sizes
@@ -365,11 +375,10 @@ Calculate average Fst within the sliding windows:
 	> windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
-	bedtools groupby -i <( sort -k4,4 windows_fst.tab ) \
-	-g 1,2,3,4 \
+	~/sw2/bedtools2/bin/groupBy -i <( sort -k4,4 -k1,1 -k2,2n windows_fst.tab ) \
+	-g 4,1,2,3 \
 	-c 9 \
-	-o mean |
-	tr ":" "\t" > windows_mean_fst.tab
+	-o mean > windows_mean_fst.tab
 
 Visualize the average Fst values within the sliding windows of the three sizes
 between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
