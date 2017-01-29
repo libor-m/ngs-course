@@ -28,12 +28,13 @@ regions is present only once. You can use ``bedtools merge`` tool:
 
 	# The data has to be sorted before merging
 	mkdir projects/bed_examples
+	cd projects/bed_examples
 
 	sortBed -i /data-shared/bed_examples/encode.bed |
-	bedtools merge -i - > projects/bed_examples/encode-merged.bed
+	bedtools merge -i - > encode-merged.bed
 
 	# Count the number of regions after merging
-	wc -l projects/bed_examples/encode-merged.bed
+	wc -l encode-merged.bed
 
 2. Count the number of open chromatin regions in merged file overlapping with genes
 
@@ -51,13 +52,13 @@ database or are within 1000 bp on each side of a gene.
 
 	## Count the number of open chromatin regions within 1000 bp window on each side
 	bedtools window -w 1000 \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
 	# Count the number of open chromatin regions overlapping with genes
 	bedtools intersect \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
@@ -69,7 +70,7 @@ containing open chromatin region from the ENCODE dataset.
 .. code-block:: bash
 
 	bedtools intersect \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) -wb |
 	cut -f 7 |
 	sort -u |
@@ -90,7 +91,7 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 1000000 \
 	-s 200000 \
 	-i winnum \
-	> projects/bed_examples/windows_1mb.bed
+	> windows_1mb.bed
 
 	# Make 2.5Mb sliding windows (step 500kb)
 	bedtools makewindows \
@@ -98,7 +99,7 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 2500000 \
 	-s 500000 \
 	-i winnum \
-	> projects/bed_examples/windows_2-5mb.bed
+	> windows_2-5mb.bed
 
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
@@ -106,23 +107,23 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 5000000 \
 	-s 1000000 \
 	-i winnum \
-	> projects/bed_examples/windows_5mb.bed
+	> windows_5mb.bed
 
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
 	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_1mb.bed \
-	> projects/bed_examples/gdens_windows_1mb.tab
+	-b windows_1mb.bed \
+	> gdens_windows_1mb.tab
 
 	bedtools coverage \
 	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_2-5mb.bed \
-	> projects/bed_examples/gdens_windows_2-5mb.tab
+	-b windows_2-5mb.bed \
+	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
 	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_5mb.bed \
-	> projects/bed_examples/gdens_windows_5mb.tab
+	-b windows_5mb.bed \
+	> gdens_windows_5mb.tab
 
 The gene density can be visualized in R-Studio.
 
