@@ -6,10 +6,6 @@ using ``Velvet``, which is a bit obsolete, but nice for teaching purposes.
 Runs quite fast and does not consume that much memory. State-of-the art
 assembler today is for example `Spades <http://cab.spbu.ru/software/spades/>`_.
 
-You've already got a project directory for the assembly: ``~/projects/assembly``.
-You can find linked ``00-reads`` there with the fastq files, and two assembly
-results should the process would fail for anyone.
-
 .. code-block:: bash
 
   mkdir -p ~/projects/assembly
