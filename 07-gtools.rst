@@ -50,7 +50,7 @@ database or are within 1000 bp on each side of a gene.
 	# Count the number of open chromatin regions overlapping with genes
 	# or are within 1000 bp window on each side of a gene:
 
-	## Count the number of open chromatin regions within 1000 bp window on each side
+	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
 	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
