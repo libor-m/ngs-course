@@ -19,8 +19,8 @@ Please run the following code to download and install the older version:
 
 **Explore bedtools & bedops functionality**
 
-- http://bedtools.readthedocs.org/en/
-- http://bedops.readthedocs.org/en/
+- http://bedtools.readthedocs.io/
+- https://bedops.readthedocs.io/
 
 1. Merge the overlapping open chromatin regions in ``encode.bed`` file
 
