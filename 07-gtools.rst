@@ -36,7 +36,7 @@ regions is present only once. You can use ``bedtools merge`` tool:
 	# Count the number of regions after merging
 	wc -l encode-merged.bed
 
-2. Count the number of open chromatin regions in merged file overlapping with genes
+2. Count the number of merged open chromatin regions overlapping with genes
 
 In the second exercise we would like to parse and count those open
 chromatin regions which overlap with known genes retrieved from Ensembl
