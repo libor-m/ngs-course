@@ -309,7 +309,7 @@ and *M. m. domesticus* populations (populations specified in
 
 .. code-block:: bash
 
-	vcftools --vcf /data-shared/mus_mda/00-popdata/popdata_mda_euro.vcf \
+	vcftools --vcf popdata_mda_euro.vcf \
 	--weir-fst-pop /data-shared/mus_mda/00-popdata/musculus_samps.txt   \
 	--weir-fst-pop /data-shared/mus_mda/00-popdata/domesticus_samps.txt \
 	--stdout |
