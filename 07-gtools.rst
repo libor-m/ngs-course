@@ -4,10 +4,23 @@ Genomic tools session
 Genome feature arithmetics & summary
 ------------------------------------
 
+There is an issue with the most up-to-date version of bedtools.
+Please run the following code to download and install the older version:
+
+.. code-block:: bash
+
+	cd
+	mkdir sw2
+	cd sw2
+	wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+	tar -zxvf bedtools-2.25.0.tar.gz
+	cd bedtools2
+	make
+
 **Explore bedtools & bedops functionality**
 
-- http://bedtools.readthedocs.org/en/
-- http://bedops.readthedocs.org/en/
+- http://bedtools.readthedocs.io/
+- https://bedops.readthedocs.io/
 
 1. Merge the overlapping open chromatin regions in ``encode.bed`` file
 
@@ -28,14 +41,15 @@ regions is present only once. You can use ``bedtools merge`` tool:
 
 	# The data has to be sorted before merging
 	mkdir projects/bed_examples
+	cd projects/bed_examples
 
 	sortBed -i /data-shared/bed_examples/encode.bed |
-	bedtools merge -i - > projects/bed_examples/encode-merged.bed
+	bedtools merge -i stdin > encode-merged.bed
 
 	# Count the number of regions after merging
-	wc -l projects/bed_examples/encode-merged.bed
+	wc -l encode-merged.bed
 
-2. Count the number of open chromatin regions in merged file overlapping with genes
+2. Count the number of merged open chromatin regions overlapping with genes
 
 In the second exercise we would like to parse and count those open
 chromatin regions which overlap with known genes retrieved from Ensembl
@@ -49,15 +63,15 @@ database or are within 1000 bp on each side of a gene.
 	# Count the number of open chromatin regions overlapping with genes
 	# or are within 1000 bp window on each side of a gene:
 
-	## Count the number of open chromatin regions within 1000 bp window on each side
+	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
 	# Count the number of open chromatin regions overlapping with genes
 	bedtools intersect \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
@@ -69,7 +83,7 @@ containing open chromatin region from the ENCODE dataset.
 .. code-block:: bash
 
 	bedtools intersect \
-	-a <( sortBed -i projects/bed_examples/encode-merged.bed ) \
+	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) -wb |
 	cut -f 7 |
 	sort -u |
@@ -90,7 +104,7 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 1000000 \
 	-s 200000 \
 	-i winnum \
-	> projects/bed_examples/windows_1mb.bed
+	> windows_1mb.bed
 
 	# Make 2.5Mb sliding windows (step 500kb)
 	bedtools makewindows \
@@ -98,7 +112,7 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 2500000 \
 	-s 500000 \
 	-i winnum \
-	> projects/bed_examples/windows_2-5mb.bed
+	> windows_2-5mb.bed
 
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
@@ -106,23 +120,23 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-w 5000000 \
 	-s 1000000 \
 	-i winnum \
-	> projects/bed_examples/windows_5mb.bed
+	> windows_5mb.bed
 
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_1mb.bed \
-	> projects/bed_examples/gdens_windows_1mb.tab
+	-a windows_1mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	> gdens_windows_1mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_2-5mb.bed \
-	> projects/bed_examples/gdens_windows_2-5mb.tab
+	-a windows_2-5mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b projects/bed_examples/windows_5mb.bed \
-	> projects/bed_examples/gdens_windows_5mb.tab
+	-a windows_5mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
+	> gdens_windows_5mb.tab
 
 The gene density can be visualized in R-Studio.
 
@@ -259,8 +273,8 @@ have to be specified in the output - each one with a separate file
 .. code-block:: bash
 
 	vcftools --vcf popdata_mda_euro.vcf \
-	--weir-fst-pop musculus_samps.txt \
-	--weir-fst-pop domesticus_samps.txt \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/musculus_samps.txt \
+	--weir-fst-pop /data-shared/mus_mda/00-popdata/domesticus_samps.txt \
 	--stdout |
 	less -S
 
@@ -308,7 +322,7 @@ and *M. m. domesticus* populations (populations specified in
 
 .. code-block:: bash
 
-	vcftools --vcf /data-shared/mus_mda/00-popdata/popdata_mda_euro.vcf \
+	vcftools --vcf popdata_mda_euro.vcf \
 	--weir-fst-pop /data-shared/mus_mda/00-popdata/musculus_samps.txt   \
 	--weir-fst-pop /data-shared/mus_mda/00-popdata/domesticus_samps.txt \
 	--stdout |
@@ -325,27 +339,24 @@ and concatenate them into a single file:
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 1000000 \
-	-s 100000  \
-	-i winnum |
-	awk '{print $0":1000kb"}' \
+	-s 100000 |
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"1000kb"}' \
 	> windows_1000kb.bed
 
 	## Create windows of 500 kb with 500 kb step
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 500000 \
-	-s 50000  \
-	-i winnum |
-	awk '{print $0":500kb"}' \
+	-s 50000 |
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"500kb"}' \
 	> windows_500kb.bed
 
 	## Create windows of 100 kb with 10 kb step
 	bedtools makewindows \
 	-g <(grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai) \
 	-w 100000 \
-	-s 10000  \
-	-i winnum | \
-	awk '{print $0":100kb"}' \
+	-s 10000 | \
+	awk -F $'\t' 'BEGIN{OFS=FS}{print $0,"100kb"}' \
 	> windows_100kb.bed
 
 	## Concatenate windows of all sizes
@@ -364,11 +375,14 @@ Calculate average Fst within the sliding windows:
 	> windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
-	bedtools groupby -i <( sort -k4,4 windows_fst.tab ) \
-	-g 1,2,3,4 \
+	# (in the globally installed version (2.26) is a bug and groupBy
+	# is not working properly, we compiled older version (2.25)
+	# in sw2 dir and will use it now to run 'groupBy')
+	sort -k4,4 -k1,1 -k2,2n windows_fst.tab |
+	~/sw2/bedtools2/bin/groupBy -i - \
+	-g 4,1,2,3 \
 	-c 9 \
-	-o mean |
-	tr ":" "\t" > windows_mean_fst.tab
+	-o mean > windows_mean_fst.tab
 
 Visualize the average Fst values within the sliding windows of the three sizes
 between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
@@ -381,22 +395,20 @@ also plot the average Fst values along the chromosomes.
 
 		library(ggplot2)
 		library(dplyr)
-		magrittr(magrittr)
+		library(magrittr)
 
 		setwd("~/projects/fst")
 
 		## Read Fst file and rename names in header
 		fst <- read.delim("windows_mean_fst.tab", header=F)
-		names(fst) <- c("chrom", "start", "end", "win_id","win_size", "avg_fst" )
+		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
-		# the 'old' way
-		fst$win_size <- factor(fst$win_size, levels=c("100kb", "500kb", "1000kb"))
-
-		# the 'new' way
+		# Reorder levels for window size
 		fst %>%
-		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb")) ->
+		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb"))) ->
 		  fst
 
+		# Plot density distribution for average Fst values across windows
 		ggplot(fst, aes(avg_fst)) +
 			geom_density(fill=I("blue")) +
 			facet_wrap(~win_size)
@@ -414,14 +426,14 @@ also plot the average Fst values along the chromosomes.
 
 		## Retrieve 99% quantiles
 		fst %>%
-			group_by(windows) %>%
-			summarize(p=quantile(fst,probs=0.99)) -> fst_quantiles
+			group_by(win_size) %>%
+			summarize(p=quantile(avg_fst,probs=0.99)) -> fst_quantiles
 
 		## Add 99% quantiles for 500kb window
 		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
 			geom_line() +
 			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=fst_quantiles[2,2], colour="black") +
+			geom_hline(yintercept=as.numeric(fst_quantiles[2,2]), colour="black") +
 			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
 
 	.. image:: _static/fst_on_chroms.png
@@ -438,7 +450,7 @@ than or equal to 99% of the data.
 	## Use of variables in AWK: -v q=value
 
 	grep 500kb windows_mean_fst.tab |
-	  awk -v a=0.9328020 -F $'\t' 'BEGIN{OFS=FS}{if($6 >= a){print $1,$2,$3}}' |
+	  awk -v q=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=q{print $2,$3,$4}' |
 	  sortBed |
 	  bedtools merge -i stdin \
 		> signif_500kb.bed
@@ -456,7 +468,7 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 	    -a signif_500kb.bed \
 	    -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
 	  grep protein_coding |
-	  cut -f 1,2,3,4,12 |
+	  cut -f 1-3,12 |
 	  cut -d ' ' -f 1,3,9 |
 	  tr -d '";' |
 	  sort -u \
