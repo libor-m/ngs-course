@@ -111,18 +111,18 @@ within these sliding windows. To speed up the process we focus only on chromosom
 
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b windows_1mb.bed \
+	-a windows_1mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
 	> gdens_windows_1mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b windows_2-5mb.bed \
+	-a windows_2-5mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
 	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
-	-a <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	-b windows_5mb.bed \
+	-a windows_5mb.bed \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
 	> gdens_windows_5mb.tab
 
 The gene density can be visualized in R-Studio.
