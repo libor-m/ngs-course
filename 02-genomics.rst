@@ -51,7 +51,7 @@ Pattern search & regular expressions
   < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
   grep -v '^#' |
   grep 'PASS' |
-  wc –l
+  wc -l
 
   < /data-shared/vcf_examples/luscinia_vars_flags.vcf.gz zcat |
   grep -v '^#' |

@@ -393,9 +393,7 @@ also plot the average Fst values along the chromosomes.
 
 	.. code-block:: bash
 
-		library(ggplot2)
-		library(dplyr)
-		library(magrittr)
+		library(tidyverse)
 
 		setwd("~/projects/fst")
 

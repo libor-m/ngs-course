@@ -1,5 +1,5 @@
-Course on UNIX and Genomic Data - Prague, February 2018
-=======================================================
+Course on UNIX and Genomic Data - Prague, 2018
+==============================================
 
 This course aims to introduce the participants to UNIX - an interface that is
 one of the most convenient options for working with big textual data.
@@ -16,7 +16,7 @@ learning.
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday (14:00-18:00)**                                  |
+| **Friday February 2nd (14:00-18:00)**                     |
 +--------------+--------------------------------------------+
 | Afternoon I  | - Course Intro                             |
 |              | - Introduction to Unix                     |
@@ -25,7 +25,7 @@ learning.
 +--------------+--------------------------------------------+
 | Afternoon II | Unix - Basic                               |
 +--------------+--------------------------------------------+
-| **Saturday (9:30-18:30)**                                 |
+| **Saturday February 3rd (9:30-18:30)**                    |
 +--------------+--------------------------------------------+
 | Morning      | - Introduction to Genomics                 |
 |              | - Unix - Advanced I                        |
@@ -38,7 +38,7 @@ learning.
 +--------------+--------------------------------------------+
 | Afternoon II | Graphic Session                            |
 +--------------+--------------------------------------------+
-| **Sunday (9:30-18:30)**                                   |
+| **Sunday February 4th (9:30-18:30)**                      |
 +--------------+--------------------------------------------+
 | Morning      | - Read Quality                             |
 |              | - Assembly                                 |
