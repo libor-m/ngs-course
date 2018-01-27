@@ -1,5 +1,5 @@
-Course on UNIX and Genomic Data - Prague, January 2017
-======================================================
+Course on UNIX and Genomic Data - Prague, February 2018
+=======================================================
 
 This course aims to introduce the participants to UNIX - an interface that is
 one of the most convenient options for working with big textual data.
