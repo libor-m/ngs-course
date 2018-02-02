@@ -59,7 +59,7 @@ the ``screen`` tool for all your work::
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
 To attach again type::
 
-  screen -dr
+  screen -r
 
 .. note::
 
@@ -165,6 +165,27 @@ It can be readily combined with ``head`` to show the second sequence in the file
     cd ~/projects/fastq
     < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
+Globbing
+^^^^^^^^
+
+Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
+the names! There is a feature that comes to rescue. It's called `globbing`. It allows
+you to specify more filenames at once by defining some common pattern. All your
+read files have ``.fastq`` extension. ``*.fastq`` means *a file named by any number of
+characters followed by '.fastq'*.
+
+.. code-block:: bash
+
+cd ~/projets/fastq
+cat HRTMUOC01.RL12.*.fastq | wc -l
+expr XXXX / 4
+
+cat HRTMUOC01.RL12.0?.fastq | wc -l
+expr XXXX / 4
+
+cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
+expr XXXX / 4
+
 **Exercise (How many reads are there?)**:
 
 We found out that FASTQ files have a particular structure (four lines per read).
@@ -182,7 +203,7 @@ from the stream).
 
 .. code-block:: bash
 
-  cat HRTMUOC01.RL12.00.fastq | wc -l
+  cat *.fastq | wc -l
 
 The number that appeared is four times the number of sequences (each sequence takes
 four lines). And there is even a built-in calculator in bash:
@@ -190,27 +211,6 @@ four lines). And there is even a built-in calculator in bash:
 .. code-block:: bash
 
   echo $(( 788640 / 4 ))
-  expr XXXX / 4
-
-Globbing
-^^^^^^^^
-
-Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
-the names! There is a feature that comes to rescue. It's called `globbing`. It allows
-you to specify more filenames at once by defining some common pattern. All your
-read files have ``.fastq`` extension. ``*.fastq`` means *a file named by any number of
-characters followed by '.fastq'*.
-
-.. code-block:: bash
-
-  cd ~/projets/fastq
-  cat HRTMUOC01.RL12.*.fastq | wc -l
-  expr XXXX / 4
-
-  cat HRTMUOC01.RL12.0?.fastq | wc -l
-  expr XXXX / 4
-
-  cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
   expr XXXX / 4
 
 Variables/Lists
