@@ -318,7 +318,7 @@ Exercise
     c) The count of files/directories in home directory
     d) The count of files/directories in current directory
 
-  2. How many directories this command ``mkdir {1999..2001}-{1st,2nd,3rd,4th}-{1..5}`` makes?
+  2. How many directories this command ``mkdir {1999..2001}-{1st,2nd,3rd,4th}-{1..5}`` makes (do not use calculator!)?
 
     a) 56
     b) 60
