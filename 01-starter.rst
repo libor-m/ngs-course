@@ -177,14 +177,11 @@ characters followed by '.fastq'*.
 .. code-block:: bash
 
   cd ~/projets/fastq
-  cat HRTMUOC01.RL12.*.fastq | wc -l
-  expr XXXX / 4
+  ls HRTMUOC01.RL12.*.fastq
 
-  cat HRTMUOC01.RL12.0?.fastq | wc -l
-  expr XXXX / 4
+  ls HRTMUOC01.RL12.0?.fastq
 
-  cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
-  expr XXXX / 4
+  ls HRTMUOC01.RL12.0[1-9].fastq
 
 **Exercise (How many reads are there?)**:
 
@@ -210,7 +207,7 @@ four lines). And there is even a built-in calculator in bash:
 
 .. code-block:: bash
 
-  echo $(( 788640 / 4 ))
+  echo $(( XXXX / 4 ))
   expr XXXX / 4
 
 Variables/Lists
