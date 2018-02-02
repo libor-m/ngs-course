@@ -168,7 +168,7 @@ It can be readily combined with ``head`` to show the second sequence in the file
 Globbing
 ^^^^^^^^
 
-Imagine you've got 40 FASTQ files instead of 3. You don't want to copy and paste all
+Imagine you've got 40 FASTQ files. You don't want to copy and paste all
 the names! There is a feature that comes to rescue. It's called `globbing`. It allows
 you to specify more filenames at once by defining some common pattern. All your
 read files have ``.fastq`` extension. ``*.fastq`` means *a file named by any number of
@@ -176,15 +176,15 @@ characters followed by '.fastq'*.
 
 .. code-block:: bash
 
-cd ~/projets/fastq
-cat HRTMUOC01.RL12.*.fastq | wc -l
-expr XXXX / 4
+  cd ~/projets/fastq
+  cat HRTMUOC01.RL12.*.fastq | wc -l
+  expr XXXX / 4
 
-cat HRTMUOC01.RL12.0?.fastq | wc -l
-expr XXXX / 4
+  cat HRTMUOC01.RL12.0?.fastq | wc -l
+  expr XXXX / 4
 
-cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
-expr XXXX / 4
+  cat HRTMUOC01.RL12.0[1-9].fastq | wc -l
+  expr XXXX / 4
 
 **Exercise (How many reads are there?)**:
 
@@ -193,7 +193,7 @@ To find the total number of reads in our data, we will use another tool, ``wc``
 (stands for `word count`, not for a toilet at the end of the pipeline;). ``wc``
 counts words, lines and characters.
 
-Our data is in three separate files. To merge them on the fly we'll use another tool,
+Our data is in several separate files. To merge them on the fly we'll use another tool,
 ``cat`` (for conCATenate). ``cat`` takes a list of file names and outputs a continuous
 stream of the data that was in the files (there is no way to tell where one file ends
 from the stream).
