@@ -143,7 +143,7 @@ Login as user (can be done by ``su user`` in root shell):
 
   # MOTD
   sudo su
-  cat > /etc/motd <<EOF
+  cat > /etc/motd <<"EOF"
 
     _ __   __ _ ___        ___ ___  _   _ _ __ ___  ___
    | '_ \ / _` / __|_____ / __/ _ \| | | | '__/ __|/ _ \
@@ -154,7 +154,7 @@ Login as user (can be done by ``su user`` in root shell):
   exit
 
   # everyone likes git and screen
-  sudo apt-get install git screen pv curl wget jq
+  sudo apt-get install git screen pv curl wget jq locate
 
   # build tools
   sudo apt-get install build-essential pkg-config autoconf
@@ -181,8 +181,9 @@ R is best used in RStudio - server version can be used in web browser.
 
   # install latest R
   # http://cran.r-project.org/bin/linux/debian/README.html
-  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian jessie-cran3/' >> /etc/apt/sources.list"
-  sudo apt-key adv --keyserver keys.gnupg.net --recv-key 381BA480
+  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian stretch-cran34/' >> /etc/apt/sources.list"
+  sudo apt install dirmngr
+  sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
   sudo apt-get update
   sudo apt-get install r-base
 
@@ -194,8 +195,16 @@ R is best used in RStudio - server version can be used in web browser.
 
   # RStudio with prerequisities
   sudo apt-get install gdebi-core
-  wget https://download2.rstudio.org/rstudio-server-1.0.136-i386.deb
-  sudo gdebi rstudio-server-1.0.136-i386.deb
+  # https://www.rstudio.com/products/rstudio/download-server/
+  wget https://download2.rstudio.org/rstudio-server-1.1.383-i386.deb
+  # occasionally it's necessary to install older libssl
+  # see https://unix.stackexchange.com/a/394462
+  sudo gdebi rstudio-server-*.deb
+  # and fix upstart config
+  # https://support.rstudio.com/hc/en-us/community/posts/200780986-Errors-during-startup-asio-netdb-error-1-Host-not-found-authoritative-
+  # remove 2 from [2345]
+  nano /usr/lib/rstudio-server/extras/upstart/rstudio-server.conf
+  rm rstudio-server-*.deb
 
 There are packages that are not in the standard repos, or the versions in the repos is very obsolete.
 It's worth it to install such packages by hand, when there is not much dependencies.
@@ -204,14 +213,14 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # pipe viewer
   cd ~/sw
-  wget -O - http://www.ivarch.com/programs/sources/pv-1.6.0.tar.bz2 | tar xj
+  wget -O - http://www.ivarch.com/programs/sources/pv-1.6.6.tar.bz2 | tar xj
   cd pv-*
   ./configure
   make && sudo make install
 
   # parallel
   cd ~/sw
-  wget -O - http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2|tar xj
+  wget -O - http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2 | tar xj
   cd parallel-*/
   ./configure
   make && sudo make install
@@ -228,7 +237,7 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # fastqc
   cd ~/sw
-  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.5.zip
+  wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.6.zip
   unzip fastqc_*.zip
   rm fastqc_*.zip
   chmod +x FastQC/fastqc
@@ -243,31 +252,32 @@ It's worth it to install such packages by hand, when there is not much dependenc
 
   # samtools
   cd ~/sw
-  wget -O - https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 | tar xj
+  wget -O - https://github.com/samtools/samtools/releases/download/1.6/samtools-1.6.tar.bz2 | tar xj
   cd samtools*
   ./configure
   make && sudo make install
 
   # bcftools
   cd ~/sw
-  wget -O - https://github.com/samtools/bcftools/releases/download/1.3.1/bcftools-1.3.1.tar.bz2 | tar xj
+  wget -O - https://github.com/samtools/bcftools/releases/download/1.6/bcftools-1.6.tar.bz2 | tar xj
   cd bcftools*
   ./configure
   make && sudo make install
 
   # htslib (tabix)
   cd ~/sw
-  wget -O - https://github.com/samtools/htslib/releases/download/1.3.2/htslib-1.3.2.tar.bz2 | tar xj
+  wget -O - https://github.com/samtools/htslib/releases/download/1.6/htslib-1.6.tar.bz2 | tar xj
   cd htslib*
   ./configure
   make && sudo make install
 
   # bwa
   cd ~/sw
-  wget -O - https://github.com/lh3/bwa/releases/download/v0.7.15/bwa-0.7.15.tar.bz2 | tar xj
+  wget -O - https://github.com/lh3/bwa/releases/download/v0.7.17/bwa-0.7.17.tar.bz2 | tar xj
   cd bwa*
   # add -msse2 to CFLAGS
   nano Makefile
+  make
   sudo cp bwa /usr/local/bin
   # copy the man
   sudo bash -c "<bwa.1 gzip > /usr/share/man/man1/bwa.1.gz"
@@ -279,11 +289,11 @@ It's worth it to install such packages by hand, when there is not much dependenc
   # comment out the -m64 line, we're on x86
   nano Makefile
   make
-  sudo cp velveth velvetg /usr/bin/local
+  sudo cp velveth velvetg /usr/local/bin
 
   # bedtools
   cd ~/sw
-  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz | tar xz
+  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz | tar xz
   cd bedtools2/
   make && sudo make install
 
@@ -323,23 +333,32 @@ Use data from my nightingale project, subset the data for two selected chromosom
   # subset the vcf file with grep
   # [the command got lost;]
 
-Prepare the ``/data`` folder.
+Prepare the ``/data-shared`` folder.
 
 .. code-block:: bash
 
-  sudo mkdir /data
+  sudo mkdir /data-shared
+  sudo chown user:user /data-shared
 
-Transfer the files to the VirtualBox image, /data directory using WinSCP.
-
-Do the quality checks:
+Transfer the files to the VirtualBox image, ``/data-shared`` directory using WinSCP.
 
 .. code-block:: bash
 
-  cd /data/slavici
-  ~/sw/FastQC/fastqc -o 04-read-qc --noextract 00-reads/*
+  # change permissons back to 'read only' for user
+  sudo chown -R root:root /data-shared
+
+Cleanup
+^^^^^^^
+
+.. code-block:: bash
 
   # update the file database
   sudo updatedb
+
+  # remove history not to confuse users
+  history -cw
+  sudo su
+  history -cw
 
 Packing the image
 ^^^^^^^^^^^^^^^^^
