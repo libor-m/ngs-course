@@ -123,14 +123,13 @@ We could do a length histogram easily now... But let's filter on the length:
 Functions in the Shell
 ----------------------
 
-This create a command called ``uniqt`` that will behave as ``uniq -c``, but
+This creates a command called ``uniqt`` that will behave as ``uniq -c``, but
 there will be no padding (spaces) in front of the numbers, and numbers will be
-separated by <tab>, so e. g. ``cut`` will work.
+separated by <tab>, so you can use it with ``cut`` will work.
 
 .. code-block:: bash
 
   uniqt() { uniq -c | sed -r 's/^ *([0-9]+) /\1\t/' ;}
-
 
 Now test it::
 
@@ -160,15 +159,6 @@ single quotes, but we still need to get through shell's ``$1`` somehow...
 Awk's ``-v`` argument helps in this case - use it like ``awk -v min_len=$1
 '(length($2) > min_len)'``.
 
-Shell Scripts
--------------
-Another way to organize your code is to put it into a separate file
-called a 'script file'. It begins with a ``shebang`` line, telling the computer
-which language is the script in. Bash shebang is ``#! /bin/bash``.
-Take care to give a descriptive name to your script::
-
-    nano fastq-filter-length.sh
-
 .. note::
 
    Let's pop-open the matryoshka. What is terminal, what is a shell, what is
@@ -180,13 +170,22 @@ Take care to give a descriptive name to your script::
    ``Konsole``, ``Terminal App``... The next doll inside is ``ssh``. It takes
    care of encrypted communication with the remote server. An interesting
    alternative for geeks is ``mosh`` (google it yourself;). Now you need a
-   program to talk to on the remote side - that is the **shell**. We're in
-   ``bash``, sometimes you can meet the simpler cousin ``sh``, and the kool
+   program to talk to on the remote side - that is the **shell**. We're using
+   ``bash`` now, sometimes you can meet the simpler cousin ``sh``, and the kool
    kids are doing ``zsh``. To recap, Bash is to shell what Firefox is to
    browser.
 
-Then collect your code from before (contents of your function, not the whole
-function) and paste it below the shebang.
+Shell Scripts
+-------------
+Another way to organize your code is to put it into a separate file
+called a 'script file'. It begins with a ``shebang`` line, telling the computer
+which language is the script in. Bash shebang is ``#! /bin/bash``.
+Take care to give a descriptive name to your script::
+
+    nano fastq-filter-length.sh
+
+Copy and paste the following code block into the nano editor, save it with ``ctrl+o``
+and switch to another bash window in screen. 
 
 .. topic:: Hands on!
 
@@ -216,7 +215,11 @@ We need to mark the file as executable and test it:
     # and run it (the ./ is important!)
     ./fastq-filter-length.sh
 
-    # when the final code is there, you need to give it input and output:
+Now collect your code from above (contents of your function, not the whole
+function) and paste it below the shebang. Don't forget to remove the debug ``echo``
+parts - otherwise your script will spoil it's output with some useless chatter.
+
+    # when the final code is there, you need to give it input (and maybe save the output):
     <data/HRTMUOC01.RL12.01.fastq ./fastq-filter-length.sh 90 > data/filtered.fastq
 
 Multi-file, multi-core processing
@@ -254,6 +257,14 @@ someone, or when you're sure that your task is IO bound. Otherwise
   There are some rules of thumb, which can help - but if you want to squeeze
   out the maximum performance from your machine, it's still a lot of
   '*try - monitor performance - try again*' cycles.
+
+  To get good performance it is important to know what happens during data procsesing: 
+  First the data is loaded from hard drive to memory, then from memory to the CPU,
+  the CPU does the calculation, then the results have to get to the memory and saved 
+  to the hard drive again. Different workloads take different amounts of time in each step.
+
+  .. image:: _static/data-processing.png
+     :align: center
 
   In general, you need a work unit which takes much longer to calculate than
   it takes to load the data from the hard drive (compare times of ``pv data >
