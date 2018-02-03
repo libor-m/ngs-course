@@ -131,13 +131,13 @@ Uncompressing files
 
 .. code-block:: bash
 
-  # Compressed tarball archives
+  # Compressed tarball archives (does not remove the archive)
   tar -xzvf fastq.tar.gz
 
-  # gzipped files
+  # gzipped files (take care, this removes the input file)
   gunzip file.txt.gz
 
-  # Open gzipped files in pipeline
+  # Open gzipped files in pipeline (zcat does not remove the file)
   zcat file.txt.gz | less
 
 Viewing plain text file content
@@ -239,8 +239,8 @@ Loops
 
   for I in $LST
   do
-    echo $I;
-    head -1 $I | wc -c;
+    echo $I
+    head -1 $I | wc -c
   done
 
 Installing software
