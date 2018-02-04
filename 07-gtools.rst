@@ -22,36 +22,11 @@ Please run the following code to download and install the older version:
 - http://bedtools.readthedocs.io/
 - https://bedops.readthedocs.io/
 
-1. Merge the overlapping open chromatin regions in ``encode.bed`` file
+1. Count the number of merged open chromatin regions overlapping with genes
 
-In this first exercise we will work with open chromatin regions
+In the first exercise we will work with open chromatin regions
 based on DNaseI hypersensitive sites in file ``encode.bed`` obtained
-from ENCODE database. As this database contains open chromatin regions
-from multiple experiments, the open chromatin regions may overlap.
-In our analysis we want to merge these regions so that the same/similar
-regions is present only once. You can use ``bedtools merge`` tool:
-
-.. code-block:: bash
-
-	# Explore the encode.bed file
-	less /data-shared/bed_examples/encode.bed
-
-	# Count the number of regions before merging
-	wc -l /data-shared/bed_examples/encode.bed
-
-	# The data has to be sorted before merging
-	mkdir projects/bed_examples
-	cd projects/bed_examples
-
-	sortBed -i /data-shared/bed_examples/encode.bed |
-	bedtools merge -i stdin > encode-merged.bed
-
-	# Count the number of regions after merging
-	wc -l encode-merged.bed
-
-2. Count the number of merged open chromatin regions overlapping with genes
-
-In the second exercise we would like to parse and count those open
+from ENCODE database. We would like to parse and count those open
 chromatin regions which overlap with known genes retrieved from Ensembl
 database.
 
@@ -60,13 +35,16 @@ database.
 	# Explore the Ensembl.NCBIM37.67.bed file
 	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
+	# Explore the encode.bed file
+	less /data-shared/bed_examples/encode.bed
+
 	# Count the number of open chromatin regions overlapping with genes:
 	bedtools intersect \
 	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-3. Count the number of merged open chromatin regions that are within 1000 bp window on each side of a gene
+2. Count the number of merged open chromatin regions that are within 1000 bp window on each side of a gene
 
 Here, we are supposed to count then number of open chromatin regions that overlap with genes or are within 1000 bp window on each side of a gene.
 
@@ -79,7 +57,7 @@ Here, we are supposed to count then number of open chromatin regions that overla
 	wc -l
 
 
-4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
+3. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
 with the step size 0.2 by the size of the window and obtain gene density
 within these sliding windows. To speed up the process we focus only on chromosome X.
 
