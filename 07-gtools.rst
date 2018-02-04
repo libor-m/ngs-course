@@ -53,15 +53,24 @@ regions is present only once. You can use ``bedtools merge`` tool:
 
 In the second exercise we would like to parse and count those open
 chromatin regions which overlap with known genes retrieved from Ensembl
-database or are within 1000 bp on each side of a gene.
+database.
 
 .. code-block:: bash
 
 	# Explore the Ensembl.NCBIM37.67.bed file
 	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
-	# Count the number of open chromatin regions overlapping with genes
-	# or are within 1000 bp window on each side of a gene:
+	# Count the number of open chromatin regions overlapping with genes:
+	bedtools intersect \
+	-a <( sortBed -i encode-merged.bed ) \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
+	wc -l
+
+3. Count the number of merged open chromatin regions that are within 1000 bp window on each side of a gene
+
+Here, we are supposed to count then number of open chromatin regions that overlap with genes or are within 1000 bp window on each side of a gene.
+
+.. code-block:: bash
 
 	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
@@ -69,25 +78,6 @@ database or are within 1000 bp on each side of a gene.
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-	# Count the number of open chromatin regions overlapping with genes
-	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
-	wc -l
-
-3. Count the number of genes overlapping the set of merged open chromatin regions
-
-Here, we are supposed to do right the opposite, i.e. count the number of genes
-containing open chromatin region from the ENCODE dataset.
-
-.. code-block:: bash
-
-	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) -wb |
-	cut -f 7 |
-	sort -u |
-	wc -l
 
 4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
 with the step size 0.2 by the size of the window and obtain gene density
