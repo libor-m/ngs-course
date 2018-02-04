@@ -9,74 +9,35 @@ Genome feature arithmetics & summary
 - http://bedtools.readthedocs.io/
 - https://bedops.readthedocs.io/
 
-1. Merge the overlapping open chromatin regions in ``encode.bed`` file
+1. Count the number of merged open chromatin regions overlapping with genes or are within 1000 bp window on each side of a gene
 
-In this first exercise we will work with open chromatin regions
+In the first exercise we will work with open chromatin regions
 based on DNaseI hypersensitive sites in file ``encode.bed`` obtained
-from ENCODE database. As this database contains open chromatin regions
-from multiple experiments, the open chromatin regions may overlap.
-In our analysis we want to merge these regions so that the same/similar
-regions is present only once. You can use ``bedtools merge`` tool:
-
-.. code-block:: bash
-
-	# Explore the encode.bed file
-	less /data-shared/bed_examples/encode.bed
-
-	# Count the number of regions before merging
-	wc -l /data-shared/bed_examples/encode.bed
-
-	# The data has to be sorted before merging
-	mkdir projects/bed_examples
-	cd projects/bed_examples
-
-	sortBed -i /data-shared/bed_examples/encode.bed |
-	bedtools merge -i stdin > encode-merged.bed
-
-	# Count the number of regions after merging
-	wc -l encode-merged.bed
-
-2. Count the number of merged open chromatin regions overlapping with genes
-
-In the second exercise we would like to parse and count those open
+from ENCODE database. We would like to parse and count those open
 chromatin regions which overlap with known genes retrieved from Ensembl
-database or are within 1000 bp on each side of a gene.
+database.
 
 .. code-block:: bash
 
 	# Explore the Ensembl.NCBIM37.67.bed file
 	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
-	# Count the number of open chromatin regions overlapping with genes
-	# or are within 1000 bp window on each side of a gene:
+	# Explore the encode.bed file
+	less /data-shared/bed_examples/encode.bed
+
+	# Count the number of open chromatin regions overlapping with genes:
+	bedtools intersect \
+	-a <( sortBed -i encode.bed ) \
+	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
+	wc -l
 
 	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
-	-a <( sortBed -i encode-merged.bed ) \
+	-a <( sortBed -i encode.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-	# Count the number of open chromatin regions overlapping with genes
-	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
-	wc -l
-
-3. Count the number of genes overlapping the set of merged open chromatin regions
-
-Here, we are supposed to do right the opposite, i.e. count the number of genes
-containing open chromatin region from the ENCODE dataset.
-
-.. code-block:: bash
-
-	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) -wb |
-	cut -f 7 |
-	sort -u |
-	wc -l
-
-4. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
+2. Make two sets of sliding windows across mouse genome (1 Mb, 5 Mb)
 with the step size 0.2 by the size of the window and obtain gene density
 within these sliding windows. To speed up the process we focus only on chromosome X.
 
@@ -93,14 +54,6 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-i winnum \
 	> windows_1mb.bed
 
-	# Make 2.5Mb sliding windows (step 500kb)
-	bedtools makewindows \
-	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
-	-w 2500000 \
-	-s 500000 \
-	-i winnum \
-	> windows_2-5mb.bed
-
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
 	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
@@ -114,11 +67,6 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-a windows_1mb.bed \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
 	> gdens_windows_1mb.tab
-
-	bedtools coverage \
-	-a windows_2-5mb.bed \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
 	-a windows_5mb.bed \
@@ -359,14 +307,14 @@ Calculate average Fst within the sliding windows:
 	bedtools intersect \
 	  -a <( sortBed -i windows.bed ) \
 	  -b <( sortBed -i popdata_mda_euro_fst.bed ) -wa -wb \
-	> windows_fst.tab
+	> windows_fst.tsv
 
 	# Run bedtools groupby command to obtain average values of Fst
-	sort -k4,4 -k1,1 -k2,2n windows_fst.tab |
-	~/sw2/bedtools2/bin/groupBy -i - \
+	sort -k4,4 -k1,1 -k2,2n windows_fst.tsv |
+	groupBy -i - \
 	-g 4,1,2,3 \
 	-c 9 \
-	-o mean > windows_mean_fst.tab
+	-o mean > windows_mean_fst.tsv
 
 Visualize the average Fst values within the sliding windows of the three sizes
 between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
@@ -382,7 +330,8 @@ also plot the average Fst values along the chromosomes.
 		setwd("~/projects/fst")
 
 		## Read Fst file and rename names in header
-		fst <- read.delim("windows_mean_fst.tab", header=F)
+		read_tsv('windows_mean_fst.tsv', col_names=F) -> fst
+
 		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
 		# Reorder levels for window size
@@ -431,7 +380,7 @@ than or equal to 99% of the data.
 
 	## Use of variables in AWK: -v q=value
 
-	grep 500kb windows_mean_fst.tab |
+	grep 500kb windows_mean_fst.tsv |
 	  awk -v q=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=q{print $2,$3,$4}' |
 	  sortBed |
 	  bedtools merge -i stdin \
@@ -442,16 +391,9 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	## Download mouse annotation file:
-	wget ftp://ftp.ensembl.org/pub/release-67/gtf/mus_musculus/Mus_musculus.NCBIM37.67.gtf.gz
-	gunzip Mus_musculus.NCBIM37.67.gtf.gz
-
 	bedtools intersect \
-	    -a signif_500kb.bed \
-	    -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
-	  grep protein_coding |
-	  cut -f 1-3,12 |
-	  cut -d ' ' -f 1,3,9 |
-	  tr -d '";' |
-	  sort -u \
-	> candidate_genes.tab
+		-a signif_500kb.bed \
+		-b /data-shared/bed_examples/Ensembl.NCBIM37.67.bed -wa -wb | \
+		cut -f4-7 | \
+		tr ";" "\t" | \
+		column -t | less
