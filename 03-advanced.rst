@@ -219,6 +219,8 @@ Now collect your code from above (contents of your function, not the whole
 function) and paste it below the shebang. Don't forget to remove the debug ``echo``
 parts - otherwise your script will spoil it's output with some useless chatter.
 
+.. code-block:: bash
+
     # when the final code is there, you need to give it input (and maybe save the output):
     <data/HRTMUOC01.RL12.01.fastq ./fastq-filter-length.sh 90 > data/filtered.fastq
 
