@@ -9,7 +9,10 @@ tech documents (Your mileage may vary).
     
     mkdir -p ~/projects/qual-exercise/data
     cd ~/projects/qual-exercise
-    </data-shared/vcf_examples/luscinia_vars.vcf.gz zcat | grep -v '^#' > data/no-headers.vcf
+    </data-shared/vcf_examples/luscinia_vars.vcf.gz zcat | 
+      grep -v '^#' |
+      grep -e 'chr1\s' -e 'chrZ\s' \
+    > data/no-headers.vcf
     
     IN=data/no-headers.vcf
     <$IN cut -f 1-6 > data/cols1-6.tsv
