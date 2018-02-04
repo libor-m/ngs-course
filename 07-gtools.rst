@@ -346,7 +346,7 @@ also plot the average Fst values along the chromosomes.
 		setwd("~/projects/fst")
 
 		## Read Fst file and rename names in header
-		read_tsv('windows_mean_fst.tsv') -> fst
+		read_tsv('windows_mean_fst.tsv', col_names=F) -> fst
 
 		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
@@ -396,7 +396,7 @@ than or equal to 99% of the data.
 
 	## Use of variables in AWK: -v q=value
 
-	grep 500kb windows_mean_fst.tab |
+	grep 500kb windows_mean_fst.tsv |
 	  awk -v q=0.9166656 -F $'\t' 'BEGIN{OFS=FS}$5>=q{print $2,$3,$4}' |
 	  sortBed |
 	  bedtools merge -i stdin \
@@ -407,16 +407,9 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
-	## Download mouse annotation file:
-	wget ftp://ftp.ensembl.org/pub/release-67/gtf/mus_musculus/Mus_musculus.NCBIM37.67.gtf.gz
-	gunzip Mus_musculus.NCBIM37.67.gtf.gz
-
 	bedtools intersect \
-	    -a signif_500kb.bed \
-	    -b Mus_musculus.NCBIM37.67.gtf -wa -wb |
-	  grep protein_coding |
-	  cut -f 1-3,12 |
-	  cut -d ' ' -f 1,3,9 |
-	  tr -d '";' |
-	  sort -u \
-	> candidate_genes.tab
+		-a signif_500kb.bed \
+		-b /data-shared/bed_examples/Ensembl.NCBIM37.67.bed -wa -wb | \
+		cut -f4-7 | \
+		tr ";" "\t" | \
+		column -t | less
