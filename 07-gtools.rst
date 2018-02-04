@@ -40,13 +40,13 @@ database.
 
 	# Count the number of open chromatin regions overlapping with genes:
 	bedtools intersect \
-	-a <( sortBed -i encode-merged.bed ) \
+	-a <( sortBed -i encode.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
 	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
-	-a <( sortBed -i encode-merged.bed ) \
+	-a <( sortBed -i encode.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
