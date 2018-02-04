@@ -22,7 +22,7 @@ And a bit of guidance here:
 
 - create a new project directory in your ``projects``
 - get rid of the comments (they start with ``#``, that is ``^#`` regular expression)
-- filter lines based on chromosomes (``grep -e chr1 -e chrZ``)
+- filter lines based on chromosomes (``grep -e 'chr1\s' -e 'chrZ\s'``)
 - extact the first 6 columns (``cut -f1-6``)
 - extract ``DP`` column (``egrep -o 'DP=[^;]*' | sed 's/DP=//'``)
 - check each line for ``INDEL`` (``awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}'``)
