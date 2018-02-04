@@ -22,7 +22,7 @@ Please run the following code to download and install the older version:
 - http://bedtools.readthedocs.io/
 - https://bedops.readthedocs.io/
 
-1. Count the number of merged open chromatin regions overlapping with genes
+1. Count the number of merged open chromatin regions overlapping with genes or are within 1000 bp window on each side of a gene
 
 In the first exercise we will work with open chromatin regions
 based on DNaseI hypersensitive sites in file ``encode.bed`` obtained
@@ -44,20 +44,13 @@ database.
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-2. Count the number of merged open chromatin regions that are within 1000 bp window on each side of a gene
-
-Here, we are supposed to count then number of open chromatin regions that overlap with genes or are within 1000 bp window on each side of a gene.
-
-.. code-block:: bash
-
 	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
 	-a <( sortBed -i encode-merged.bed ) \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
 	wc -l
 
-
-3. Make three sets of sliding windows across mouse genome (1 Mb, 2.5 Mb, 5 Mb)
+2. Make two sets of sliding windows across mouse genome (1 Mb, 5 Mb)
 with the step size 0.2 by the size of the window and obtain gene density
 within these sliding windows. To speed up the process we focus only on chromosome X.
 
@@ -74,14 +67,6 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-i winnum \
 	> windows_1mb.bed
 
-	# Make 2.5Mb sliding windows (step 500kb)
-	bedtools makewindows \
-	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
-	-w 2500000 \
-	-s 500000 \
-	-i winnum \
-	> windows_2-5mb.bed
-
 	# Make 5Mb sliding windows (step 1Mb)
 	bedtools makewindows \
 	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
@@ -95,11 +80,6 @@ within these sliding windows. To speed up the process we focus only on chromosom
 	-a windows_1mb.bed \
 	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
 	> gdens_windows_1mb.tab
-
-	bedtools coverage \
-	-a windows_2-5mb.bed \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) \
-	> gdens_windows_2-5mb.tab
 
 	bedtools coverage \
 	-a windows_5mb.bed \
