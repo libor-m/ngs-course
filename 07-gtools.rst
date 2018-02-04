@@ -327,7 +327,7 @@ Calculate average Fst within the sliding windows:
 	# is not working properly, we compiled older version (2.25)
 	# in sw2 dir and will use it now to run 'groupBy')
 	sort -k4,4 -k1,1 -k2,2n windows_fst.tsv |
-	~/sw2/bedtools2/bin/groupBy -i - \
+	groupBy -i - \
 	-g 4,1,2,3 \
 	-c 9 \
 	-o mean > windows_mean_fst.tsv
@@ -346,7 +346,7 @@ also plot the average Fst values along the chromosomes.
 		setwd("~/projects/fst")
 
 		## Read Fst file and rename names in header
-		read_tsv('windows_mean_fst.tab') -> fst
+		read_tsv('windows_mean_fst.tsv') -> fst
 
 		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
 
