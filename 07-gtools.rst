@@ -4,19 +4,6 @@ Genomic tools session
 Genome feature arithmetics & summary
 ------------------------------------
 
-There is an issue with the most up-to-date version of bedtools.
-Please run the following code to download and install the older version:
-
-.. code-block:: bash
-
-	cd
-	mkdir sw2
-	cd sw2
-	wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
-	tar -zxvf bedtools-2.25.0.tar.gz
-	cd bedtools2
-	make
-
 **Explore bedtools & bedops functionality**
 
 - http://bedtools.readthedocs.io/
@@ -375,9 +362,6 @@ Calculate average Fst within the sliding windows:
 	> windows_fst.tab
 
 	# Run bedtools groupby command to obtain average values of Fst
-	# (in the globally installed version (2.26) is a bug and groupBy
-	# is not working properly, we compiled older version (2.25)
-	# in sw2 dir and will use it now to run 'groupBy')
 	sort -k4,4 -k1,1 -k2,2n windows_fst.tab |
 	~/sw2/bedtools2/bin/groupBy -i - \
 	-g 4,1,2,3 \
