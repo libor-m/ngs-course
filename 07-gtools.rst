@@ -378,8 +378,8 @@ than or equal to 99% of the data.
 
 .. code-block:: bash
 
-	## Calculate the 95 % quantile for average Fst for 500 kb windows
-	Q=$( grep '500kb' windows_mean_fst.tsv | tabtk num -c5 -q0.95 )
+	## Calculate the 99 % quantile for average Fst for 500 kb windows
+	Q=$( grep '500kb' windows_mean_fst.tsv | tabtk num -c5 -q0.99 )
 
 	## Use of variables in AWK: -v q=value
 
