@@ -73,6 +73,9 @@ Log in to `Read the Docs`, go to `Admin > Versions
 <https://readthedocs.org/dashboard/ngs-course/versions/>`_,
 make the new version 'Active', set as the default version.
 
+Check if webhooks are set up both in `ReadTheDocs > Project > Admin > Integratinos
+and in `GitHub > Settings > Webhooks`.
+
 VirtualBox image
 ----------------
 Create new VirtualBox machine
