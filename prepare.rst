@@ -73,6 +73,13 @@ Log in to `Read the Docs`, go to `Admin > Versions
 <https://readthedocs.org/dashboard/ngs-course/versions/>`_,
 make the new version 'Active', set as the default version.
 
+If the version (branch) is not visible yet, do a force build of some previous
+version to get a fresh checkout.
+
+Slack
+^^^^^
+Add a new channel every year. Add the channel to defaults in slack Admin.
+
 VirtualBox image
 ----------------
 Create new VirtualBox machine
