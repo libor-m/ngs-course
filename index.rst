@@ -38,7 +38,7 @@ learning.
 +--------------+--------------------------------------------+
 | Afternoon II | Graphic Session                            |
 +--------------+--------------------------------------------+
-| **Sunday February 3th (9:30-18:30)**                      |
+| **Sunday February 3rd (9:30-18:30)**                      |
 +--------------+--------------------------------------------+
 | Morning      | - Read Quality                             |
 |              | - Assembly                                 |
@@ -60,7 +60,7 @@ Initial instructions:
    install
    connect
 
-Course contents:
+Course outline:
 
 `Slack <https://ngs-course.slack.com>`_ chat room.
 
