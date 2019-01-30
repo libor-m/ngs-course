@@ -76,6 +76,9 @@ make the new version 'Active', set as the default version.
 If the version (branch) is not visible yet, do a force build of some previous
 version to get a fresh checkout.
 
+Check if webhooks are set up both in `ReadTheDocs > Project > Admin > Integratinos`
+and in `GitHub > Settings > Webhooks`.
+
 Slack
 ^^^^^
 Add a new channel every year. Add the channel to defaults in slack Admin.
