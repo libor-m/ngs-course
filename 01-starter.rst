@@ -12,15 +12,15 @@ Basic orientation
    Copying and pasting in the Windows terminal (Git for Windows) is different
    than in other programs - especially because ``ctrl+c`` means to kill the current
    program. To **copy text to clipboard** just select it with your left mouse button.
-   To **paste from clipboard** either click right mouse button, or press ``shift+insert``.
+   To **paste from clipboard** either click midlle mouse button, or press ``shift+insert``.
 
 Check your keyboard
 ^^^^^^^^^^^^^^^^^^^
 
-Before we do any serious typing, make sure you know where are the important keys.
-I'd suggest using English keyboard, if you don't want to constantly press right alt
-and five random letters before you find the one you need.
-You will definitely need those keys::
+Before we do any serious typing, make sure you know where are the important
+keys. I'd suggest using English keyboard, if you don't want to constantly press
+right alt and five random letters before you find the one you need. You will
+definitely need those keys::
 
   [] - square brackets
   {} - curly brackets (mustache)
@@ -69,19 +69,22 @@ To attach again type::
 Directory structure
 ^^^^^^^^^^^^^^^^^^^
 
-Unlike 'drives' in MS Windows, UNIX has a single directory tree
-that starts in ``/`` (called root directory). Everything can be reached from the root directory.
-The next important directory is ``~`` (called user's home directory). It is
-a shortcut for ``/home/user`` here, ``/home/..your login name..`` in general.
+Unlike 'drives' in MS Windows, UNIX has a single directory tree that starts in
+``/`` (called root directory). Everything can be reached from the root
+directory. The next important directory is ``~`` (called user's home directory).
+It is a shortcut for ``/home/user`` here, ``/home/..your login name..`` in
+general.
 
 .. image:: _static/paths.png
 
-Your bash session has a `working directory` that can be changed with ``cd`` (change directory)
-and printed with ``pwd`` (print working directory). All filenames and paths you
-type refer to your working directory (relative paths), unless you start them with ``/`` (absolute paths).
+Your bash session has a `working directory` that can be changed with ``cd``
+(change directory) and printed with ``pwd`` (print working directory). All
+filenames and paths you type refer to your working directory (relative paths),
+unless you start them with ``/`` (absolute paths).
 
-Try the following commands in the order they are provided, and figure out what they do.
-Then use your knowledge to explore the directory structure of the virtual machine.
+Try the following commands in the order they are provided, and figure out what
+they do. Then use your knowledge to explore the directory structure of the
+virtual machine.
 
 Figure out what these commands do:
 
@@ -154,11 +157,11 @@ Viewing plain text file content
 Pipes
 ^^^^^
 
-Using the ``|`` (pipe) character you instruct the shell to take the output of the first command
-and use it as an input for the second command.
+Using the ``|`` (pipe) character you instruct the shell to take the output of
+the first command and use it as an input for the second command.
 
-The complement to ``head`` is ``tail``. It displays last lines of the input.
-It can be readily combined with ``head`` to show the second sequence in the file.
+The complement to ``head`` is ``tail``. It displays last lines of the input. It
+can be readily combined with ``head`` to show the second sequence in the file.
 
 .. code-block:: bash
 
@@ -168,11 +171,11 @@ It can be readily combined with ``head`` to show the second sequence in the file
 Globbing
 ^^^^^^^^
 
-Imagine you've got 40 FASTQ files. You don't want to copy and paste all
-the names! There is a feature that comes to rescue. It's called `globbing`. It allows
-you to specify more filenames at once by defining some common pattern. All your
-read files have ``.fastq`` extension. ``*.fastq`` means *a file named by any number of
-characters followed by '.fastq'*.
+Imagine you've got 40 FASTQ files. You don't want to copy and paste all the
+names! There is a feature that comes to rescue. It's called `globbing`. It
+allows you to specify more filenames at once by defining some common pattern.
+All your read files have ``.fastq`` extension. ``*.fastq`` means *a file named
+by any number of characters followed by '.fastq'*.
 
 .. code-block:: bash
 
@@ -190,10 +193,10 @@ To find the total number of reads in our data, we will use another tool, ``wc``
 (stands for `word count`, not for a toilet at the end of the pipeline;). ``wc``
 counts words, lines and characters.
 
-Our data is in several separate files. To merge them on the fly we'll use another tool,
-``cat`` (for conCATenate). ``cat`` takes a list of file names and outputs a continuous
-stream of the data that was in the files (there is no way to tell where one file ends
-from the stream).
+Our data is in several separate files. To merge them on the fly we'll use
+another tool, ``cat`` (for conCATenate). ``cat`` takes a list of file names and
+outputs a continuous stream of the data that was in the files (there is no way
+to tell where one file ends from the stream).
 
 # now double click on each file name in the listing,
 # and click right mouse button to paste (insert space in between)
@@ -202,8 +205,8 @@ from the stream).
 
   cat *.fastq | wc -l
 
-The number that appeared is four times the number of sequences (each sequence takes
-four lines). And there is even a built-in calculator in bash:
+The number that appeared is four times the number of sequences (each sequence
+takes four lines). And there is even a built-in calculator in bash:
 
 .. code-block:: bash
 
@@ -246,9 +249,10 @@ Loops
 Installing software
 -------------------
 
-The easiest way to install software is via a package manager (eg. ``apt-get`` for all Debian
-variants). When the required software is not in the repositories, or one needs the latest
-version, it's necessary to take the more difficult path. The canonical UNIX way is::
+The easiest way to install software is via a package manager (eg. ``apt-get``
+for all Debian variants). When the required software is not in the repositories,
+or one needs the latest version, it's necessary to take the more difficult path.
+The canonical UNIX way is::
 
   wget -O - ..url.. | tar xvz   # download and unpack the 'tarball' from internet
   cd ..unpacked directory..     # set working directory to the project directory
