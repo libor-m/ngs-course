@@ -1,6 +1,23 @@
 Genomic tools session
 =====================
 
+A lot of command line tools available for genomics, e.g.:
+
+**Read alignment data:**
+* samtools (https://samtools.github.io)
+
+**Variant data:**
+* vcftools (https://vcftools.github.io/index.html)
+* bcftools (https://samtools.github.io/bcftools/)
+
+**Annotation data (genome arithmetics):**
+* bedtools (https://bedtools.readthedocs.io/en/latest/)
+* bedops (https://github.com/bedops/bedops)
+
+**Sequence/Alignment/Tree data:**
+* newick-utilities (https://github.com/tjunier/newick_utils/wiki)
+* BuddySuite (https://github.com/biologyguy/BuddySuite)
+
 Genome feature arithmetics & summary
 ------------------------------------
 
@@ -19,22 +36,24 @@ database.
 
 .. code-block:: bash
 
-	# Explore the Ensembl.NCBIM37.67.bed file
-	less /data-shared/bed_examples/Ensembl.NCBIM37.67.bed
-
-	# Explore the encode.bed file
-	less /data-shared/bed_examples/encode.bed
+	# Input files:
+    
+    # Gene data
+	GENES=/data-shared/bed_examples/Ensembl.NCBIM37.67.bed
+    
+    # Encode data
+	ENCODE=/data-shared/bed_examples/encode.bed
 
 	# Count the number of open chromatin regions overlapping with genes:
 	bedtools intersect \
-	-a <( sortBed -i encode.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
+	-a <( sortBed -i $ENCODE ) \
+	-b <( sortBed -i $GENES ) |
 	wc -l
 
 	## Count the number of open chromatin regions overlapping with genes and within 1000 bp window on each side
 	bedtools window -w 1000 \
-	-a <( sortBed -i encode.bed ) \
-	-b <( sortBed -i /data-shared/bed_examples/Ensembl.NCBIM37.67.bed ) |
+	-a <( sortBed -i $ENCODE ) \
+	-b <( sortBed -i $GENES ) |
 	wc -l
 
 2. Make two sets of sliding windows across mouse genome (1 Mb, 5 Mb)
@@ -43,25 +62,34 @@ within these sliding windows. To speed up the process we focus only on chromosom
 
 .. code-block:: bash
 
-	# Explore fasta index file
-	less /data-shared/bed_examples/genome.fa.fai
+	# Genome file
+	GENOME=/data-shared/bed_examples/genome.fa.fai
+    GENES=/data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
-	# Make 1Mb sliding windows (step 200kb)
-	bedtools makewindows \
-	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
-	-w 1000000 \
-	-s 200000 \
-	-i winnum \
-	> windows_1mb.bed
-
-	# Make 5Mb sliding windows (step 1Mb)
-	bedtools makewindows \
-	-g <( grep '^X' /data-shared/bed_examples/genome.fa.fai ) \
-	-w 5000000 \
-	-s 1000000 \
-	-i winnum \
-	> windows_5mb.bed
-
+	# Prepare function to make windows
+    
+    make_windows() {
+        
+        bedtools makewindows \
+	       -g $1 \
+	       -w $2 \
+	       -s $3 \
+	       -i winnum | \
+        bedtools coverage \
+            -a - \
+            -b $4
+    }
+    
+    WIN=1000000
+    STEP=200000
+    
+    cal_coverage $GENOME $WIN $STEP $GENES > windows_1mb.bed
+    
+    WIN=5000000
+    STEP=1000000
+    
+    cal_coverage $GENOME $WIN $STEP $GENES > windows_5mb.bed
+    
 	# Obtain densities of genes within individual windows
 	bedtools coverage \
 	-a windows_1mb.bed \
