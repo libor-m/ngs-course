@@ -30,9 +30,9 @@ genes within highly differentiated regions:
         
         a) create sliding windows of three sizes (``bedtools makewindows``)
 
-		  * 100 kb + 10 kb step
-		  * 500 kb + 50 kb step
-		  * 1 Mb + 100 kb step
+		  - 100 kb + 10 kb step
+		  - 500 kb + 50 kb step
+		  - 1 Mb + 100 kb step
 
         b) calculate Fst for each SNP
         c) calculate average for each window
