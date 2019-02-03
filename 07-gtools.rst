@@ -52,13 +52,13 @@ and filtered out variants with missing genomes and low minor allele frequency).
     SAMPLES=/data-shared/mus_mda/00-popdata/euro_samps.txt
 
 	vcftools --gzvcf $IN \
-	--keep $SAMPLES \
-	--recode --stdout |
-	vcftools --vcf - \
-	--max-missing 1 \
-	--maf 0.2 \
-	--recode \
-	--stdout \
+	   --keep $SAMPLES \
+	   --recode --stdout |
+    vcftools --vcf - \
+	   --max-missing 1 \
+	   --maf 0.2 \
+	   --recode \
+	   --stdout \
 	> popdata_mda_euro.vcf
 
 Calculate Fst values for variants between *M. m. musculus*
@@ -72,9 +72,9 @@ and *M. m. domesticus* populations (populations specified in
     IN=popdata_mda_euro.vcf 
 
 	vcftools --vcf $IN \
-	--weir-fst-pop $MUS \
-	--weir-fst-pop $DOM \
-	--stdout |
+	   --weir-fst-pop $MUS \
+	   --weir-fst-pop $DOM \
+	   --stdout |
 	tail -n +2 |
 	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
 	> popdata_mda_euro_fst.bed
@@ -90,7 +90,7 @@ and concatenate them into a single file:
 	       -g $1 \
 	       -w $2 \
 	       -s $3 |
-        awk -v win=$2 -F $'\t' 'BEGIN{OFS=FS}{ print $0,win }' |
+        awk -v win=$5 -F $'\t' 'BEGIN{OFS=FS}{ print $0,win }' |
         bedtools intersect \
 	       -a - \
 	       -b $4 \
@@ -115,22 +115,25 @@ and concatenate them into a single file:
     
     WIN=1000000
     STEP=100000
+    NAME="1Mb"
     
-    average_fst $GENOME $WIN $STEP $IN > fst_1000kb.bed
+    average_fst $GENOME $WIN $STEP $IN $NAME > fst_1000kb.bed
     
     # 500 kb sliding windows with 50 kb step
     
     WIN=500000
     STEP=50000
+    NAME="500kb"
     
-    average_fst $GENOME $WIN $STEP $IN > fst_500kb.bed
+    average_fst $GENOME $WIN $STEP $IN $NAME > fst_500kb.bed
     
     # 100 kb sliding windows with 10 kb step
     
     WIN=100000
     STEP=10000
+    NAME="100kb"
 
-    average_fst $GENOME $WIN $STEP $IN > fst_100kb.bed
+    average_fst $GENOME $WIN $STEP $IN $NAME > fst_100kb.bed
     
     cat fst*.bed > windows_mean_fst.tsv
 
@@ -154,7 +157,7 @@ also plot the average Fst values along the chromosomes.
 
 		# Reorder levels for window size
 		fst %>%
-		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1000kb"))) ->
+		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1Mb"))) ->
 		  fst
 
 		# Plot density distribution for average Fst values across windows
@@ -212,9 +215,11 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
 
 .. code-block:: bash
 
+    GENES=/data-shared/bed_examples/Ensembl.NCBIM37.67.bed
+
 	bedtools intersect \
 		-a signif_500kb.bed \
-		-b /data-shared/bed_examples/Ensembl.NCBIM37.67.bed -wa -wb | \
+		-b $GENES -wa -wb | \
 		cut -f4-7 | \
 		tr ";" "\t" | \
 		column -t | less
