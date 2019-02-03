@@ -77,12 +77,60 @@ and *M. m. domesticus* populations (populations specified in
 	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
 	> popdata_mda_euro_fst.bed
 
-Make three sets of sliding windows (100 kb, 500 kb, 1 Mb)
-and concatenate them into a single file:
+Build function that calculates average Fst for sliding windows
 
 .. code-block:: bash
 
-    # Calculate average Fst by sliding window
+    # Set file name with Fst values by SNP
+    
+    IN=popdata_mda_euro_fst.bed
+    
+    # Make sliding windows (genome file containing info about size of chromosome has to be specified)
+    
+    grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai > genome-fst.fa.fai
+    
+    GENOME=genome-fst.fa.fai
+    
+    WIN=1000000
+    STEP=100000
+    NAME="1Mb"
+    
+    bedtools makewindows \
+	       -g $GENOME \
+	       -w $WIN \
+	       -s $STEP | 
+    awk -v win=$NAME '{ print $0"\t"win }' | less
+    
+    # Intersect windows with list of SNPs
+    
+    bedtools makewindows \
+	       -g $GENOME \
+	       -w $WIN \
+	       -s $STEP | \
+    awk -v win=$NAME '{ print $0"\t"win }' | 
+    bedtools intersect \
+	       -a - \
+	       -b $IN \
+           -wa -wb | less
+    
+    # Calculate the average Fst by windows
+    
+    bedtools makewindows \
+	       -g $GENOME \
+	       -w $WIN \
+	       -s $STEP | \
+    awk -v win=$NAME '{ print $0"\t"win }' | 
+    bedtools intersect \
+	       -a - \
+	       -b $IN \
+           -wa -wb | 
+    sort -k4,4 -k1,1 -k2,2n |
+    groupBy -i - \
+	       -g 4,1,2,3 \
+	       -c 9 \
+	       -o mean
+    
+    # We can put everything together to write a function that can be re-used for different window sizes
     
     average_fst() {
         
@@ -90,7 +138,7 @@ and concatenate them into a single file:
 	       -g $1 \
 	       -w $2 \
 	       -s $3 |
-        awk -v win=$4 -F $'\t' 'BEGIN{OFS=FS}{ print $0,win }' |
+        awk -v win=$4 '{ print $0"\t"win }' |
         bedtools intersect \
 	       -a - \
 	       -b $5 \
@@ -102,38 +150,26 @@ and concatenate them into a single file:
 	       -o mean
         
     }
-    
-    ## Average Fst
+
+Make three sets of sliding windows (100 kb, 500 kb, 1 Mb)
+and concatenate them into a single file:
+
+.. code-block:: bash
     
     IN=popdata_mda_euro_fst.bed
-    
-    grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai > genome-fst.fa.fai
-    
     GENOME=genome-fst.fa.fai
     
     # 1 Mb sliding windows with 100 kb step
     
-    WIN=1000000
-    STEP=100000
-    NAME="1Mb"
-    
-    average_fst $GENOME $WIN $STEP $NAME $IN > fst_1000kb.bed
+    average_fst $GENOME 1000000 100000 "1Mb" $IN > fst_1000kb.bed
     
     # 500 kb sliding windows with 50 kb step
-    
-    WIN=500000
-    STEP=50000
-    NAME="500kb"
-    
-    average_fst $GENOME $WIN $STEP $NAME $IN > fst_500kb.bed
+
+    average_fst $GENOME 500000 50000 "500kb" $IN > fst_500kb.bed
     
     # 100 kb sliding windows with 10 kb step
     
-    WIN=100000
-    STEP=10000
-    NAME="100kb"
-
-    average_fst $GENOME $WIN $STEP $NAME $IN > fst_100kb.bed
+    average_fst $GENOME 100000 10000 "100kb" $IN > fst_100kb.bed
     
     cat fst*.bed > windows_mean_fst.tsv
 
