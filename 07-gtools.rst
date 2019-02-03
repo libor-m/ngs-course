@@ -47,10 +47,10 @@ and filtered out variants with missing genomes and low minor allele frequency).
     mkdir -p ~/projects/fst
     
     cd ~/projects/fst
-
+    
     IN=/data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
     SAMPLES=/data-shared/mus_mda/00-popdata/euro_samps.txt
-
+    
 	vcftools --gzvcf $IN \
 	   --keep $SAMPLES \
 	   --recode --stdout |
@@ -66,11 +66,11 @@ and *M. m. domesticus* populations (populations specified in
 ``musculus_samps.txt`` and ``domesticus_samps.txt``):
 
 .. code-block:: bash
-
+    
     MUS=/data-shared/mus_mda/00-popdata/musculus_samps.txt
     DOM=/data-shared/mus_mda/00-popdata/domesticus_samps.txt
     IN=popdata_mda_euro.vcf 
-
+    
 	vcftools --vcf $IN \
 	   --weir-fst-pop $MUS \
 	   --weir-fst-pop $DOM \
