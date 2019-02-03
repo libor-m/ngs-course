@@ -51,7 +51,7 @@ and filtered out variants with missing genomes and low minor allele frequency).
     IN=/data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
     SAMPLES=/data-shared/mus_mda/00-popdata/euro_samps.txt
     
-	vcftools --gzvcf $IN \
+    vcftools --gzvcf $IN \
 	   --keep $SAMPLES \
 	   --recode --stdout |
     vcftools --vcf - \
@@ -84,23 +84,25 @@ and concatenate them into a single file:
 
 .. code-block:: bash
 
+    # Calculate average Fst by sliding window
+    
     average_fst() {
         
         bedtools makewindows \
 	       -g $1 \
 	       -w $2 \
 	       -s $3 |
-        awk -v win=$5 -F $'\t' 'BEGIN{OFS=FS}{ print $0,win }' |
+        awk -v win=$4 -F $'\t' 'BEGIN{OFS=FS}{ print $0,win }' |
         bedtools intersect \
 	       -a - \
-	       -b $4 \
+	       -b $5 \
            -wa -wb |
         sort -k4,4 -k1,1 -k2,2n |
         groupBy -i - \
 	       -g 4,1,2,3 \
 	       -c 9 \
 	       -o mean
-           
+        
     }
     
     ## Average Fst
@@ -117,7 +119,7 @@ and concatenate them into a single file:
     STEP=100000
     NAME="1Mb"
     
-    average_fst $GENOME $WIN $STEP $IN $NAME > fst_1000kb.bed
+    average_fst $GENOME $WIN $STEP $NAME $IN > fst_1000kb.bed
     
     # 500 kb sliding windows with 50 kb step
     
@@ -125,7 +127,7 @@ and concatenate them into a single file:
     STEP=50000
     NAME="500kb"
     
-    average_fst $GENOME $WIN $STEP $IN $NAME > fst_500kb.bed
+    average_fst $GENOME $WIN $STEP $NAME $IN > fst_500kb.bed
     
     # 100 kb sliding windows with 10 kb step
     
@@ -133,7 +135,7 @@ and concatenate them into a single file:
     STEP=10000
     NAME="100kb"
 
-    average_fst $GENOME $WIN $STEP $IN $NAME > fst_100kb.bed
+    average_fst $GENOME $WIN $STEP $NAME $IN > fst_100kb.bed
     
     cat fst*.bed > windows_mean_fst.tsv
 
@@ -218,8 +220,6 @@ the windows of high Fst (i.e. putative reproductive isolation loci).
     GENES=/data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
 	bedtools intersect \
-		-a signif_500kb.bed \
-		-b $GENES -wa -wb | \
-		cut -f4-7 | \
-		tr ";" "\t" | \
+		-a $GENES \
+		-b signif_500kb.bed -wa | \
 		column -t | less
