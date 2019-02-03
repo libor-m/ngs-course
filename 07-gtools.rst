@@ -26,7 +26,8 @@ and *M. m. domesticus* within a given sliding window and find candidate
 genes within highly differentiated regions:
 
 	1. use ``vcftools`` to filter data and calculate Fst for individual SNPs
-	2. write a function that will:
+    2. calculate Fst for each SNP (``vcftools``)
+	3. write a function that will:
         
             a) create sliding windows of three sizes (``bedtools makewindows``):
 
@@ -34,12 +35,11 @@ genes within highly differentiated regions:
 		          * 500 kb + 50 kb step
 		          * 1 Mb + 100 kb step
 
-            b) calculate Fst for each SNP (``vcftools``)
-            c) calculate average Fst for each window (``groupBy``)
+            b) calculate average Fst for each window (``groupBy``)
     
-	3. use R-Studio and ggplot2 to plot Fst values across the genome
-	4. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
-	5. use ``bedtools intersect`` to get a list of candidate genes
+	4. use R-Studio and ggplot2 to plot Fst values across the genome
+	5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
+	6. use ``bedtools intersect`` to get a list of candidate genes
 
 Extract genotype data for European mouse individuals and filter out
 variants having more than one missing genotype and minor allele frequency 0.2
