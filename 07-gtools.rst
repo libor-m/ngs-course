@@ -27,12 +27,10 @@ genes within highly differentiated regions:
 
  1. use ``vcftools`` to filter data and calculate Fst for individual SNPs
  2. calculate Fst for each SNP (``vcftools``)
- 3. write a function that will
-   a) create sliding windows of three sizes (``bedtools makewindows``)
-       * 100 kb + 10 kb step
-       * 500 kb + 50 kb step
-       * 1 Mb + 100 kb step
-   b) calculate average Fst for each window (``groupBy``) 
+ 3. write a function that will create sliding windows for windows of different sizes and steps (``bedtools makewindows``) and calculate average Fst for each window (``groupBy``) and calculate average Fst for sliding windows of these sizes and steps
+   a) 100 kb + 10 kb step
+   b) 500 kb + 50 kb step
+   c) 1 Mb + 100 kb step
  4. use R-Studio and ggplot2 to plot Fst values across the genome
  5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
  6. use ``bedtools intersect`` to get a list of candidate genes
