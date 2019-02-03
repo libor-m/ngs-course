@@ -27,8 +27,8 @@ genes within highly differentiated regions:
 
  1. use ``vcftools`` to filter data and calculate Fst for individual SNPs
  2. calculate Fst for each SNP (``vcftools``)
- 3. write a function that will:
-   a) create sliding windows of three sizes (``bedtools makewindows``):
+ 3. write a function that will
+   a) create sliding windows of three sizes (``bedtools makewindows``)
        * 100 kb + 10 kb step
        * 500 kb + 50 kb step
        * 1 Mb + 100 kb step
