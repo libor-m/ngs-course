@@ -58,6 +58,7 @@ Initial instructions:
    :maxdepth: 1
 
    install
+   install-win10
    connect
 
 Course outline:
