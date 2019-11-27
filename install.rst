@@ -14,7 +14,7 @@ Installation steps (it should take about 10 minutes, use some good Internet link
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
   Follow the instructions after the import is started.
 
-After successful installation you should see something like this (only the machine list will contain just one machine).
+After successful installation you should see something like this.
 Check whether you can start the virtual machine: click ``Start`` in the main VirtualBox window:
 
 .. image:: _static/vbox-main.png

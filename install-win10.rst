@@ -22,7 +22,7 @@ Set up the machine
 ------------------
 
 - Check that you can run `Hyper-V Manager` from start menu.
-- Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/BKV3jf8dYNjkq5K/download (~ 1.5 GB). You'll get a single
+- Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/BKV3jf8dYNjkq5K (~ 1.5 GB). You'll get a single
   file with ``.exe`` extension.
 - Double click the ``.exe`` file, it will unpack itself. Then run `Hyper-V Manager` and choose
   `Import Virtual Machine`, select the folder you just unpacked.
