@@ -192,8 +192,8 @@ R is best used in RStudio - server version can be used in web browser.
   cd sw
 
   # install latest R
-  # http://cran.r-project.org/bin/linux/debian/README.html
-  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian stretch-cran35/' >> /etc/apt/sources.list"
+  # https://cran.r-project.org/bin/linux/debian/
+  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian buster-cran35/' >> /etc/apt/sources.list"
   sudo apt install dirmngr
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
   sudo apt update
@@ -203,12 +203,19 @@ R is best used in RStudio - server version can be used in web browser.
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
   > install.packages(c("tidyverse", "shiny", "reshape2", "vegan"))
-  > exit()
+  > quit(save="no")
 
   # RStudio with prerequisities
   sudo apt install gdebi-core
-  # https://www.rstudio.com/products/rstudio/download-server/
+
+  # 1.1.463 is the latest 32 bit version, no more updates...
+  # https://support.rstudio.com/hc/en-us/articles/206569407-Older-Versions-of-RStudio
   wget https://download2.rstudio.org/rstudio-server-1.1.463-i386.deb
+
+  # https://rstudio.com/products/rstudio/download-server/debian-ubuntu/
+  # 64 bit
+  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.2.5019-amd64.deb
+
   # occasionally it's necessary to install older libssl
   # see https://unix.stackexchange.com/a/394462
   # go to https://packages.debian.org/jessie/i386/libssl1.0.0/download
@@ -227,6 +234,8 @@ repos is very obsolete. It's worth it to install such packages by hand, when
 there is not much dependencies.
 
 .. code-block:: bash
+
+  mkdir ~/sw
 
   # install a tar with the most common method
   inst-tar() {
@@ -282,8 +291,8 @@ there is not much dependencies.
   cd ~/sw
   wget -O - https://github.com/lh3/bwa/releases/download/v0.7.17/bwa-0.7.17.tar.bz2 | tar xj
   cd bwa*
-  # add -msse2 to CFLAGS
-  nano Makefile
+  # 32 bit: add -msse2 to CFLAGS
+  # nano Makefile
   make
   sudo cp bwa /usr/local/bin
   # copy the man
@@ -293,20 +302,24 @@ there is not much dependencies.
   cd ~/sw
   wget -O - https://www.ebi.ac.uk/~zerbino/velvet/velvet_1.2.10.tgz | tar xz
   cd velvet*
-  # comment out the -m64 line, we're on x86
-  nano Makefile
+  # 32 bit: comment out the -m64 line, we're on x86
+  # nano Makefile
   make
   sudo cp velveth velvetg /usr/local/bin
 
   # bedtools
   cd ~/sw
-  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.27.1/bedtools-2.27.1.tar.gz | tar xz
+  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.29.0/bedtools-2.29.0.tar.gz | tar xz
   cd bedtools2/
   make && sudo make install
 
   # htop if network fails
-  wget http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_2.0.2-1_i386.deb
+  wget http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_2.2.0-2_i386.deb
+  wget http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_2.2.0-2_amd64.deb
   # then gdebi htop* at the lesson
+
+  # clean up
+  rm -rf bcftools-*/ bedtools2/ bwa-*/ htslib-*/ parallel-*/ pv-*/ samtools-*/ tabtk/ vcftools-vcftools-*/
 
 TODO - future proofing of the installs with getting the latest - but release -
 quality code with something like this (does not work with tags yet)::
@@ -342,15 +355,21 @@ Transfer the data to `user` directory (`root` cannot log in remotely):
 .. code-block:: bash
 
   # on host machine
+  cd somewhere.../data-pack
   scp -P 2222 -r data-shared user@localhost:~
   scp -P 2222 -r home/user/projects user@localhost:~
+
+  # hyperv non-localhost
+  VM=192.168.62.71
+  scp -r data-shared "user@$VM:~"
+  scp -r home/user/projects "user@$VM:~"
 
 Back on the guest machine.
 
 .. code-block:: bash
 
   # make the shared data 'shared'
-  mv ~/data-shared /
+  sudo mv ~/data-shared /
 
   # change permissons back to 'read only' for user
   sudo chown -R root:root /data-shared

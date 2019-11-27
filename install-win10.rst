@@ -1,14 +1,26 @@
-Installation instructions
-=========================
+.. _win10_install:
+
+Installation instructions for latest Windows 10
+===============================================
 
 We will be using a virtual computer pre-installed with Debian Linux and sample data necessary for the exercises.
 
-.. note::
-  You need to install the image even if your main system is Linux / Mac OS X!
+VirtualBox does not work on some Windows 10 machines, as virtualization is used to imporove your security.
 
-Installation steps (it should take about 10 minutes, use some good Internet link):
 
-- Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
+Installation steps (it should take about 20 minutes, use some good Internet link):
+
+Install Hyper-V
+---------------
+Turn the Hyper-V feature on and restart as required.
+
+.. image:: _static/win10-turn1.png
+
+.. image:: _static/win10-turn2.png
+
+Set up the machine
+------------------
+
 - Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/lCnNzqf9xv59Dp6 (~ 1.5 GB). You'll get a single
   file with ``.ova`` extension.
 - You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
@@ -25,17 +37,11 @@ After a while you should see something like this:
 
 You don't need to type anything into that window, just checking that it looks like the screen shot is enough.
 
-.. note::
-  If VirtualBox does not work for you and you have Windows 10, you can try :ref:`win10_install`.
-
 How to access the machine
 -------------------------
 It is much more comfortable to use a native terminal application, rather than
-the small VirtualBox 'monitor'. You will connect to the machine differently,
-depending on what operating system you are using.
+the small 'monitor'.
 
-Windows
-^^^^^^^
 Install `Git for Windows <https://git-scm.com/download/win>`_. We'll use it to
 control the virtual computer.
 
@@ -54,17 +60,6 @@ Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
 ``Installation package``).  WinSCP will be used to transfer files between your
 'host' computer and the virtual computer.
 
-Mac OS X and Linux
-^^^^^^^^^^^^^^^^^^
-Ssh is used to control the virtual computer. It should be already installed in your computer.
-
-Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended)
-from the command line. `Scp` and `rsync` could be already installed in your system,
-if you want to use `lftp`, you'll probably have to install it yourself.
-
-Mac users that prefer grapical clients can use something like `CyberDuck`. See
-http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x .
-
 Time to log in!
 ---------------
-Try to log in following the instructions in :ref:`ssh_connect`.
+We will help you to log in, because it's a little more complicated than with VirtualBox.
