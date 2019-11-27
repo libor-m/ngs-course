@@ -12,7 +12,7 @@ Installation steps (it should take about 20 minutes, use some good Internet link
 
 Install Hyper-V
 ---------------
-Turn the Hyper-V feature on and restart as required.
+Turn the `Hyper-V` feature on and restart as required.
 
 .. image:: _static/win10-turn1.png
 
@@ -21,21 +21,11 @@ Turn the Hyper-V feature on and restart as required.
 Set up the machine
 ------------------
 
-- Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/lCnNzqf9xv59Dp6 (~ 1.5 GB). You'll get a single
-  file with ``.ova`` extension.
-- You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
-  Follow the instructions after the import is started.
-
-After successful installation you should see something like this (only the machine list will contain just one machine).
-Check whether you can start the virtual machine: click ``Start`` in the main VirtualBox window:
-
-.. image:: _static/vbox-main.png
-
-After a while you should see something like this:
-
-.. image:: _static/vbox.png
-
-You don't need to type anything into that window, just checking that it looks like the screen shot is enough.
+- Check that you can run `Hyper-V Manager` from start menu.
+- Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/BKV3jf8dYNjkq5K/download (~ 1.5 GB). You'll get a single
+  file with ``.exe`` extension.
+- Double click the ``.exe`` file, it will unpack itself. Then run `Hyper-V Manager` and choose
+  `Import Virtual Machine`, select the folder you just unpacked.
 
 How to access the machine
 -------------------------
