@@ -55,9 +55,6 @@ References that may come handy:
 
 - `Thomas Cokelaer's cheat sheet <http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_
 
-Use http://goo.gl to shorten a link to www.seznam.cz, to get a tracking counter
-url for the network connectivity test.
-
 Adding another instance
 ^^^^^^^^^^^^^^^^^^^^^^^
 Check out the version which will serve as starting material, create and publish new branch.
@@ -82,6 +79,8 @@ and in `GitHub > Settings > Webhooks`.
 Slack
 ^^^^^
 Add a new channel every year. Add the channel to defaults in slack Admin.
+
+Update invite link in `index.rst` (7 day validity).
 
 VirtualBox image
 ----------------

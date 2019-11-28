@@ -63,7 +63,8 @@ Initial instructions:
 
 Course outline:
 
-`Slack <https://ngs-course.slack.com>`_ chat room.
+`Slack <https://ngs-course.slack.com>`_ chat room
+(`invite link <https://join.slack.com/t/ngs-course/shared_invite/enQtODQ1MTg4Mzg0ODAxLTc4OTAxN2JjYjJkMzI1NGRjMDRmYzQ2NWZhOGRjZmU1YjVkODhlOWFhMDY2MmY0N2NhMDRmZDQwY2UxNGI0YjY>`_).
 
 .. toctree::
    :maxdepth: 2
