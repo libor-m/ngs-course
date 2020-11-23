@@ -1,7 +1,10 @@
-Course on UNIX and Genomic Data - Prague, November 2019
-=======================================================
+Course on UNIX and work with genomic data - Prague, November 2020
+=================================================================
 
-This course aims to introduce the participants to UNIX - an interface that is
+This course is taught regularly as a subject in the winter term at the Department of Zoology, Faculty of Science, 
+Charles University in Prague (`MB170C47 <https://is.cuni.cz/studium/eng/predmety/index.php?do=predmet&kod=MB170C47>`_).
+
+It aims to introduce the participants to UNIX - an interface that is
 one of the most convenient options for working with big textual data.
 Special attention is put on working with Next Generation Sequencing (NGS)
 data. Most of the NGS data formats are intentionally text based because the
@@ -16,19 +19,16 @@ learning.
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday 29/11/2019 (10:40-14:40)**                       |
+| **Friday 27/11/2020 (14:00-18:00)**                       |
 +--------------+--------------------------------------------+
-| Morning      | - Course Intro                             |
-|              | - Introduction to Unix                     |
+| Afternoon    | Course Intro                               |
+|              | Introduction to Unix                       |
+|              | Unix - Basic                               |
 +--------------+--------------------------------------------+
-| *Break (~ 0.5h)*                                          |
+| **Saturday 28/11/2020 (10:00-18:00)**                     |
 +--------------+--------------------------------------------+
-| Afternoon    | Unix - Basic                               |
-+--------------+--------------------------------------------+
-| **Saturday 30/11/2019 (10:00-18:00)**                     |
-+--------------+--------------------------------------------+
-| Morning      | - Introduction to Genomics                 |
-|              | - Unix - Advanced I                        |
+| Morning      | Introduction to Genomics                   |
+|              | Unix - Advanced I                          |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
@@ -36,12 +36,12 @@ learning.
 +--------------+--------------------------------------------+
 | *Afternoon Break (~ 0.5h)*                                |
 +--------------+--------------------------------------------+
-| Afternoon II | Graphic Session                            |
+| Afternoon II | Graphics Session                           |
 +--------------+--------------------------------------------+
-| **Sunday 1/12/2019 (10:00-18:00)**                        |
+| **Sunday 29/11/2020 (10:00-18:00)**                       |
 +--------------+--------------------------------------------+
-| Morning      | - Read Quality                             |
-|              | - Assembly                                 |
+| Morning      | Read Quality                               |
+|              | Assembly                                   |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
