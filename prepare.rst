@@ -68,7 +68,8 @@ Check out the version which will serve as starting material, create and publish 
 
 Log in to `Read the Docs`, go to `Admin > Versions
 <https://readthedocs.org/dashboard/ngs-course/versions/>`_,
-make the new version 'Active', set as the default version.
+make the new version 'Active', set as the default version in `Admin > Advanced
+<https://readthedocs.org/dashboard/ngs-course/advanced/>`_.
 
 If the version (branch) is not visible yet, do a force build of some previous
 version to get a fresh checkout.
