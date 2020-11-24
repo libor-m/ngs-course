@@ -1,7 +1,7 @@
 Course on UNIX and work with genomic data - Prague, November 2020
 =================================================================
 
-This course is taught regularly as a subject in the winter term at the Department of Zoology, Faculty of Science, 
+This course is taught regularly as a subject in the winter term at the Department of Zoology, Faculty of Science,
 Charles University in Prague (`MB170C47 <https://is.cuni.cz/studium/eng/predmety/index.php?do=predmet&kod=MB170C47>`_).
 
 It aims to introduce the participants to UNIX - an interface that is
@@ -58,7 +58,7 @@ Initial instructions:
 Course outline:
 
 `Slack <https://ngs-course.slack.com>`_ chat room
-(`invite link <https://join.slack.com/t/ngs-course/shared_invite/enQtODQ1MTg4Mzg0ODAxLTc4OTAxN2JjYjJkMzI1NGRjMDRmYzQ2NWZhOGRjZmU1YjVkODhlOWFhMDY2MmY0N2NhMDRmZDQwY2UxNGI0YjY>`_).
+(`invite link <https://join.slack.com/t/ngs-course/shared_invite/zt-jfrs3pyd-n6pzUCosxXqvh4gcAIjpuw>`_).
 
 .. toctree::
    :maxdepth: 2

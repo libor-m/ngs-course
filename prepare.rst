@@ -79,9 +79,13 @@ and in `GitHub > Settings > Webhooks`.
 
 Slack
 ^^^^^
-Add a new channel every year. Add the channel to defaults in slack Admin.
+http://ngs-course.slack.com/
 
-Update invite link in `index.rst` (7 day validity).
+Add a new channel every year. Add the channel to
+`defaults <https://ngs-course.slack.com/admin/settings#default_channels>`_
+in slack Admin.
+
+Update invite link in `index.rst` (30 day validity).
 
 VirtualBox image
 ----------------
