@@ -22,21 +22,18 @@ learning.
 | **Friday 27/11/2020 (14:00-18:00)**                       |
 +--------------+--------------------------------------------+
 | Afternoon    | Course Intro                               |
-|              | Introduction to Unix                       |
-|              | Unix - Basic                               |
+|              | Introduction to UNIX                       |
+|              | Basics of UNIX                             |
 +--------------+--------------------------------------------+
 | **Saturday 28/11/2020 (10:00-18:00)**                     |
 +--------------+--------------------------------------------+
 | Morning      | Introduction to Genomics                   |
-|              | Unix - Advanced I                          |
+|              | Processing of plain text files in UNIX     |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
-| Afternoon I  | Unix - Advanced II                         |
-+--------------+--------------------------------------------+
-| *Afternoon Break (~ 0.5h)*                                |
-+--------------+--------------------------------------------+
-| Afternoon II | Graphics Session                           |
+| Afternoon    | Project management in UNIX                 |
+|              | Graphics Session                           |
 +--------------+--------------------------------------------+
 | **Sunday 29/11/2020 (10:00-18:00)**                       |
 +--------------+--------------------------------------------+
@@ -46,10 +43,7 @@ learning.
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
 | Afternoon I  | Bioinformatic pipelines                    |
-+--------------+--------------------------------------------+
-| *Afternoon Break (~ 0.5h)*                                |
-+--------------+--------------------------------------------+
-| Afternoon II | Exercise (Variant quality)                 |
+|              | Variant quality exercise                   |
 +--------------+--------------------------------------------+
 
 Initial instructions:
@@ -71,11 +65,12 @@ Course outline:
 
    01-starter
    02-genomics
-   03-advanced
-   04-graphics
-   05-quality
-   06-assembly
-   07-gtools
+   03-file-processing
+   04-project-management
+   05-graphics
+   06-quality
+   07-assembly
+   08-bioinfo-pipeline
    08-var-quality
 
 Additional reference materials:
