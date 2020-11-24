@@ -1,5 +1,5 @@
-Introduction to genomics
-========================
+Session 2: Introduction to genomics
+===================================
 
 This session focuses on plain text file data extraction/modification
 using built-in Unix tools.

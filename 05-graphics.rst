@@ -1,5 +1,6 @@
-Graphics session
-================
+Session 5: Graphics session
+===========================
+
 .. pull-quote:: A picture is worth a thousand words.
 
 Especially when your data is big. We'll try to show you one of the easiest

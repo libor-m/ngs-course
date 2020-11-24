@@ -1,8 +1,8 @@
-Plain text file processing in UNIX
-==================================
+Session 3: Plain text file processing in UNIX
+=============================================
 
 This session focuses on plain text file data extraction/modification
-using built-in Unix tools.
+using built-in UNIX tools.
 
 Pattern search & regular expressions
 ------------------------------------
@@ -26,15 +26,6 @@ Pattern search & regular expressions
   AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
 
-.. note::
-
-  You can check file permissions by typing ``ll`` instead of ``ls``.
-  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
-  for *User*, *Group*, and *Others*. The two names you see next to the
-  permissions are file's owner user and group.
-
-  You can change the permissions - if you have the permission to do so -
-  by e.g. ``chmod go+w`` - "add write permission to group and others".
 
 1. Count the number of variants in the file
 
@@ -68,30 +59,146 @@ Pattern search & regular expressions
   grep '^chrZ\s' |
   wc -l
 
-Cutting out, sorting and replacing text
----------------------------------------
+Word and line count
+-------------------
 
-We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``.
+``wc`` command states for *word count* provides a quick summary statistics on the plain text file 
+content. Bytes, words and lines can be counted in defined files.
+
+.. code-block:: bash
+
+  wc -c file.txt # Number of bytes in a file
+  wc -w file.txt # Number of words in a file
+  wc -l file.txt # Number of lines in a file
+
+To calculate the number of bytes, words and lines in every file listed:
+
+.. code-block:: bash
+  
+  wc -c *.txt
+  wc -w *.txt
+  wc -l *.txt
+
+
+Retrieve & count unique records
+-------------------------------
+
+Often times we face a problem of how many unique records we have 
+in a file or how many there are instances of every unique item.
+
+UNIX provides efficient way to cut (``cut``) desired columns and retrieve unique 
+records for selected column (``sort -u``). Additionaly, we can count the instances (``uniq -c``).
+
+Typical examle of use in bioinformatics is to count the number of genes 
+or SNPs per contig or chromosome.
+
+To select specified columns ``cut`` command can be used. By default, ``cut`` 
+use whitespace as separator. When there is need to distinguish between 
+standard whitespece and ``TAB`` (i.e. ``TAB``-separated files) then ``-d $'\t'`` 
+delimiter has to be set explicitly. When all columns except a specific column(s)
+are supposed to be selected ``--complement`` flag can be used.
+
+.. code-block:: bash
+
+  cut -f1-3 file.txt
+  cut -d $'\t' -f1-3 file.txt
+  cut --complement -f4 file.txt # Select all columns except column 4
+
+Content of the file can be sorted based on the specified column (``-k1,1``) 
+or range of columns (``-k1,3``). When the data needs to be sorted numerically (``-n``)
+or in reverse order (``-r``) appropriate flags need to be added. Similarly to ``cut``
+command ``sort`` recognizes as separator any whitespace. When ``TAB`` is used as a separator, 
+to enforce distinction from the possible whitespaces used in the file, 
+``-d $'\t'`` flag has to be used explicitly.
+
+.. code-block:: bash
+
+  sort -k1,1 file.txt # Sort based on first column
+  sort -k1,1 -k2,2nr file.txt # Sort first based on first column, then on second column numerically in reversed order
+  sort -k1,3 file.txt # Sort based on range of columns
+
+``sort`` command can also be used to retrieve the unique records using flag ``-u``.
+When counts of instances for every unique items are supposed to be provided ``uniq -c``
+command should be used in combination with ``sort`` as records before sent to ``uniq``
+have to be sorted.
+
+.. code-block:: bash
+
+  sort -u file.txt # Retrieve unique records in the file
+  < file.txt sort | uniq -c # Count number of instances for every unique item
+
+
+String extraction and replacement
+---------------------------------
+
+Another common task in bioinformatics is a string extraction and/or replacement.
+Often times we need to extract specific piece of information from a complex data.
+
+Typical example is the extraction of a specific value according to a TAG in gff3
+or VCF file. As positions of TAGS can differ from line to line, using ``cut`` 
+command is simply not possible. Matching using ``sed`` based on a TAG is 
+the only possibility. ``regex`` can be used to match appropriate pattern using ``sed``.
+
+Another typical task is a replacing of delimiters. ``tr`` command is very 
+well suited for this task. ``-d`` flag can be used to remove specific characters
+from the file. The whole classes can be replaced which can be for instance 
+used to change uppercase to lowercase or vice versa.
+
+.. note::
+
+  Difference between ``sed`` and ``tr``:
+
+  ``tr`` (from TRansliterate) replaces (or deletes) **individual characters**:
+  Ideal for removing line ends (``tr -d "\n"``) or replacing some
+  separator to TAB (``tr ";" "\t"``).
+
+  ``sed`` replaces (or deletes) **complex patterns**.
+
+Typical usage of ``tr`` is as follows:
+
+.. code-block:: bash
+
+  tr "\t" ";" file.txt # To replace TAB separator to semicolon
+  tr -d "\n" file.txt # Remove new line characters (``\n``)
+  tr "[A-Z]" "[a-z]" # Replace uppercase to lowercase
+
+To match a specific string in the file ``sed`` can use ``regex`` similar 
+to ``grep`` command. However, to use full ``regex`` functionality 
+and simplify the regex syntax, **extended regular expression** flag 
+``r`` (``-E`` for Mac OSX) has to be used.
+
+Comparison of use of standard ``sed`` and use of ``sed`` with extended
+regular expressions ``sed -r``:
+
+.. code-block:: bash
+
+  sed 's/pattern/replacement/'
+
+  # Replace one or more A or C or G or T by N
+
+  # Standard sed
+  sed 's/^[AGCT]\{1,\}/N/'
+
+  # The same thing using extended regular expressions:
+  sed -r 's/^[AGCT]+/N/'
+
+``sed`` can be used also for string extraction. Matched string designated 
+to be extracted has to be marked in rounded brackets ``(string)`` 
+and passed to the output with following notation: ``\#`` where # character 
+states for the position starting with 1 in the matched string (i.e. there can be
+multiple extractions from one matched string).
+
+.. code-block:: bash
+
+  sed 's/AAA(TTT)CCC(GGG)/\1\2/' # The result would be 'TTTGGG'
 
 .. note::
 
   ``sed -r`` (text Stream EDitor) can do a lot of things, however,
-  pattern replacement is the best thing to use it for. The 'sed language'
-  consists of single character commands, and is no fun to code and even less
-  fun to read (what does ``sed 'h;G;s/\n//'`` do?;). Use ``awk`` for more
-  complex processing.
-
-  General syntax:
-
-  .. code-block:: bash
-
-    sed 's/pattern/replacement/'
-
-    # Replace one or more A or C or G or T by N
-    sed 's/^[AGCT]\{1,\}/N/'
-
-    # The same thing using extended regular expressions:
-    sed -r 's/^[AGCT]+/N/'
+  pattern replacement and extraction is the best thing to use it for. 
+  The 'sed language' consists of single character commands, and it is no fun 
+  to code and even less fun to read (what does ``sed 'h;G;s/\n//'`` do?;). 
+  Use ``awk`` for more complex processing (*see next session*).
 
 *Use nightingale variant call file (VCF)*
 
@@ -119,15 +226,83 @@ We are going to use these commands: ``cut``, ``sort``, ``uniq``, ``tr``, ``sed``
 
 Figure out alternative solution for exercise 2.
 
-.. note::
+Join & paste data
+-----------------
 
-  Difference between ``sed`` and ``tr``:
+The final part of this session is joining and pasting data. Here, we seek to merge multiple
+files into one. ``join`` command corresponds to standard ``JOIN`` command known from ``SQL`` language.
+It joins two files based on specific key column. It assumes that both files contain a column representing
+keys the are in both files. **Both files must be sorted by the key before any joining task**. 
+``join`` command has the same functionality as a standard ``JOIN`` meaning that supports ``INNER JOIN``, 
+``LEFT JOIN``, ``RIGHT JOIN`` and ``FULL OUTER JOIN`` (`Join types <http://www.sql-join.com/sql-join-types>`_).
 
-  ``tr`` (from TRansliterate) replaces (or deletes) individual characters:
-  Ideal for removing line ends (``tr -d "\n"``) or replacing some
-  separator to TAB (``tr ";" "\t"``).
+By default the column considered to be **key** is the first column in both input files. As already mentioned
+the key column needs to be sorted in a same way in both files.
 
-  ``sed`` replaces (or deletes) complex patterns.
+.. code-block:: bash
+
+  sort -k1,1 file1.txt > file1.tmp
+  sort -k1,1 file2.txt > file2.tmp
+  join file1.tmp file2.tmp > joined-file.txt
+
+If **key** column is at different position it needs to be specified on the input 
+using ``-1`` and ``-2`` flags:
+
+.. code-block:: bash
+
+  sort -k2,2 file1.txt > file1.tmp # key column on the 2nd position
+  sort -k3,3 file2.txt > file2.tmp # key column on the 3rd position
+  join -12 -23 file1.tmp file2.tmp > joined-file.txt
+
+To specify that the ``join`` is supposed to print **unpaired** lines corresponding to **left, right 
+and full outer join**, specification of the file to print unpaired lines from has to be done using
+``-a`` flag. Also, ``-e`` flag sets value for missing values
+
+.. code-block:: bash
+
+  # Left join
+  join -a1 -e NA file1.tmp file2.tmp > joined-file.txt
+
+  # Right join
+  join -a2 -e NA file1.tmp file2.tmp > joined-file.txt
+
+  # Full outer join
+  join -a1 -a2 -e NA file1.tmp file2.tmp > joined-file.txt
+
+Another command that can be used to merge two or more files is ``paste``. ``paste`` as opposed to 
+``join`` simply align files by column (corresponding to ``cbind`` in ``R``). No **key** column 
+is needed as it assumes **one to one correspondence** between the two files.
+
+.. code-block:: bash
+
+  paste file1.txt file2.txt > file-merged.txt
+
+``paste`` command can also be used for smart file transpositions. ``paste`` by default 
+expects input multiple files per one line. However, when only one file provided with other 
+possible file possitions filed with ``-`` the command ``paste`` takes the further columns 
+from next lines of the only file provided. This feature enables to transpose multiple lines
+into one line.
+
+Example:
+
+.. code-block:: bash
+
+  file.txt
+
+  item-line1
+  item-line2
+  item-line3
+  item-line4
+
+  < filte.txt paste - -
+
+  item-line1  item-line2
+  item-line3  item-line4
+
+**This feature can be used in bioinformatics to convert ``.fastq`` files into ``.tab``
+type separated files with one read per line.** We will use this functionality in upcoming
+session.
+
 
 Exercise
 --------

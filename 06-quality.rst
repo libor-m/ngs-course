@@ -1,5 +1,6 @@
-Read quality
-============
+Session 6: Read quality
+=======================
+
 Many steps of genomic data processing have some associated quality value for
 their results. Here we will briefly check the first and last of those. But
 there is no simple way to set your quality thresholds. You have to recognize

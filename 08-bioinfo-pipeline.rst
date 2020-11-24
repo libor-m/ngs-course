@@ -1,22 +1,5 @@
-Bioinformatic pipelines
-=======================
-
-A lot of command line tools available for genomics, e.g.:
-
-**Read alignment data:**
- * samtools (https://samtools.github.io)
-
-**Variant data:**
- * vcftools (https://vcftools.github.io/index.html)
- * bcftools (https://samtools.github.io/bcftools/)
-
-**Annotation data (genome arithmetics):**
- * bedtools (https://bedtools.readthedocs.io/en/latest/)
- * bedops (https://github.com/bedops/bedops)
-
-**Sequence/Alignment/Tree data:**
- * newick-utilities (https://github.com/tjunier/newick_utils/wiki)
- * BuddySuite (https://github.com/biologyguy/BuddySuite)
+Session 8: Bioinformatic pipelines
+==================================
 
 Exercise
 --------

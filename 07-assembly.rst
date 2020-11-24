@@ -1,5 +1,5 @@
-Genome assembly
-===============
+Session 7: Genome assembly
+==========================
 
 We'll be assembling a genome of *E. coli* from paired Illumina reads. We're
 using ``Velvet``, which is a bit obsolete, but nice for teaching purposes.

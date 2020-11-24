@@ -21,29 +21,29 @@ learning.
 +-----------------------------------------------------------+
 | **Friday 27/11/2020 (14:00-18:00)**                       |
 +--------------+--------------------------------------------+
-| Afternoon    | Course Intro                               |
-|              | Introduction to UNIX                       |
-|              | Basics of UNIX                             |
+| Afternoon    | - Course Intro                             |
+|              | - Introduction to UNIX                     |
+|              | - Basics of UNIX                           |
 +--------------+--------------------------------------------+
 | **Saturday 28/11/2020 (10:00-18:00)**                     |
 +--------------+--------------------------------------------+
-| Morning      | Introduction to Genomics                   |
-|              | Processing of plain text files in UNIX     |
+| Morning      | - Introduction to Genomics                 |
+|              | - Processing of plain text files in UNIX   |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
-| Afternoon    | Project management in UNIX                 |
-|              | Graphics Session                           |
+| Afternoon    | - Project management in UNIX               |
+|              | - Graphics Session                         |
 +--------------+--------------------------------------------+
 | **Sunday 29/11/2020 (10:00-18:00)**                       |
 +--------------+--------------------------------------------+
-| Morning      | Read Quality                               |
-|              | Assembly                                   |
+| Morning      | - Read Quality                             |
+|              | - Assembly                                 |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
 +--------------+--------------------------------------------+
-| Afternoon I  | Bioinformatic pipelines                    |
-|              | Variant quality exercise                   |
+| Afternoon    | - Bioinformatic pipelines                  |
+|              | - Variant quality exercise                 |
 +--------------+--------------------------------------------+
 
 Initial instructions:
@@ -71,7 +71,7 @@ Course outline:
    06-quality
    07-assembly
    08-bioinfo-pipeline
-   08-var-quality
+   09-var-quality
 
 Additional reference materials:
 

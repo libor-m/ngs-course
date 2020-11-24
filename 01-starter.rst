@@ -1,5 +1,5 @@
-Unix - Basics
-=============
+Session 1: Basics of UNIX
+=========================
 
 This session will give you all the basics that you need
 to smoothly move around when using a UNIX system (in the text mode!).
@@ -99,6 +99,16 @@ Figure out what these commands do:
     cd /
     cd ..
     cd ~
+
+.. note::
+
+  You can check file permissions by typing ``ll`` instead of ``ls``.
+  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
+  for *User*, *Group*, and *Others*. The two names you see next to the
+  permissions are file's owner user and group.
+
+  You can change the permissions - if you have the permission to do so -
+  by e.g. ``chmod go+w`` - "add write permission to group and others".
 
 A neat trick to go back where you've been before the last ``cd`` command:
 
@@ -213,8 +223,8 @@ takes four lines). And there is even a built-in calculator in bash:
   echo $(( XXXX / 4 ))
   expr XXXX / 4
 
-Variables/Lists
-^^^^^^^^^^^^^^^
+Variables & Lists
+^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 

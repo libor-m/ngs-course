@@ -1,5 +1,5 @@
-Variant quality
-===============
+Session 9: Variant quality
+==========================
 
 In this part you will be working on your own. You're already familiar with the
 VCF format and some reformatting and plotting tools. There is a file with
