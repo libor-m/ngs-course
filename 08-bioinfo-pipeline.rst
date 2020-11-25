@@ -11,9 +11,11 @@ genes within highly differentiated regions:
  1. use ``vcftools`` to filter data and calculate Fst for individual SNPs
  2. calculate Fst for each SNP (``vcftools``)
  3. write a function that will create sliding windows for windows of different sizes and steps (``bedtools makewindows``) and calculate average Fst for each window (``groupBy``) and calculate average Fst for sliding windows of these sizes and steps
+
    a) 100 kb + 10 kb step
    b) 500 kb + 50 kb step
    c) 1 Mb + 100 kb step
+
  4. use R-Studio and ggplot2 to plot Fst values across the genome
  5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
  6. use ``bedtools intersect`` to get a list of candidate genes
@@ -26,12 +28,12 @@ and filtered out variants with missing genomes and low minor allele frequency).
 .. code-block:: bash
 
     mkdir -p ~/projects/fst
-    
+
     cd ~/projects/fst
-    
+
     IN=/data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
     SAMPLES=/data-shared/mus_mda/00-popdata/euro_samps.txt
-    
+
     vcftools --gzvcf $IN \
 	   --keep $SAMPLES \
 	   --recode --stdout |
@@ -47,11 +49,11 @@ and *M. m. domesticus* populations (populations specified in
 ``musculus_samps.txt`` and ``domesticus_samps.txt``):
 
 .. code-block:: bash
-    
+
     MUS=/data-shared/mus_mda/00-popdata/musculus_samps.txt
     DOM=/data-shared/mus_mda/00-popdata/domesticus_samps.txt
-    IN=popdata_mda_euro.vcf 
-    
+    IN=popdata_mda_euro.vcf
+
 	vcftools --vcf $IN \
 	   --weir-fst-pop $MUS \
 	   --weir-fst-pop $DOM \
@@ -65,58 +67,58 @@ Build function that calculates average Fst for sliding windows
 .. code-block:: bash
 
     # Set file name with Fst values by SNP
-    
+
     IN=popdata_mda_euro_fst.bed
-    
+
     # Make sliding windows (genome file containing info about size of chromosome has to be specified)
-    
+
     grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai > genome-fst.fa.fai
-    
+
     GENOME=genome-fst.fa.fai
-    
+
     WIN=1000000
     STEP=100000
     NAME="1Mb"
-    
+
     bedtools makewindows \
 	       -g $GENOME \
 	       -w $WIN \
-	       -s $STEP | 
+	       -s $STEP |
     awk -v win=$NAME '{ print $0"\t"win }' | less
-    
+
     # Intersect windows with list of SNPs
-    
+
     bedtools makewindows \
 	       -g $GENOME \
 	       -w $WIN \
 	       -s $STEP | \
-    awk -v win=$NAME '{ print $0"\t"win }' | 
+    awk -v win=$NAME '{ print $0"\t"win }' |
     bedtools intersect \
 	       -a - \
 	       -b $IN \
            -wa -wb | less
-    
+
     # Calculate the average Fst by windows
-    
+
     bedtools makewindows \
 	       -g $GENOME \
 	       -w $WIN \
 	       -s $STEP | \
-    awk -v win=$NAME '{ print $0"\t"win }' | 
+    awk -v win=$NAME '{ print $0"\t"win }' |
     bedtools intersect \
 	       -a - \
 	       -b $IN \
-           -wa -wb | 
+           -wa -wb |
     sort -k4,4 -k1,1 -k2,2n |
     groupBy -i - \
 	       -g 4,1,2,3 \
 	       -c 9 \
 	       -o mean
-    
+
     # We can put everything together to write a function that can be re-used for different window sizes
-    
+
     average_fst() {
-        
+
         bedtools makewindows \
 	       -g $1 \
 	       -w $2 \
@@ -131,29 +133,29 @@ Build function that calculates average Fst for sliding windows
 	       -g 4,1,2,3 \
 	       -c 9 \
 	       -o mean
-        
+
     }
 
 Make three sets of sliding windows (100 kb, 500 kb, 1 Mb)
 and concatenate them into a single file:
 
 .. code-block:: bash
-    
+
     IN=popdata_mda_euro_fst.bed
     GENOME=genome-fst.fa.fai
-    
+
     # 1 Mb sliding windows with 100 kb step
-    
+
     average_fst $GENOME 1000000 100000 "1Mb" $IN > fst_1000kb.bed
-    
+
     # 500 kb sliding windows with 50 kb step
 
     average_fst $GENOME 500000 50000 "500kb" $IN > fst_500kb.bed
-    
+
     # 100 kb sliding windows with 10 kb step
-    
+
     average_fst $GENOME 100000 10000 "100kb" $IN > fst_100kb.bed
-    
+
     cat fst*.bed > windows_mean_fst.tsv
 
 Visualize the average Fst values within the sliding windows of the three sizes
