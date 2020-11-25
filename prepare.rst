@@ -87,48 +87,100 @@ in slack Admin.
 
 Update invite link in `index.rst` (30 day validity).
 
-VirtualBox image
-----------------
-Create new VirtualBox machine
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-- Linux/Debian (32 bit)
-- 1 GB RAM - this can be changed at the users machine, if enough RAM is available
-- 12 GB HDD as system drive (need space for basic system, gcc, rstudio and some data)
-- setup port forwarding
+Cloud image
+-----------
+Create new machine
+^^^^^^^^^^^^^^^^^^
+We expect ~16 participants. To make things simple we'll host them all on a single instance.
 
-  - 2222 to 22 (ssh, avoiding possible collisions on linux machines with sshd running)
-  - 8787 to 8787 (rstudio server)
-  - 5690 to 5690 (rstudio + shiny)
+Follow the Meta Cloud `quick start <https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/>`_.
+- add keys
+- add SSH and ICMP security rules (more rules later)
+- Compute > Instance > Launch instance
 
-Install Debian
-^^^^^^^^^^^^^^
-Download Debian net install image - use i386 so there is as few problems with virtualization as possible.
-Not all machines can virtualize x64.
+    - Debian (64 bit)
+    - flavor `hpc.16core-32ram`
+    - 32 GB RAM - little less than 2 GB per user
+    - 16 vCPUs - keep 2 of the allowed 18 for the testing instance
+    - 160 GB HDD as system drive (need space for basic system, gcc, rstudio and produced data * N participants)
 
-https://www.debian.org/CD/netinst/
+- more rules in security group
+  - HTTP to set up let's encrypt cert
+  - 443 for secured RStudio
+  - 60k-61k for mosh
+  - 5690 rstudio + shiny
 
-Connect the iso to IDE in the virtual machine. Start the machine. Choose ``Install``.
+- TODO:  disk quota
 
-Mostly the default settings will do.
-
-- English language (it will cause less problems)
-- Pacific time zone (it is connected with language, no easy free choice;)
-- hostname ``node``, domain ``vbox``
-- users: root:debian, user:user
-- simple partitioning (all in one partition, no LVM)
-- Czech mirror to get fast installer file downloads
-- pick only SSH server and Standard system utilities
-
-Log in as root:
+Debian conifg
+^^^^^^^^^^^^^
+SSH to the machine - read the IP in the OpenStack interface and log in with `debian`
+user name.
 
 .. code-block:: bash
 
-  apt install sudo
-  usermod -a -G sudo user
+  ssh debian@${INSTANCE_IP}
 
-Login as user (can be done by ``su user`` in root shell):
+  # start as super user
+  sudo su
+
+  # Prague time zone
+  dpkg-reconfigure tzdata
+
+  # find fastest mirror
+  apt install netselect-apt
+
+  # patch it in sources.list
+  vi /etc/sources.list
+
+  # upgrade all
+  apt update
+  apt upgrade
+
+  # keep the sources list over reboot
+  # +apt_preserve_sources_list: true
+  vi /etc/cloud/cloud.cfg
+
+  # install the basic tools for more configuration work
+  apt install vim screen mosh git
+
+  # log in as debian
+  su debian
+
+  # create an ssh key
+  ssh-keygen -t ed25519
+
+  # checkout dotfiles
+  git clone git@github.com:libor-m/dotfiles.git
+
+  # link vim config
+  ln -s dotfiles/vim/.vimrc .
+
+  # back to root shell
+  exit
+
+  # link vim config for root
+  cd
+  ln -s ~debian/dotfiles/vim/.vimrc .
+
+Now it should be easy to work as `debian` user, with vim configured even for sudo.
+
+Tiny fixes to make work as `debian` pleasurable.
 
 .. code-block:: bash
+
+  # colrize prompt - uncomment force_color_prompt=yes
+  # add ll alias - uncomment alias ll='ls -l'
+  # export MANWIDTH=120
+  vi ~/.bashrc
+  . ~/.bashrc
+
+Set up the user skeleton, so the newly created users will be set up as needed.
+Fancy login message will sure help;)
+
+.. code-block:: bash
+
+  sudo su
 
   # colrize prompt - uncomment force_color_prompt=yes
   # add ll alias - uncomment alias ll='ls -l'
@@ -139,14 +191,10 @@ Login as user (can be done by ``su user`` in root shell):
   # # wget impersonating normal browser
   # # good for being tracked with goo.gl for example
   # alias wgets='H="--header"; wget $H="Accept-Language: en-us,en;q=0.5" $H="Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8" $H="Connection: keep-alive" -U "Mozilla/5.0 (Windows NT 5.1; rv:10.0.2) Gecko/20100101 Firefox/10.0.2" --referer=/ '
-  nano ~/.bashrc
-  . ~/.bashrc
-
-  # set timezone so the time is displayed correctly
-  echo "TZ='Europe/Prague'; export TZ" >> ~/.profile
+  vi /etc/skel/.bashrc
 
   # some screen settings
-  cat > ~/.screenrc << 'EOF'
+  cat > /etc/skel/.screenrc << 'EOF'
   hardstatus alwayslastline
   hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%d.%m. %{W}%c%{g}]'
 
@@ -155,8 +203,43 @@ Login as user (can be done by ``su user`` in root shell):
   startup_message off
   EOF
 
+  mkdir -p /etc/skel/.config/rstudio
+  cat > /etc/skel/.config/rstudio/rstudio-prefs.json <<'EOF'
+  {
+      "save_workspace": "never",
+      "font_size_points": 11,
+      "editor_theme": "Solarized Dark",
+      "panes": {
+          "quadrants": [
+              "TabSet1",
+              "TabSet2",
+              "Source",
+              "Console"
+          ],
+          "tabSet1": [
+              "Environment",
+              "History",
+              "Files",
+              "Connections",
+              "Build",
+              "VCS",
+              "Tutorial",
+              "Presentation"
+          ],
+          "tabSet2": [
+              "Plots",
+              "Packages",
+              "Help",
+              "Viewer"
+          ],
+          "console_left_on_top": false,
+          "console_right_on_top": false
+      },
+      "posix_terminal_shell": "bash"
+  }
+  EOF
+
   # MOTD
-  sudo su
   cat > /etc/motd <<"EOF"
 
     _ __   __ _ ___        ___ ___  _   _ _ __ ___  ___
@@ -168,8 +251,12 @@ Login as user (can be done by ``su user`` in root shell):
   EOF
   exit
 
-  # everyone likes git and screen
-  sudo apt install git screen pv curl wget jq locate
+
+Install some basic software
+
+.. code-block:: bash
+
+  sudo apt install pv curl wget jq locate
 
   # build tools
   sudo apt install build-essential pkg-config autoconf
@@ -178,26 +265,40 @@ Login as user (can be done by ``su user`` in root shell):
   sudo apt install python-dev python-pip python-virtualenv
 
   # java because of fastqc
-  sudo apt install openjdk-8-jre-headless
+  # sudo apt install openjdk-8-jre-headless
+
+  # let's try default jre
+  sudo apt install default-jre-headless
+
+Set up a dynamic DNS to get some nice login name.
+
+.. code-block:: bash
+
+  cd
+  ln -s dotfiles/duckdns
+
+  cat duckdns/duck.cron
+  # add the printed line to crontab
+  crontab -e
 
 This is what it takes to create a basic usable system in VirtualBox. We can shut
 it down now with ``sudo shutdown -h now`` and take a snapshot of the machine. If
 any installation goes haywire from now on, it's easy to revert to this basic
 system.
 
-Install additional software
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install R and RStudio
+^^^^^^^^^^^^^^^^^^^^^
 
 R is best used in RStudio - server version can be used in web browser.
 
 .. code-block:: bash
 
-  mkdir sw
-  cd sw
+  mkdir ~/sw
+  cd ~/sw
 
   # install latest R
   # https://cran.r-project.org/bin/linux/debian/
-  sudo bash -c "echo 'deb http://mirrors.nic.cz/R/bin/linux/debian buster-cran35/' >> /etc/apt/sources.list"
+  sudo bash -c "echo 'deb http://cloud.r-project.org/bin/linux/debian buster-cran40/' > /etc/apt/sources.list.d/cran.list"
   sudo apt install dirmngr
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
   sudo apt update
@@ -211,27 +312,63 @@ R is best used in RStudio - server version can be used in web browser.
 
   # RStudio with prerequisities
   sudo apt install gdebi-core
-
-  # 1.1.463 is the latest 32 bit version, no more updates...
-  # https://support.rstudio.com/hc/en-us/articles/206569407-Older-Versions-of-RStudio
-  wget https://download2.rstudio.org/rstudio-server-1.1.463-i386.deb
-
-  # https://rstudio.com/products/rstudio/download-server/debian-ubuntu/
-  # 64 bit
-  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.2.5019-amd64.deb
-
-  # occasionally it's necessary to install older libssl
-  # see https://unix.stackexchange.com/a/394462
-  # go to https://packages.debian.org/jessie/i386/libssl1.0.0/download
-  # copy .deb the link there, do gdebi .deb
+  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1093-amd64.deb
   sudo gdebi rstudio-server-*.deb
+
   # and fix upstart config
   # https://support.rstudio.com/hc/en-us/community/posts/200780986-Errors-during-startup-asio-netdb-error-1-Host-not-found-authoritative-
   # remove 2 from [2345]
   sudo nano /usr/lib/rstudio-server/extras/upstart/rstudio-server.conf
-  rm rstudio-server-*.deb
 
-Open http://localhost:8787 and reconfigure layout and colors.
+  # install nginx as a front end
+  # snapd is needed for certbot ;(
+  sudo apt install nginx snapd
+
+  # test if http is accessible from local browser
+
+  # simple nginx proxy config for rstudio
+  sudo su
+  cat > /etc/nginx/sites-enabled/ngs-course.duckdns.org <<'EOF'
+    map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+    }
+
+    server {
+    location / {
+        proxy_pass http://localhost:8787;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_read_timeout 20d;
+    }
+
+    server_name ngs-course.duckdns.org;
+
+    listen 80;
+
+    }
+  EOF
+
+  # remove the default site
+  rm /etc/nginx/sites-enabled/default
+
+  # test and reload
+  nginx -t
+  nginx -s reload
+
+  # test if RStudio login page is visible at http
+  # .. we'll use the non-sudo account to access rstudio later
+
+  # secure with certbot
+  # (snap paths are somehow broken..and restarting the whole system is soo windows98)
+  /snap/bin/certbot --nginx
+
+
+TODO: Open http://localhost:8787 and reconfigure layout and colors.
+
+Install additional software
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 There are packages that are not in the standard repos, or the versions in the
 repos is very obsolete. It's worth it to install such packages by hand, when
@@ -239,7 +376,7 @@ there is not much dependencies.
 
 .. code-block:: bash
 
-  mkdir ~/sw
+  mkdir -p ~/sw
 
   # install a tar with the most common method
   inst-tar() {
@@ -269,7 +406,7 @@ there is not much dependencies.
 
   # fastqc
   cd ~/sw
-  wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip
+  wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip
   unzip fastqc_*.zip
   rm fastqc_*.zip
   chmod +x FastQC/fastqc
@@ -283,20 +420,18 @@ there is not much dependencies.
   make && sudo make install
 
   # samtools
-  inst-tar https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2
+  inst-tar https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2
 
   # bcftools
-  inst-tar https://github.com/samtools/bcftools/releases/download/1.9/bcftools-1.9.tar.bz2
+  inst-tar https://github.com/samtools/bcftools/releases/download/1.11/bcftools-1.11.tar.bz2
 
   # htslib (tabix)
-  inst-tar https://github.com/samtools/htslib/releases/download/1.9/htslib-1.9.tar.bz2
+  inst-tar https://github.com/samtools/htslib/releases/download/1.11/htslib-1.11.tar.bz2
 
   # bwa
   cd ~/sw
   wget -O - https://github.com/lh3/bwa/releases/download/v0.7.17/bwa-0.7.17.tar.bz2 | tar xj
   cd bwa*
-  # 32 bit: add -msse2 to CFLAGS
-  # nano Makefile
   make
   sudo cp bwa /usr/local/bin
   # copy the man
@@ -306,21 +441,14 @@ there is not much dependencies.
   cd ~/sw
   wget -O - https://www.ebi.ac.uk/~zerbino/velvet/velvet_1.2.10.tgz | tar xz
   cd velvet*
-  # 32 bit: comment out the -m64 line, we're on x86
-  # nano Makefile
   make
   sudo cp velveth velvetg /usr/local/bin
 
   # bedtools
   cd ~/sw
-  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.29.0/bedtools-2.29.0.tar.gz | tar xz
+  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.29.2/bedtools-2.29.2.tar.gz | tar xz
   cd bedtools2/
   make && sudo make install
-
-  # htop if network fails
-  wget http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_2.2.0-2_i386.deb
-  wget http://ftp.cz.debian.org/debian/pool/main/h/htop/htop_2.2.0-2_amd64.deb
-  # then gdebi htop* at the lesson
 
   # clean up
   rm -rf bcftools-*/ bedtools2/ bwa-*/ htslib-*/ parallel-*/ pv-*/ samtools-*/ tabtk/ vcftools-vcftools-*/
@@ -333,6 +461,57 @@ quality code with something like this (does not work with tags yet)::
 Check what are the largest packages::
 
   dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+
+Create the user accounts
+^^^^^^^^^^^^^^^^^^^^^^^^
+For a multi-user machine, we need the low-privileged accounts and at least a quota
+to prevent DoS by overfilling the disk.
+
+Name the accounts `user01` to `user22`:
+
+.. code-block:: bash
+
+  sudo su
+  cd
+
+  # aptitude search '?provides(wordlist)'
+  apt install wamerican
+
+  # generate some funny passwords
+  </usr/share/dict/words egrep "^[a-z]{5,8}$" |
+    sort -R |
+    paste -d' ' - - - |
+    head -22 |
+    nl -w2 -n'rz' |
+    sed 's/^/user/' \
+  > users.tsv
+
+  # use `adduser` as debian alternative
+  # --gecos '' --disabled-password to get unattended run
+  adduser --gecos '' --disabled-password liborm
+  adduser --gecos '' --disabled-password janouse1
+  usermod -a -G sudo liborm
+  usermod -a -G sudo janouse1
+
+  # normal users
+  <users.tsv cut -f1 | xargs -n1 adduser --gecos '' --disabled-password
+
+  # use chpasswd to update the passwords
+  <users.tsv tr "\t" ":" | chpasswd
+
+  # add quotas
+  # https://www.digitalocean.com/community/tutorials/how-to-set-filesystem-quotas-on-debian-10
+  apt install quota
+  # add ,usrquota to / mount
+  vi /etc/fstab
+  mount -o remount /
+  quotacheck -ugm /
+  quotaon -v /
+  <users.tsv cut -f1 | xargs -I{} setquota -u {} 8G 10G 0 0 /
+
+  # copy-paste users.tsv to shared google sheet
+  # delete on disk
+  rm users.tsv
 
 Sample datasets
 ^^^^^^^^^^^^^^^
@@ -360,15 +539,12 @@ Transfer the data to `user` directory (`root` cannot log in remotely):
 
   # on host machine
   cd somewhere.../data-pack
-  scp -P 2222 -r data-shared user@localhost:~
-  scp -P 2222 -r home/user/projects user@localhost:~
 
-  # hyperv non-localhost
-  VM=192.168.62.71
-  scp -r data-shared "user@$VM:~"
-  scp -r home/user/projects "user@$VM:~"
+  VM=ngs-course.duckdns.org
+  scp -r data-shared "debian@${VM}:~"
+  scp -r home/user/projects "debian@${VM}:~"
 
-Back on the guest machine.
+On the remote machine:
 
 .. code-block:: bash
 
@@ -393,11 +569,6 @@ Cleanup
   # ctrl-d
   history -cw
 
-Packing the image
-^^^^^^^^^^^^^^^^^
-Now shut down the VM and click in VirtualBox main window ``File > Export
-appliance``. Upload the file to a file sharing service, and use the `goo.gl` url
-shortener to track the downloads.
 
 Slide deck
 ----------
