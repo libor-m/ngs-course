@@ -94,9 +94,11 @@ Create new machine
 We expect ~16 participants. To make things simple we'll host them all on a single instance.
 
 Follow the Meta Cloud `quick start <https://cloud.gitlab-pages.ics.muni.cz/documentation/quick-start/>`_.
-- add keys
+Briefly:
+
+- add ssh keys
 - add SSH and ICMP security rules (more rules later)
-- Compute > Instance > Launch instance
+- `Compute > Instance > Launch instance`, fill this in the wizard dialog
 
     - Debian (64 bit)
     - flavor `hpc.16core-32ram`
@@ -110,7 +112,6 @@ Follow the Meta Cloud `quick start <https://cloud.gitlab-pages.ics.muni.cz/docum
   - 60k-61k for mosh
   - 5690 rstudio + shiny
 
-- TODO:  disk quota
 
 Debian conifg
 ^^^^^^^^^^^^^
@@ -203,6 +204,9 @@ Fancy login message will sure help;)
   startup_message off
   EOF
 
+  # basic RStudio ide config
+  # obtained by configuring one instance for liborm and then copying the
+  # resulting file
   mkdir -p /etc/skel/.config/rstudio
   cat > /etc/skel/.config/rstudio/rstudio-prefs.json <<'EOF'
   {
@@ -363,9 +367,6 @@ R is best used in RStudio - server version can be used in web browser.
   # secure with certbot
   # (snap paths are somehow broken..and restarting the whole system is soo windows98)
   /snap/bin/certbot --nginx
-
-
-TODO: Open http://localhost:8787 and reconfigure layout and colors.
 
 Install additional software
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

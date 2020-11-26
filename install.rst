@@ -1,45 +1,21 @@
 Installation instructions
 =========================
 
-We will be using a virtual computer pre-installed with Debian Linux and sample data necessary for the exercises.
+We will be all connecting to a single remote server hosted by
+`MetaCentrum <https://www.metacentrum.cz/>`_.
 
 .. note::
-  You need to install the image even if your main system is Linux / Mac OS X!
-
-Installation steps (it should take about 10 minutes, use some good Internet link):
-
-- Install VirtualBox (https://www.virtualbox.org/wiki/Downloads). It works on Linux and Mac too.
-- Download the virtual machine image from this link: https://owncloud.cesnet.cz/index.php/s/lCnNzqf9xv59Dp6 (~ 1.5 GB). You'll get a single
-  file with ``.ova`` extension.
-- You can either double click the ``.ova`` file, or run VirtualBox, and choose ``File > Import Appliance``.
-  Follow the instructions after the import is started.
-
-After successful installation you should see something like this.
-Check whether you can start the virtual machine: click ``Start`` in the main VirtualBox window:
-
-.. image:: _static/vbox-main.png
-
-After a while you should see something like this:
-
-.. image:: _static/vbox.png
-
-You don't need to type anything into that window, just checking that it looks like the screen shot is enough.
-
-.. note::
-  If VirtualBox does not work for you and you have Windows 10, you can try :ref:`win10_install`.
-
-How to access the machine
--------------------------
-It is much more comfortable to use a native terminal application, rather than
-the small VirtualBox 'monitor'. You will connect to the machine differently,
-depending on what operating system you are using.
+    You will connect to the machine differently, depending on what
+    operating system you are using.
 
 Windows
 ^^^^^^^
 Install `Git for Windows <https://git-scm.com/download/win>`_. We'll use it to
-control the virtual computer.
+control the remote computer.
 
-Be sure to check ``Git Bash Here``, keep the default settings in the other screens.
+When installing Git Bash, go with the default settings, just
+make sure you check ``Git Bash Here``. Keep in mind that the images are from an
+older version of the installer.
 
 .. image:: _static/git-for-win-1.png
 
@@ -51,19 +27,20 @@ run this and exit the terminal (``exit``)::
   curl -sL https://owncloud.cesnet.cz/index.php/s/1B1NnrI4lqQtY9Q/download > ~/.minttyrc
 
 Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
-``Installation package``).  WinSCP will be used to transfer files between your
-'host' computer and the virtual computer.
+``Installation package``). WinSCP will be used to transfer files between your
+computer and the remote computer.
 
-Mac OS X and Linux
-^^^^^^^^^^^^^^^^^^
-Ssh is used to control the virtual computer. It should be already installed in your computer.
+macOS and Linux
+^^^^^^^^^^^^^^^
+``ssh`` is used to control the virtual computer. It should be already installed in your computer.
 
 Files can be transferred with ``scp``, ``rsync`` or ``lftp`` (recommended)
-from the command line. `Scp` and `rsync` could be already installed in your system,
-if you want to use `lftp`, you'll probably have to install it yourself.
+from the command line. `scp` and `rsync` could be already installed in your system,
+if you want to try `lftp`, you'll probably have to install it yourself.
 
-Mac users that prefer grapical clients can use something like `CyberDuck`. See
-http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x .
+Mac users that prefer grapical clients can use something like `CyberDuck`. Check
+the `answers here
+<http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x>`_.
 
 Time to log in!
 ---------------

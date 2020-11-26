@@ -1,5 +1,5 @@
-Best practice
-=============
+A few more tips
+===============
 
 This is a collection of tips, that may help to overcome the initial barrier of
 working with a 'foreign' system. There is a lot of ways to achieve the
@@ -16,19 +16,22 @@ runs terminal in the folder that you clicked. Git itself is meant for managing
 versions of directories, but it cannot live without the UNIX environment, so
 someone did the hard work and packaged it all nicely together.
 
-If you need more complete UNIX environment with many packages 'inside' your
-Windows,  you can use `Cygwin <https://www.cygwin.com/>`_. But it is quite
-complete, which leads you to believe that it can replace native UNIX, which
-you'll find painfully later is not true;)
+If you need more complete UNIX environment, there are currently several options.
+If you have a recent version of Windows 10 (yes, there are different versions
+of Window 10), you can enable 'Windows Subsystem for Linux (WSL)' and then install
+Ubuntu or Debian from the Windows Store. It's a marvel of engineering to connect
+two operating systems, you're getting a 'real' Linux.
 
-An easy way of getting UNIX environment in Windows is to install a basic Linux
-into a virtual machine as you have seen in the course. It's much more
+
+In older Windows,  you can use `Cygwin <https://www.cygwin.com/>`_. It is quite
+complete, but it can't replace native UNIX, as you'll find sooner or later.
+
+Another easy way of getting a UNIX environment in Windows is to install a basic Linux
+into a virtual machine. Our previous courses used this method. It's much more
 convenient that the dual boot configurations, and the risk of completely
 breaking your computer is lower. You can be using UNIX while having all your
 familiar stuff at hand. The only downside is that you have to transfer all the
-data as if the image was a remote machine. Unless you're able to set up
-windows  file sharing on the Linux machine. This is the way the author prefers
-(you can ask;).
+data as if the image was a remote machine.
 
 It's much more convenient to use a normal terminal like PuTTY to connect to
 the  machine rather than typing the commands into the virtual screen of
@@ -40,7 +43,7 @@ terminal program (``konsole``, ``xterm``, ``Terminal`` ...).
 
 Essentials
 ----------
-Always use ``screen`` for any serious work. Not using screen will cause your
+Always use ``screen`` for any remote work. Not using screen will cause your
 jobs being interrupted when the network link fails (given you're working remotely),
 and it will make you keep your home computer running even if your calculation is running
 on a remote server.
