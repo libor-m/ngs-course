@@ -257,11 +257,7 @@ FastQC exercise
 
   When checking quality of multiple fastq files, there is `MultiQC
   <http://multiqc.info/>`_ - it takes the output of multiple FastQC runs and
-  generates a nice summary. You can try to run MultiQC as a homework (please not in the class,
-  it downloads a lot of data)::
-
-    sudo apt install python-pip python-matplotlib
-    sudo pip install multiqc
+  generates a nice summary. You can try to run MultiQC as a homework::
 
     # run the multiqc on the fastqc results
     multiqc -o 03-multiqc 01-quality
