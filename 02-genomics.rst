@@ -1,20 +1,20 @@
 Session 2: Genomic data
 =======================
 
-During this course we are going to use various genomic data stored in standard formats 
-that can be easily read and processed with UNIX shell commands. This session provides 
-overview of these common data formats. Specialized tools that are optimized for work 
-with these data will be mentioned here as well. 
+During this course we are going to use various genomic data stored in standard formats
+that can be easily read and processed with Unix shell commands. This session provides
+overview of these common data formats. Specialized tools that are optimized for work
+with these data will be mentioned here as well.
 
-Complex tasks are more easy to be conducted with specialized genomic tools rather 
-than trying to achieve that solely by using built-in UNIX command line tools. 
-Not mentioning here very specific bioinformatic tasks like read mapping, 
+Complex tasks are more easy to be conducted with specialized genomic tools rather
+than trying to achieve that solely by using built-in Unix command line tools.
+Not mentioning here very specific bioinformatic tasks like read mapping,
 assembly and others that simply need a software developed for such purposes.
 
-The advantage is that majority of the specialized genomic software can be run 
-in the command line. The most efficient work is based on combination of both 
-built-in UNIX shell commands and specialized genomic tools. Built-in UNIX shell 
-commands can be used to direct flow of the data in the bioinformatic pipeline, 
+The advantage is that majority of the specialized genomic software can be run
+in the command line. The most efficient work is based on combination of both
+built-in Unix shell commands and specialized genomic tools. Built-in Unix shell
+commands can be used to direct flow of the data in the bioinformatic pipeline,
 carry basic processing of the data, and run genomic tools with specified parameters.
 
 Common genomic tools

@@ -4,7 +4,7 @@ Session 5: Graphics session
 .. pull-quote:: A picture is worth a thousand words.
 
 Especially when your data is big. We'll try to show you one of the easiest
-ways to get nice pictures from your UNIX. We'll be using R, but we're not
+ways to get nice pictures from your Unix. We'll be using R, but we're not
 trying to teach you R. R Project is huge, and mostly a huge mess. We're cherry
 picking just the best bits;)
 
@@ -23,7 +23,7 @@ Prepare the input file
 Our input dataset is huge, and we want to use only some subset of the animals.
 Let's choose few  european individuals. They have ``RDS, KCT, MWN`` and
 ``BAG`` in their names. Each programmer is lazy and prefers to avoid mistakes
-by letting the machine do the work - let's find the right  columns with UNIX
+by letting the machine do the work - let's find the right  columns with Unix
 tools.
 
 .. code-block:: bash

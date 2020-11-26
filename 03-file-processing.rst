@@ -1,8 +1,8 @@
-Session 3: Plain text file processing in UNIX
+Session 3: Plain text file processing in Unix
 =============================================
 
 This session focuses on plain text file data extraction/modification
-using built-in UNIX tools.
+using built-in Unix tools.
 
 Pattern search & regular expressions
 ------------------------------------
@@ -62,7 +62,7 @@ Pattern search & regular expressions
 Word and line count
 -------------------
 
-``wc`` command states for *word count* provides a quick summary statistics on the plain text file 
+``wc`` command states for *word count* provides a quick summary statistics on the plain text file
 content. Bytes, words and lines can be counted in defined files.
 
 .. code-block:: bash
@@ -74,7 +74,7 @@ content. Bytes, words and lines can be counted in defined files.
 To calculate the number of bytes, words and lines in every file listed:
 
 .. code-block:: bash
-  
+
   wc -c *.txt
   wc -w *.txt
   wc -l *.txt
@@ -83,18 +83,18 @@ To calculate the number of bytes, words and lines in every file listed:
 Retrieve & count unique records
 -------------------------------
 
-Often times we face a problem of how many unique records we have 
+Often times we face a problem of how many unique records we have
 in a file or how many there are instances of every unique item.
 
-UNIX provides efficient way to cut (``cut``) desired columns and retrieve unique 
+Unix provides efficient way to cut (``cut``) desired columns and retrieve unique
 records for selected column (``sort -u``). Additionaly, we can count the instances (``uniq -c``).
 
-Typical examle of use in bioinformatics is to count the number of genes 
+Typical examle of use in bioinformatics is to count the number of genes
 or SNPs per contig or chromosome.
 
-To select specified columns ``cut`` command can be used. By default, ``cut`` 
-use whitespace as separator. When there is need to distinguish between 
-standard whitespece and ``TAB`` (i.e. ``TAB``-separated files) then ``-d $'\t'`` 
+To select specified columns ``cut`` command can be used. By default, ``cut``
+use whitespace as separator. When there is need to distinguish between
+standard whitespece and ``TAB`` (i.e. ``TAB``-separated files) then ``-d $'\t'``
 delimiter has to be set explicitly. When all columns except a specific column(s)
 are supposed to be selected ``--complement`` flag can be used.
 
@@ -104,11 +104,11 @@ are supposed to be selected ``--complement`` flag can be used.
   cut -d $'\t' -f1-3 file.txt
   cut --complement -f4 file.txt # Select all columns except column 4
 
-Content of the file can be sorted based on the specified column (``-k1,1``) 
+Content of the file can be sorted based on the specified column (``-k1,1``)
 or range of columns (``-k1,3``). When the data needs to be sorted numerically (``-n``)
 or in reverse order (``-r``) appropriate flags need to be added. Similarly to ``cut``
-command ``sort`` recognizes as separator any whitespace. When ``TAB`` is used as a separator, 
-to enforce distinction from the possible whitespaces used in the file, 
+command ``sort`` recognizes as separator any whitespace. When ``TAB`` is used as a separator,
+to enforce distinction from the possible whitespaces used in the file,
 ``-d $'\t'`` flag has to be used explicitly.
 
 .. code-block:: bash
@@ -135,13 +135,13 @@ Another common task in bioinformatics is a string extraction and/or replacement.
 Often times we need to extract specific piece of information from a complex data.
 
 Typical example is the extraction of a specific value according to a TAG in gff3
-or VCF file. As positions of TAGS can differ from line to line, using ``cut`` 
-command is simply not possible. Matching using ``sed`` based on a TAG is 
+or VCF file. As positions of TAGS can differ from line to line, using ``cut``
+command is simply not possible. Matching using ``sed`` based on a TAG is
 the only possibility. ``regex`` can be used to match appropriate pattern using ``sed``.
 
-Another typical task is a replacing of delimiters. ``tr`` command is very 
+Another typical task is a replacing of delimiters. ``tr`` command is very
 well suited for this task. ``-d`` flag can be used to remove specific characters
-from the file. The whole classes can be replaced which can be for instance 
+from the file. The whole classes can be replaced which can be for instance
 used to change uppercase to lowercase or vice versa.
 
 .. note::
@@ -162,9 +162,9 @@ Typical usage of ``tr`` is as follows:
   tr -d "\n" file.txt # Remove new line characters (``\n``)
   tr "[A-Z]" "[a-z]" # Replace uppercase to lowercase
 
-To match a specific string in the file ``sed`` can use ``regex`` similar 
-to ``grep`` command. However, to use full ``regex`` functionality 
-and simplify the regex syntax, **extended regular expression** flag 
+To match a specific string in the file ``sed`` can use ``regex`` similar
+to ``grep`` command. However, to use full ``regex`` functionality
+and simplify the regex syntax, **extended regular expression** flag
 ``r`` (``-E`` for Mac OSX) has to be used.
 
 Comparison of use of standard ``sed`` and use of ``sed`` with extended
@@ -182,9 +182,9 @@ regular expressions ``sed -r``:
   # The same thing using extended regular expressions:
   sed -r 's/^[AGCT]+/N/'
 
-``sed`` can be used also for string extraction. Matched string designated 
-to be extracted has to be marked in rounded brackets ``(string)`` 
-and passed to the output with following notation: ``\#`` where # character 
+``sed`` can be used also for string extraction. Matched string designated
+to be extracted has to be marked in rounded brackets ``(string)``
+and passed to the output with following notation: ``\#`` where # character
 states for the position starting with 1 in the matched string (i.e. there can be
 multiple extractions from one matched string).
 
@@ -195,9 +195,9 @@ multiple extractions from one matched string).
 .. note::
 
   ``sed -r`` (text Stream EDitor) can do a lot of things, however,
-  pattern replacement and extraction is the best thing to use it for. 
-  The 'sed language' consists of single character commands, and it is no fun 
-  to code and even less fun to read (what does ``sed 'h;G;s/\n//'`` do?;). 
+  pattern replacement and extraction is the best thing to use it for.
+  The 'sed language' consists of single character commands, and it is no fun
+  to code and even less fun to read (what does ``sed 'h;G;s/\n//'`` do?;).
   Use ``awk`` for more complex processing (*see next session*).
 
 *Use nightingale variant call file (VCF)*
@@ -232,8 +232,8 @@ Join & paste data
 The final part of this session is joining and pasting data. Here, we seek to merge multiple
 files into one. ``join`` command corresponds to standard ``JOIN`` command known from ``SQL`` language.
 It joins two files based on specific key column. It assumes that both files contain a column representing
-keys the are in both files. **Both files must be sorted by the key before any joining task**. 
-``join`` command has the same functionality as a standard ``JOIN`` meaning that supports ``INNER JOIN``, 
+keys the are in both files. **Both files must be sorted by the key before any joining task**.
+``join`` command has the same functionality as a standard ``JOIN`` meaning that supports ``INNER JOIN``,
 ``LEFT JOIN``, ``RIGHT JOIN`` and ``FULL OUTER JOIN`` (`Join types <http://www.sql-join.com/sql-join-types>`_).
 
 By default the column considered to be **key** is the first column in both input files. As already mentioned
@@ -245,7 +245,7 @@ the key column needs to be sorted in a same way in both files.
   sort -k1,1 file2.txt > file2.tmp
   join file1.tmp file2.tmp > joined-file.txt
 
-If **key** column is at different position it needs to be specified on the input 
+If **key** column is at different position it needs to be specified on the input
 using ``-1`` and ``-2`` flags:
 
 .. code-block:: bash
@@ -254,7 +254,7 @@ using ``-1`` and ``-2`` flags:
   sort -k3,3 file2.txt > file2.tmp # key column on the 3rd position
   join -12 -23 file1.tmp file2.tmp > joined-file.txt
 
-To specify that the ``join`` is supposed to print **unpaired** lines corresponding to **left, right 
+To specify that the ``join`` is supposed to print **unpaired** lines corresponding to **left, right
 and full outer join**, specification of the file to print unpaired lines from has to be done using
 ``-a`` flag. Also, ``-e`` flag sets value for missing values
 
@@ -269,17 +269,17 @@ and full outer join**, specification of the file to print unpaired lines from ha
   # Full outer join
   join -a1 -a2 -e NA file1.tmp file2.tmp > joined-file.txt
 
-Another command that can be used to merge two or more files is ``paste``. ``paste`` as opposed to 
-``join`` simply align files by column (corresponding to ``cbind`` in ``R``). No **key** column 
+Another command that can be used to merge two or more files is ``paste``. ``paste`` as opposed to
+``join`` simply align files by column (corresponding to ``cbind`` in ``R``). No **key** column
 is needed as it assumes **one to one correspondence** between the two files.
 
 .. code-block:: bash
 
   paste file1.txt file2.txt > file-merged.txt
 
-``paste`` command can also be used for smart file transpositions. ``paste`` by default 
-expects input multiple files per one line. However, when only one file provided with other 
-possible file possitions filed with ``-`` the command ``paste`` takes the further columns 
+``paste`` command can also be used for smart file transpositions. ``paste`` by default
+expects input multiple files per one line. However, when only one file provided with other
+possible file possitions filed with ``-`` the command ``paste`` takes the further columns
 from next lines of the only file provided. This feature enables to transpose multiple lines
 into one line.
 

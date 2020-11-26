@@ -70,7 +70,7 @@ like this:
 Parsing Fastq and decoding Phred
 --------------------------------
 To understand better what is in the FastQC plots, we will try to reproduce the
-plots using UNIX and ggplot. You should be able to understand the
+plots using Unix and ggplot. You should be able to understand the
 following pipeline, at least by taking it apart with the help of head or less.
 A brief description:
 
