@@ -60,12 +60,10 @@ content. Bytes, words and lines can be counted in defined files.
   wc -w file.txt # Number of words in a file
   wc -l file.txt # Number of lines in a file
 
-To calculate the number of bytes, words and lines in every file listed:
+To calculate the number of lines in every file listed:
 
 .. code-block:: bash
 
-  wc -c *.txt
-  wc -w *.txt
   wc -l *.txt
 
 1. Count the number of variants in the file
@@ -148,6 +146,26 @@ have to be sorted.
   sort -u file.txt # Retrieve unique records in the file
   < file.txt sort | uniq -c # Count number of instances for every unique item
 
+**Exercise: Which chromosome has the highest and the least number of variants?**
+
+.. code-block:: bash
+
+  < data-shared/luscinia_vars_flags.vcf grep -v '^#' |
+  cut -f1 |
+  sort |
+  uniq -c |
+  sort -k1,1n
+
+**Exercise: Get the first six base pairs from every read**
+
+.. code-block:: bash
+
+  < *.fastq zcat | 
+  grep -E "^[ACGT]+$" | 
+  cut -c1-6
+  sort | 
+  uniq -c |
+  less
 
 String extraction and replacement
 ---------------------------------
@@ -185,6 +203,16 @@ Typical usage of ``tr`` is as follows:
   tr "\t" ";" file.txt # To replace TAB separator to semicolon
   tr -d "\n" file.txt # Remove new line characters (``\n``)
   tr "[A-Z]" "[a-z]" # Replace uppercase to lowercase
+
+**Exercise: What is the number of samples in the VCF file?**
+
+.. code-block:: bash
+
+  < data-shared/luscinia_vars_flags.vcf grep -v '^##' |
+  head -n1 |
+  cut --complement -f1-9 |
+  tr "\t" "\n" |
+  wc -l
 
 To match a specific string in the file ``sed`` can use ``regex`` similar
 to ``grep`` command. However, to use full ``regex`` functionality
@@ -241,32 +269,19 @@ sequences).
   # Match any repeating pattern
   grep -o -E "([ATGC]{1,})\1+"
 
+**Exercise: Microsatellites statistics**
 
-*Exercies: Use nightingale variant call file (VCF)*
-
-1. Which chromosome has the highest and the least number of variants?
+Extract all AT dinucleotides repeating at least twice and calculate 
+their frequency distribution in the whole dataset.
 
 .. code-block:: bash
 
-  < data-shared/luscinia_vars_flags.vcf grep -v '^#' |
-  cut -f 1 |
-  sort |
+  < *.fastq zcat | 
+  grep -E "^[ACGT]+$" | 
+  grep -o -E "(AT){2,}" |
+  sort | 
   uniq -c |
-  sed -r 's/^ +//' |
-  tr " " "\t" |
-  sort -k1,1nr
-
-2. What is the number of samples in the VCF file?
-
-.. code-block:: bash
-
-  < data-shared/luscinia_vars_flags.vcf grep -v '^##' |
-  head -n1 |
-  cut --complement -f 1-9 |
-  tr "\t" "\n" |
-  wc -l
-
-Figure out alternative solution for exercise 2.
+  less
 
 Join & paste data
 -----------------
@@ -345,6 +360,14 @@ Example:
 type separated files with one read per line.** We will use this functionality in upcoming
 session.
 
+**Exercise: Convert FASTQ file to TAB separated file with each read on one line**
+
+.. code-block:: bash
+
+  < *.fastq zcat | 
+  paste - - - - |
+  cut --complement -f3 \
+  reads.tab
 
 Exercise
 --------
