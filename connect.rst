@@ -32,6 +32,9 @@ how many characters your password has.
 In **macOS** your terminal program is called 'Terminal', in **Linux** you have
 several options like 'Konsole', 'xterm' etc.
 
+On Chromebook, you need to install the
+`Secure Shell App <https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo?hl=en>`_.
+
 Connect to copy files
 ---------------------
 In Windows, WinSCP can be used to copy files to Linux machines.
