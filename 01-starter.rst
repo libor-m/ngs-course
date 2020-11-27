@@ -1,5 +1,5 @@
-Session 1: Unix Basics
-======================
+Session 1: Basic Unix
+=====================
 
 This session will give you all the basics that you need
 to smoothly move around when using a Unix system (in the text mode!).
@@ -13,6 +13,32 @@ Basic orientation
    than in other programs - especially because ``ctrl+c`` means to kill the current
    program. To **copy text to clipboard** just select it with your left mouse button.
    To **paste from clipboard** either click midlle mouse button, or press ``shift+insert``.
+
+Command line
+^^^^^^^^^^^^
+
+How does it work with commands in command line? Typical command is composed of command
+name, flag, flag value, path to input file and path to output file.
+
+.. code-block:: bash
+
+  command -flag(value) input > output
+
+  # Specific example
+  head -n10 file.txt > out.txt
+
+How do I know which flags to use for individual commands? There is several ways. You can
+you command documentation using ``man``, or most of commands have help option ``-h`` 
+or ``--help``. Below is way to call manual and help.
+
+.. code-block:: bash
+
+  # using manual
+  man head
+
+  # help
+  head -h
+  head --help
 
 Check your keyboard
 ^^^^^^^^^^^^^^^^^^^
@@ -50,14 +76,19 @@ definitely need those keys::
 
 Be safe when the network fails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 When you are disconnected from the machine due to any technical problems,
 all your running programs are killed. To prevent this, we suggest to use
 the ``screen`` tool for all your work::
+
+.. code-block:: bash
 
   screen
 
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
 To attach again type::
+
+.. code-block:: bash
 
   screen -r
 
