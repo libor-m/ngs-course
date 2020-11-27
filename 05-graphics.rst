@@ -92,7 +92,7 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
 
 Now open RStudio
 ^^^^^^^^^^^^^^^^
-Just click this link (ctrl-click to keep this manual open): `Open RStudio <http://localhost:8787>`_.
+Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.duckdns.org>`_.
 
 In R Studio choose ``File > New file > R Script``. R has a working directory
 as well. You can change it with ``setwd``. Type this code into the newly
