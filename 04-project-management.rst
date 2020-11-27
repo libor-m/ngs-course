@@ -1,11 +1,13 @@
-Session 4: Unix - Advanced II
-=============================
+Session 4: Unix - "Real" Project
+================================
 
-You will learn to:
+Here you will learn several concepts needed for running real projects:
 
-- keep your code in a file and data in a different place
+- use one screen sessions per project (if you're juggling more projects)
+- keep your code in a text file
+- keep your data files separate from your code
 - write handy scripts in ``awk``
-- tidy your code by using functions and script files
+- make your intent more legible by wrapping code in functions and script files
 - scale to multiple files and speed up your processing
 
 Keep your stuff ordered
@@ -21,7 +23,8 @@ Let's pretend we're starting to work on something serious, a new project::
   cd unix-advanced
 
   # definitely run screen to be safe
-  screen -S advanced-2
+  # screen sessions can be named, wich helps you
+  screen -S advanced
 
   # prepare source data
   cp /data-shared/bed_examples/Ensembl.NCBIM37.67.bed data/
@@ -30,6 +33,11 @@ Let's pretend we're starting to work on something serious, a new project::
 
   # note and save all the (working) code
   nano workflow.sh
+
+.. note::
+  The nano bottom bar has a lot of weird symbols. ``^O`` means type ``ctrl-o``,
+  pressing both of the keys at once. ``M-U`` means ``alt-u``, again pressing both
+  simultaneously. For some reason, ``Write Out`` means **Save** in usual parlance.
 
 Now you'll be typing your code in the nano window and pasting it to the
 other window where the shell is running. You'll be writing code on your own
