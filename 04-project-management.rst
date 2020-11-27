@@ -216,6 +216,16 @@ We need to mark the file as executable and test it:
     # and run it (the ./ is important!)
     ./fastq-filter-length.sh
 
+.. note::
+
+  You can check file permissions by typing ``ll`` instead of ``ls``.
+  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
+  for *User*, *Group*, and *Others*. The two names you see next to the
+  permissions are file's owner user and group.
+
+  You can change the permissions - if you have the permission to do so -
+  by e.g. ``chmod go+w`` - "add write permission to group and others".
+
 Now collect your code from above (contents of your function, not the whole
 function) and paste it below the shebang. Don't forget to remove the debug ``echo``
 parts - otherwise your script will spoil it's output with some useless chatter.

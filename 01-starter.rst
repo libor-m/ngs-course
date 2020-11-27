@@ -86,11 +86,29 @@ the ``screen`` tool for all your work::
   screen
 
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
+
 To attach again type::
 
 .. code-block:: bash
 
   screen -r
+
+You can have simultaneously multiple sessions. In that case you have to select 
+to which session to reattach. ``-ls`` command can be used to list all 
+existing sessions and then re-attach to a specific session using ``-r`` 
+and specifying the name of the session:
+
+.. code-block:: bash
+
+  screen -ls
+
+  screen -r XXXX.NNNNNN.XXXX
+
+To kill ``screen`` session we can use:
+
+.. code-block:: bash
+
+  screen –X -S XXXX.NNNNNN.XXXX quit
 
 .. note::
 
@@ -140,31 +158,27 @@ A neat trick to go back where you've been before the last ``cd`` command:
 
 More in :ref:`moving_around`.
 
-.. note::
-
-  You can check file permissions by typing ``ll`` instead of ``ls``.
-  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
-  for *User*, *Group*, and *Others*. The two names you see next to the
-  permissions are file's owner user and group.
-
-  You can change the permissions - if you have the permission to do so -
-  by e.g. ``chmod go+w`` - "add write permission to group and others".
-
 Moving or copying files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-  touch # make a file
+  touch file.txt # make an empty file.txt
+  mkdir dir # make a directory
   mkdir -p some/sub/directories # make nested directories
-  rm -r # remove a file/directory
+  rm # remove a file
+  rm -r # remove a directory
   mv # move a file/directory
-  cp -r # copy a file/directory
+  cp # copy a file/directory
 
 .. code-block:: bash
 
-  cd # Go to home directory
-  mkdir projects/fastq # Make a new directory 'fastq'
+  # Go to home directory
+  cd 
+
+  # Make a new directory 'fastq'
+  mkdir projects/fastq && cd projects/fastq
+  
   # Copy a fastq archive to the new directory
   cp /data-shared/fastq/fastq.tar.gz projects/fastq/.
   cd projects/fastq
