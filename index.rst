@@ -27,7 +27,7 @@ your login credentials and further info - use (`this link to join
 +--------------+--------------------------------------------+
 | **Saturday 28/11/2020 (10:00-18:00)**                     |
 +--------------+--------------------------------------------+
-| Morning      | - Introduction to Genomics                 |
+| Morning      | - Genomic data                             |
 |              | - Processing of plain text files in Unix   |
 +--------------+--------------------------------------------+
 | *Lunch Break (~ 1h)*                                      |
