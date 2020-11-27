@@ -1,8 +1,8 @@
-Session 1: Basics of UNIX
-=========================
+Session 1: Unix Basics
+======================
 
 This session will give you all the basics that you need
-to smoothly move around when using a UNIX system (in the text mode!).
+to smoothly move around when using a Unix system (in the text mode!).
 
 Basic orientation
 -----------------
@@ -69,7 +69,7 @@ To attach again type::
 Directory structure
 ^^^^^^^^^^^^^^^^^^^
 
-Unlike 'drives' in MS Windows, UNIX has a single directory tree that starts in
+Unlike 'drives' in Windows, Unix has a single directory tree that starts in
 ``/`` (called root directory). Everything can be reached from the root
 directory. The next important directory is ``~`` (called user's home directory).
 It is a shortcut for ``/home/user`` here, ``/home/..your login name..`` in
@@ -190,7 +190,7 @@ by any number of characters followed by '.fastq'*.
 
 .. code-block:: bash
 
-  cd ~/projets/fastq
+  cd ~/projects/fastq
   ls HRTMUOC01.RL12.*.fastq
 
   ls HRTMUOC01.RL12.0?.fastq
@@ -263,17 +263,17 @@ Installing software
 The easiest way to install software is via a package manager (eg. ``apt-get``
 for all Debian variants). When the required software is not in the repositories,
 or one needs the latest version, it's necessary to take the more difficult path.
-The canonical UNIX way is::
+The canonical Unix way is::
 
   wget -O - ..url.. | tar xvz   # download and unpack the 'tarball' from internet
   cd ..unpacked directory..     # set working directory to the project directory
   ./configure                   # check your system and choose the way to build it
   make                          # convert source code to machine code (compile it)
-  sudo make install             # copy the results to your system
+  sudo make install             # install for everyone on this machine
 
 .. note::
 
-   Normal users cannot change (and break) the (UNIX) system. There is one special
+   Normal users cannot change (and break) the (Unix) system. There is one special
    user in each system called ``root``, who has the rights to make system wide changes.
    You can either directly log in as root, or use ``sudo`` (super user do) to execute
    one command as ``root``.
@@ -283,6 +283,10 @@ The canonical UNIX way is::
 
 htop
 ^^^^
+.. note::
+  This year the machine is shared among all course participants, so we can't give
+  super user access to everyone to be sure that no one can accidentally damage
+  the machine.
 
 Installing software from common repository:
 

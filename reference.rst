@@ -1,13 +1,13 @@
-Reference manual for UNIX introduction
+Reference manual for Unix introduction
 ======================================
 
-Basic orientation in UNIX
+Basic orientation in Unix
 -------------------------
 
 **Multiple windows (screen)**
 
 You're all used to work with multiple windows (in MS Windows;). You can have
-them in UNIX as well. The main benefit, however, is that you can log off and
+them in Unix as well. The main benefit, however, is that you can log off and
 your programs keep running.
 
 To go into a screen mode type::
@@ -378,7 +378,7 @@ Building commands
 
 **Variables**
 
-  UNIX environment enables to use shell variables. To set primer sequence ``'GATACGCTACGTGC'`` to variable ``PRIMER1`` in a command line and print it on screen using ``echo``, type:
+  Unix environment enables to use shell variables. To set primer sequence ``'GATACGCTACGTGC'`` to variable ``PRIMER1`` in a command line and print it on screen using ``echo``, type:
 
   .. code-block:: bash
 
@@ -386,7 +386,7 @@ Building commands
     echo $PRIMER1
     # GATACGCTACGTGC
 
-.. note:: It is good habit in UNIX to use capitalized names for variables: ``PRIMER1`` not ``primer1``.
+.. note:: It is good habit in Unix to use capitalized names for variables: ``PRIMER1`` not ``primer1``.
 
 **Producing lists**
 
@@ -415,7 +415,7 @@ Producing lists of subdirectories
 
 **Pipes**
 
-  UNIX environment enables to chain commands using pipe symbol ``|``. Standard output of the first command serves as standard input of the second one, and so on.
+  Unix environment enables to chain commands using pipe symbol ``|``. Standard output of the first command serves as standard input of the second one, and so on.
 
   .. code-block:: bash
 
@@ -453,7 +453,7 @@ More complex data manipulation (awk)
 
 ``awk`` enables to manipulate text data in a very complex way. In fact, it is a simple programming language with functionality similar to regular programming languages. As such it enables enormous variability in ways of how to process text data.
 
-It can be used to write a short script and which can be chained along with UNIX commands in one pipeline. The biggest power of `awk` is that it's line oriented and saves you lot of boilerplate code that you would have to write in other languages, if you need moderately complex processing of text files. The basic structure of the script is divided into three parts and any of these three parts may or may not be included in the script (according to the intention of user). The first part ``'BEGIN{}'`` conducts operation before going through the input file, the middle part ``'{}'`` goes throughout the input file and conducts operations on each line separately. The last part ``'END{}'`` conducts operation after going through the input file.
+It can be used to write a short script and which can be chained along with Unix commands in one pipeline. The biggest power of `awk` is that it's line oriented and saves you lot of boilerplate code that you would have to write in other languages, if you need moderately complex processing of text files. The basic structure of the script is divided into three parts and any of these three parts may or may not be included in the script (according to the intention of user). The first part ``'BEGIN{}'`` conducts operation before going through the input file, the middle part ``'{}'`` goes throughout the input file and conducts operations on each line separately. The last part ``'END{}'`` conducts operation after going through the input file.
 
 The basic syntax:
 

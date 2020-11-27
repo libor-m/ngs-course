@@ -186,7 +186,7 @@ Take care to give a descriptive name to your script::
     nano fastq-filter-length.sh
 
 Copy and paste the following code block into the nano editor, save it with ``ctrl+o``
-and switch to another bash window in screen. 
+and switch to another bash window in screen.
 
 .. topic:: Hands on!
 
@@ -228,7 +228,7 @@ parts - otherwise your script will spoil it's output with some useless chatter.
 Multi-file, multi-core processing
 ---------------------------------
 Multi-file processing is best done with ``find`` and ``xargs``. That's basic
-UNIX. If you install ``parallel``, it substitutes ``xargs`` and does much
+Unix. If you install ``parallel``, it substitutes ``xargs`` and does much
 better job, having 'nicer' syntax, and makes multi-file multi-core processing
 a breeze.
 
@@ -261,9 +261,9 @@ someone, or when you're sure that your task is IO bound. Otherwise
   out the maximum performance from your machine, it's still a lot of
   '*try - monitor performance - try again*' cycles.
 
-  To get good performance it is important to know what happens during data procsesing: 
+  To get good performance it is important to know what happens during data procsesing:
   First the data is loaded from hard drive to memory, then from memory to the CPU,
-  the CPU does the calculation, then the results have to get to the memory and saved 
+  the CPU does the calculation, then the results have to get to the memory and saved
   to the hard drive again. Different workloads take different amounts of time in each step.
 
   .. image:: _static/data-processing.png
