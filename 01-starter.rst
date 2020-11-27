@@ -81,17 +81,13 @@ When you are disconnected from the machine due to any technical problems,
 all your running programs are killed. To prevent this, we suggest to use
 the ``screen`` tool for all your work::
 
-.. code-block:: bash
-
-  screen
+screen
 
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
 
 To attach again type::
 
-.. code-block:: bash
-
-  screen -r
+screen -r
 
 You can have simultaneously multiple sessions. In that case you have to select 
 to which session to reattach. ``-ls`` command can be used to list all 
@@ -171,6 +167,33 @@ Moving or copying files and directories
   mv # move a file/directory
   cp # copy a file/directory
 
+Viewing plain text file content
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  less -SN
+  tail -n8
+  head -n8
+  cat
+  nano
+
+Work with compressed files
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  # gzipped files (take care, this removes the input file)
+  gunzip file.txt.gz
+
+  # Open gzipped files in pipeline (zcat does not remove the file)
+  zcat file.txt.gz | less
+
+  # Compressed tarball archives (does not remove the archive)
+  tar -xzvf fastq.tar.gz
+
+**Exercise: Prepare fastq files in your working directory**
+
 .. code-block:: bash
 
   # Go to home directory
@@ -180,35 +203,9 @@ Moving or copying files and directories
   mkdir projects/fastq && cd projects/fastq
   
   # Copy a fastq archive to the new directory
-  cp /data-shared/fastq/fastq.tar.gz projects/fastq/.
-  cd projects/fastq
+  cp /data-shared/fastq/fastq.tar.gz .
   tar -zxvf fastq.tar.gz
-  ls
-
-Uncompressing files
-^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  # Compressed tarball archives (does not remove the archive)
-  tar -xzvf fastq.tar.gz
-
-  # gzipped files (take care, this removes the input file)
-  gunzip file.txt.gz
-
-  # Open gzipped files in pipeline (zcat does not remove the file)
-  zcat file.txt.gz | less
-
-Viewing plain text file content
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  less -SN
-  tail -n 5
-  head -n 5
-  cat
-  nano
+  ls -sh
 
 Pipes
 ^^^^^
@@ -221,8 +218,12 @@ can be readily combined with ``head`` to show the second sequence in the file.
 
 .. code-block:: bash
 
-    cd ~/projects/fastq
-    < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
+  cd ~/projects/fastq
+  
+  head -8 HRTMUOC01.RL12.00.fastq | tail -4 | less
+
+  # Neater way to write pipelines
+  < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
 Globbing
 ^^^^^^^^
@@ -236,13 +237,13 @@ by any number of characters followed by '.fastq'*.
 .. code-block:: bash
 
   cd ~/projects/fastq
-  ls HRTMUOC01.RL12.*.fastq
+  ls *.fastq
 
   ls HRTMUOC01.RL12.0?.fastq
 
   ls HRTMUOC01.RL12.0[1-9].fastq
 
-**Exercise (How many reads are there?)**:
+**Exercise: How many reads are there?**:
 
 We found out that FASTQ files have a particular structure (four lines per read).
 To find the total number of reads in our data, we will use another tool, ``wc``
@@ -269,8 +270,8 @@ takes four lines). And there is even a built-in calculator in bash:
   echo $(( XXXX / 4 ))
   expr XXXX / 4
 
-Variables & Lists
-^^^^^^^^^^^^^^^^^
+Variables
+^^^^^^^^^
 
 .. code-block:: bash
 
@@ -280,27 +281,20 @@ Variables & Lists
   FILE=~/projects/fastq/HRTMUOC01.RL12.00.fastq
   echo $FILE
 
-.. code-block:: bash
-
-  echo file{1..9}.txt
-  LST=$( echo file{1..9}.txt )
-  echo $LST
-
-  LST2=$(ls ~/projects/fastq/*.fastq)
-  echo $LST2
-
-Loops
-^^^^^
+Lists & Loops
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-  LST=$(ls ~/projects/fastq/HRTMUOC01.RL12.*.fastq)
+  PARAM=$({0..9})
 
-  for I in $LST
+  for v in $PARAM
   do
-    echo $I
-    head -1 $I | wc -c
+    echo $v
   done
+
+  # One line syntax
+  for v in $PARAM; do echo $v; done
 
 Installing software
 -------------------
@@ -311,6 +305,9 @@ or one needs the latest version, it's necessary to take the more difficult path.
 The canonical Unix way is::
 
   wget -O - ..url.. | tar xvz   # download and unpack the 'tarball' from internet
+
+  git clone ..url..             # clone source code from git repository
+
   cd ..unpacked directory..     # set working directory to the project directory
   ./configure                   # check your system and choose the way to build it
   make                          # convert source code to machine code (compile it)
