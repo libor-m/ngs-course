@@ -7,8 +7,26 @@ using built-in Unix tools.
 Pattern search & regular expressions
 ------------------------------------
 
-``grep -E`` is a useful tool to search for patterns using a mini-language called
-**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
+``grep`` command can be used to efficiently match and also retrieve pattern in text files.
+
+.. code-block:: bash
+
+  grep pattern file.txt # Returns lines matching a pattern
+
+  grep -v pattern file.txt # Returns lines not matching a pattern
+
+  grep -E regex file.txt # Returns lines not matching a regex
+
+  grep -c pattern file.txt # Returns number of lines matching a pattern
+
+  grep -B pattern file.txt # Returns number of lines before a line matching a pattern
+
+  grep -o pattern file.txt # Returns only matching part of lines
+
+  man grep # For other options
+
+But what if we want match a variable pattern, e.g. differing length or content?
+**Regular expressions** are exactly the tool that we need.
 
 .. code-block:: bash
 
@@ -26,6 +44,29 @@ Pattern search & regular expressions
   AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
 
+
+``grep -E`` is a useful tool to search for patterns using a mini-language called
+**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
+
+Word and line count
+-------------------
+
+``wc`` command states for *word count* provides a quick summary statistics on the plain text file
+content. Bytes, words and lines can be counted in defined files.
+
+.. code-block:: bash
+
+  wc -c file.txt # Number of bytes in a file
+  wc -w file.txt # Number of words in a file
+  wc -l file.txt # Number of lines in a file
+
+To calculate the number of bytes, words and lines in every file listed:
+
+.. code-block:: bash
+
+  wc -c *.txt
+  wc -w *.txt
+  wc -l *.txt
 
 1. Count the number of variants in the file
 
@@ -58,26 +99,6 @@ Pattern search & regular expressions
   grep 'PASS' |
   grep '^chrZ\s' |
   wc -l
-
-Word and line count
--------------------
-
-``wc`` command states for *word count* provides a quick summary statistics on the plain text file
-content. Bytes, words and lines can be counted in defined files.
-
-.. code-block:: bash
-
-  wc -c file.txt # Number of bytes in a file
-  wc -w file.txt # Number of words in a file
-  wc -l file.txt # Number of lines in a file
-
-To calculate the number of bytes, words and lines in every file listed:
-
-.. code-block:: bash
-
-  wc -c *.txt
-  wc -w *.txt
-  wc -l *.txt
 
 
 Retrieve & count unique records
@@ -144,6 +165,9 @@ well suited for this task. ``-d`` flag can be used to remove specific characters
 from the file. The whole classes can be replaced which can be for instance
 used to change uppercase to lowercase or vice versa.
 
+For extraction of repeating strings ``grep -o`` is the most efficient tool. In bioinformatics 
+it can be easily used to match and retrieve microsatellites from the sequence for instance.
+
 .. note::
 
   Difference between ``sed`` and ``tr``:
@@ -177,10 +201,11 @@ regular expressions ``sed -r``:
   # Replace one or more A or C or G or T by N
 
   # Standard sed
-  sed 's/^[AGCT]\{1,\}/N/'
+  sed 's/^[^ACGT]\{1,\}/N/'
 
   # The same thing using extended regular expressions:
-  sed -r 's/^[AGCT]+/N/'
+  sed -r 's/^[^ACGT]{1,}/N/'
+  sed -r 's/^[^ACGT]+/N/'
 
 ``sed`` can be used also for string extraction. Matched string designated
 to be extracted has to be marked in rounded brackets ``(string)``
@@ -190,7 +215,8 @@ multiple extractions from one matched string).
 
 .. code-block:: bash
 
-  sed 's/AAA(TTT)CCC(GGG)/\1\2/' # The result would be 'TTTGGG'
+  # Returns TTTGGG
+  echo 'AAATTTCCCGGG' | sed -r 's/A+(T+)C+(G+)/\1\2/'
 
 .. note::
 
@@ -200,7 +226,23 @@ multiple extractions from one matched string).
   to code and even less fun to read (what does ``sed 'h;G;s/\n//'`` do?;).
   Use ``awk`` for more complex processing (*see next session*).
 
-*Use nightingale variant call file (VCF)*
+``grep -o`` extracts only matching parts of the string. This command can be used
+to exctract repeating patterns (i.e. very usefull for extraction of microsatellite 
+sequences).
+
+.. code-block:: bash
+
+  # Match AT di-nucleotide twice or more times
+  grep -o -E "(AT){2,}"
+
+  # Match GTC tri-nuleotide twice or more times
+  grep -o -E "(GTC){2,}"
+
+  # Match any repeating pattern
+  grep -o -E "([ATGC]{1,})\1+"
+
+
+*Exercies: Use nightingale variant call file (VCF)*
 
 1. Which chromosome has the highest and the least number of variants?
 

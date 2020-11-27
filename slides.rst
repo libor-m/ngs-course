@@ -3,7 +3,7 @@ Slide decks
 
 :download:`Unix - Introduction <_static/unix-2019-11.pdf>` (Libor)
 
-:download:`Unix - Basics <_static/unix_basics.pdf>` (Vasek)
+:download:`Unix - Basics <_static/unix-basics-2020-2021.pdf>` (Vasek)
 
 :download:`Genomics <_static/genomics.pdf>` (Vasek)
 

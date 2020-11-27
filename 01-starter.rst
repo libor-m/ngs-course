@@ -1,5 +1,5 @@
-Session 1: Unix Basics
-======================
+Session 1: Basic Unix
+=====================
 
 This session will give you all the basics that you need
 to smoothly move around when using a Unix system (in the text mode!).
@@ -13,6 +13,32 @@ Basic orientation
    than in other programs - especially because ``ctrl+c`` means to kill the current
    program. To **copy text to clipboard** just select it with your left mouse button.
    To **paste from clipboard** either click midlle mouse button, or press ``shift+insert``.
+
+Command line
+^^^^^^^^^^^^
+
+How does it work with commands in command line? Typical command is composed of command
+name, flag, flag value, path to input file and path to output file.
+
+.. code-block:: bash
+
+  command -flag(value) input > output
+
+  # Specific example
+  head -n10 file.txt > out.txt
+
+How do I know which flags to use for individual commands? There is several ways. You can
+you command documentation using ``man``, or most of commands have help option ``-h`` 
+or ``--help``. Below is way to call manual and help.
+
+.. code-block:: bash
+
+  # using manual
+  man head
+
+  # help
+  head -h
+  head --help
 
 Check your keyboard
 ^^^^^^^^^^^^^^^^^^^
@@ -50,16 +76,35 @@ definitely need those keys::
 
 Be safe when the network fails
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 When you are disconnected from the machine due to any technical problems,
 all your running programs are killed. To prevent this, we suggest to use
 the ``screen`` tool for all your work::
 
-  screen
+screen
 
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
+
 To attach again type::
 
-  screen -r
+screen -r
+
+You can have simultaneously multiple sessions. In that case you have to select 
+to which session to reattach. ``-ls`` command can be used to list all 
+existing sessions and then re-attach to a specific session using ``-r`` 
+and specifying the name of the session:
+
+.. code-block:: bash
+
+  screen -ls
+
+  screen -r XXXX.NNNNNN.XXXX
+
+To kill ``screen`` session we can use:
+
+.. code-block:: bash
+
+  screen –X -S XXXX.NNNNNN.XXXX quit
 
 .. note::
 
@@ -100,15 +145,6 @@ Figure out what these commands do:
     cd ..
     cd ~
 
-.. note::
-
-  You can check file permissions by typing ``ll`` instead of ``ls``.
-  ``rwx`` stand for *Read*, *Write*, *eXecute*, and are repeated three times,
-  for *User*, *Group*, and *Others*. The two names you see next to the
-  permissions are file's owner user and group.
-
-  You can change the permissions - if you have the permission to do so -
-  by e.g. ``chmod go+w`` - "add write permission to group and others".
 
 A neat trick to go back where you've been before the last ``cd`` command:
 
@@ -123,35 +159,13 @@ Moving or copying files and directories
 
 .. code-block:: bash
 
-  touch # make a file
+  touch file.txt # make an empty file.txt
+  mkdir dir # make a directory
   mkdir -p some/sub/directories # make nested directories
-  rm -r # remove a file/directory
+  rm # remove a file
+  rm -r # remove a directory
   mv # move a file/directory
-  cp -r # copy a file/directory
-
-.. code-block:: bash
-
-  cd # Go to home directory
-  mkdir projects/fastq # Make a new directory 'fastq'
-  # Copy a fastq archive to the new directory
-  cp /data-shared/fastq/fastq.tar.gz projects/fastq/.
-  cd projects/fastq
-  tar -zxvf fastq.tar.gz
-  ls
-
-Uncompressing files
-^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: bash
-
-  # Compressed tarball archives (does not remove the archive)
-  tar -xzvf fastq.tar.gz
-
-  # gzipped files (take care, this removes the input file)
-  gunzip file.txt.gz
-
-  # Open gzipped files in pipeline (zcat does not remove the file)
-  zcat file.txt.gz | less
+  cp # copy a file/directory
 
 Viewing plain text file content
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -159,10 +173,39 @@ Viewing plain text file content
 .. code-block:: bash
 
   less -SN
-  tail -n 5
-  head -n 5
+  tail -n8
+  head -n8
   cat
   nano
+
+Work with compressed files
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+  # gzipped files (take care, this removes the input file)
+  gunzip file.txt.gz
+
+  # Open gzipped files in pipeline (zcat does not remove the file)
+  zcat file.txt.gz | less
+
+  # Compressed tarball archives (does not remove the archive)
+  tar -xzvf fastq.tar.gz
+
+**Exercise: Prepare fastq files in your working directory**
+
+.. code-block:: bash
+
+  # Go to home directory
+  cd 
+
+  # Make a new directory 'fastq'
+  mkdir projects/fastq && cd projects/fastq
+  
+  # Copy a fastq archive to the new directory
+  cp /data-shared/fastq/fastq.tar.gz .
+  tar -zxvf fastq.tar.gz
+  ls -sh
 
 Pipes
 ^^^^^
@@ -175,8 +218,12 @@ can be readily combined with ``head`` to show the second sequence in the file.
 
 .. code-block:: bash
 
-    cd ~/projects/fastq
-    < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
+  cd ~/projects/fastq
+  
+  head -8 HRTMUOC01.RL12.00.fastq | tail -4 | less
+
+  # Neater way to write pipelines
+  < HRTMUOC01.RL12.00.fastq head -8 | tail -4 | less -S
 
 Globbing
 ^^^^^^^^
@@ -190,13 +237,13 @@ by any number of characters followed by '.fastq'*.
 .. code-block:: bash
 
   cd ~/projects/fastq
-  ls HRTMUOC01.RL12.*.fastq
+  ls *.fastq
 
   ls HRTMUOC01.RL12.0?.fastq
 
   ls HRTMUOC01.RL12.0[1-9].fastq
 
-**Exercise (How many reads are there?)**:
+**Exercise: How many reads are there?**:
 
 We found out that FASTQ files have a particular structure (four lines per read).
 To find the total number of reads in our data, we will use another tool, ``wc``
@@ -223,8 +270,8 @@ takes four lines). And there is even a built-in calculator in bash:
   echo $(( XXXX / 4 ))
   expr XXXX / 4
 
-Variables & Lists
-^^^^^^^^^^^^^^^^^
+Variables
+^^^^^^^^^
 
 .. code-block:: bash
 
@@ -234,27 +281,20 @@ Variables & Lists
   FILE=~/projects/fastq/HRTMUOC01.RL12.00.fastq
   echo $FILE
 
-.. code-block:: bash
-
-  echo file{1..9}.txt
-  LST=$( echo file{1..9}.txt )
-  echo $LST
-
-  LST2=$(ls ~/projects/fastq/*.fastq)
-  echo $LST2
-
-Loops
-^^^^^
+Lists & Loops
+^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-  LST=$(ls ~/projects/fastq/HRTMUOC01.RL12.*.fastq)
+  PARAM=$({0..9})
 
-  for I in $LST
+  for v in $PARAM
   do
-    echo $I
-    head -1 $I | wc -c
+    echo $v
   done
+
+  # One line syntax
+  for v in $PARAM; do echo $v; done
 
 Installing software
 -------------------
@@ -265,6 +305,9 @@ or one needs the latest version, it's necessary to take the more difficult path.
 The canonical Unix way is::
 
   wget -O - ..url.. | tar xvz   # download and unpack the 'tarball' from internet
+
+  git clone ..url..             # clone source code from git repository
+
   cd ..unpacked directory..     # set working directory to the project directory
   ./configure                   # check your system and choose the way to build it
   make                          # convert source code to machine code (compile it)
