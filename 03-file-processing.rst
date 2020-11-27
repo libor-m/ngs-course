@@ -144,6 +144,9 @@ well suited for this task. ``-d`` flag can be used to remove specific characters
 from the file. The whole classes can be replaced which can be for instance 
 used to change uppercase to lowercase or vice versa.
 
+For extraction of repeating strings ``grep -o`` is the most efficient tool. In bioinformatics 
+it can be easily used to match and retrieve microsatellites from the sequence for instance.
+
 .. note::
 
   Difference between ``sed`` and ``tr``:
@@ -177,10 +180,11 @@ regular expressions ``sed -r``:
   # Replace one or more A or C or G or T by N
 
   # Standard sed
-  sed 's/^[AGCT]\{1,\}/N/'
+  sed 's/^[^ACGT]\{1,\}/N/'
 
   # The same thing using extended regular expressions:
-  sed -r 's/^[AGCT]+/N/'
+  sed -r 's/^[^ACGT]{1,}/N/'
+  sed -r 's/^[^ACGT]+/N/'
 
 ``sed`` can be used also for string extraction. Matched string designated 
 to be extracted has to be marked in rounded brackets ``(string)`` 
@@ -190,7 +194,8 @@ multiple extractions from one matched string).
 
 .. code-block:: bash
 
-  sed 's/AAA(TTT)CCC(GGG)/\1\2/' # The result would be 'TTTGGG'
+  # Returns TTTGGG
+  echo 'AAATTTCCCGGG' | sed -r 's/A+(T+)C+(G+)/\1\2/'
 
 .. note::
 
@@ -199,6 +204,22 @@ multiple extractions from one matched string).
   The 'sed language' consists of single character commands, and it is no fun 
   to code and even less fun to read (what does ``sed 'h;G;s/\n//'`` do?;). 
   Use ``awk`` for more complex processing (*see next session*).
+
+``grep -o`` extracts only matching parts of the string. This command can be used
+to exctract repeating patterns (i.e. very usefull for extraction of microsatellite 
+sequences).
+
+.. code-block:: bash
+
+  # Match AT di-nucleotide twice or more times
+  grep -o -E "(AT){2,}"
+
+  # Match GTC tri-nuleotide twice or more times
+  grep -o -E "(GTC){2,}"
+
+  # Match any repeating pattern
+  grep -o -E "([ATGC]{1,})\1+"
+
 
 *Use nightingale variant call file (VCF)*
 

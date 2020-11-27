@@ -100,6 +100,15 @@ Figure out what these commands do:
     cd ..
     cd ~
 
+
+A neat trick to go back where you've been before the last ``cd`` command:
+
+.. code-block:: bash
+
+  cd -
+
+More in :ref:`moving_around`.
+
 .. note::
 
   You can check file permissions by typing ``ll`` instead of ``ls``.
@@ -109,14 +118,6 @@ Figure out what these commands do:
 
   You can change the permissions - if you have the permission to do so -
   by e.g. ``chmod go+w`` - "add write permission to group and others".
-
-A neat trick to go back where you've been before the last ``cd`` command:
-
-.. code-block:: bash
-
-  cd -
-
-More in :ref:`moving_around`.
 
 Moving or copying files and directories
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
