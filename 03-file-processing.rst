@@ -7,8 +7,26 @@ using built-in Unix tools.
 Pattern search & regular expressions
 ------------------------------------
 
-``grep -E`` is a useful tool to search for patterns using a mini-language called
-**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
+``grep`` command can be used to efficiently match and also retrieve pattern in text files.
+
+.. code-block:: bash
+
+  grep pattern file.txt # Returns lines matching a pattern
+
+  grep -v pattern file.txt # Returns lines not matching a pattern
+
+  grep -E regex file.txt # Returns lines not matching a regex
+
+  grep -c pattern file.txt # Returns number of lines matching a pattern
+
+  grep -B pattern file.txt # Returns number of lines before a line matching a pattern
+
+  grep -o pattern file.txt # Returns only matching part of lines
+
+  man grep # For other options
+
+But what if we want match a variable pattern, e.g. differing length or content?
+**Regular expressions** are exactly the tool that we need.
 
 .. code-block:: bash
 
@@ -26,6 +44,29 @@ Pattern search & regular expressions
   AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
 
+
+``grep -E`` is a useful tool to search for patterns using a mini-language called
+**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
+
+Word and line count
+-------------------
+
+``wc`` command states for *word count* provides a quick summary statistics on the plain text file
+content. Bytes, words and lines can be counted in defined files.
+
+.. code-block:: bash
+
+  wc -c file.txt # Number of bytes in a file
+  wc -w file.txt # Number of words in a file
+  wc -l file.txt # Number of lines in a file
+
+To calculate the number of bytes, words and lines in every file listed:
+
+.. code-block:: bash
+
+  wc -c *.txt
+  wc -w *.txt
+  wc -l *.txt
 
 1. Count the number of variants in the file
 
@@ -58,26 +99,6 @@ Pattern search & regular expressions
   grep 'PASS' |
   grep '^chrZ\s' |
   wc -l
-
-Word and line count
--------------------
-
-``wc`` command states for *word count* provides a quick summary statistics on the plain text file
-content. Bytes, words and lines can be counted in defined files.
-
-.. code-block:: bash
-
-  wc -c file.txt # Number of bytes in a file
-  wc -w file.txt # Number of words in a file
-  wc -l file.txt # Number of lines in a file
-
-To calculate the number of bytes, words and lines in every file listed:
-
-.. code-block:: bash
-
-  wc -c *.txt
-  wc -w *.txt
-  wc -l *.txt
 
 
 Retrieve & count unique records
@@ -221,7 +242,7 @@ sequences).
   grep -o -E "([ATGC]{1,})\1+"
 
 
-*Use nightingale variant call file (VCF)*
+*Exercies: Use nightingale variant call file (VCF)*
 
 1. Which chromosome has the highest and the least number of variants?
 
