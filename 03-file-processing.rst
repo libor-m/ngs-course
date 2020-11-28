@@ -160,11 +160,12 @@ have to be sorted.
 
 .. code-block:: bash
 
-  < *.fastq zcat | 
+  cat *.fastq | 
   grep -E "^[ACGT]+$" | 
   cut -c1-6
   sort | 
   uniq -c |
+  sort -k1,1nr |
   less
 
 String extraction and replacement
@@ -229,11 +230,10 @@ regular expressions ``sed -r``:
   # Replace one or more A or C or G or T by N
 
   # Standard sed
-  sed 's/^[^ACGT]\{1,\}/N/'
+  sed 's/^[ACGTN]\{6\}/NNNNNN/'
 
   # The same thing using extended regular expressions:
-  sed -r 's/^[^ACGT]{1,}/N/'
-  sed -r 's/^[^ACGT]+/N/'
+  sed -r 's/^[ACGTN]{6}/NNNNNN/'
 
 ``sed`` can be used also for string extraction. Matched string designated
 to be extracted has to be marked in rounded brackets ``(string)``
@@ -269,6 +269,20 @@ sequences).
   # Match any repeating pattern
   grep -o -E "([ATGC]{1,})\1+"
 
+**Exercise: What is the number of SNPs per chromosome in the VCF file??**
+
+Don't use ``cut`` command!
+
+.. code-block:: bash
+
+  FILE=/data-shared/vcf_examples/luscinia_vars_flags.vcf.gz
+
+  < $FILE zcat | 
+  grep -o -E '^chr[Z1-9]+' | 
+  sort | 
+  uniq -c | 
+  sort -k1,1nr
+
 **Exercise: Microsatellites statistics**
 
 Extract all AT dinucleotides repeating at least twice and calculate 
@@ -276,7 +290,7 @@ their frequency distribution in the whole dataset.
 
 .. code-block:: bash
 
-  < *.fastq zcat | 
+  cat *.fastq | 
   grep -E "^[ACGT]+$" | 
   grep -o -E "(AT){2,}" |
   sort | 
@@ -364,10 +378,10 @@ session.
 
 .. code-block:: bash
 
-  < *.fastq zcat | 
+  cat *.fastq | 
   paste - - - - |
   cut --complement -f3 \
-  reads.tab
+  > reads.tab
 
 Exercise
 --------
