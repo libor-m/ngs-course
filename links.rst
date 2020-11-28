@@ -8,6 +8,19 @@ Advanced Bash
 - `Bash one-liners explained <http://www.catonmat.net/blog/bash-one-liners-explained-part-one/>`_
 - `How redirection really works <http://wiki.bash-hackers.org/howto/redirection_tutorial>`_
 - `What version of bash you need for X to work <http://wiki.bash-hackers.org/scripting/bashchanges>`_
+- `The Bash Primer <http://2015.compciv.org/bash-guide/>`_
+- `Explanation of a scrollback buffer <https://unix.stackexchange.com/questions/145050/what-exactly-is-scrollback-and-scrollback-buffer>`_
+
+Bash command help re-imagined
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+- `tldr pages <https://tldr.sh/>`_
+- `explainshell <https://explainshell.com/>`_
+
+Some fun
+^^^^^^^^
+- `Bash game to celebrate 50th anniversary <https://www.unixgame.io/unix50>`_
+- `Regex golf <http://regex.alf.nu/>`_
+- `Faces behind Unix <http://www.facesofopensource.com/unix/>`_
 
 R Studio
 ^^^^^^^^
