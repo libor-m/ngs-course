@@ -20,7 +20,9 @@ Some fun
 ^^^^^^^^
 - `Bash game to celebrate 50th anniversary <https://www.unixgame.io/unix50>`_
 - `Regex golf <http://regex.alf.nu/>`_
+- `Regex test and explain <https://regex101.com/>`_
 - `Faces behind Unix <http://www.facesofopensource.com/unix/>`_
+
 
 R Studio
 ^^^^^^^^
