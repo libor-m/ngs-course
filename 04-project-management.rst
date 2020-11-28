@@ -271,6 +271,7 @@ it up correctly. Once on every new machine you need to tell git who you are,
 because the commits are 'signed' by the author.
 
 .. code-block:: bash
+
   git config --global user.email "you@example.com"
   git config --global user.name "Your Name"
 
@@ -284,6 +285,7 @@ To upload your code, you need to add a key to GitHub
 key:
 
 .. code-block:: bash
+
   # generate the private and public keys
   ssh-keygen -t ed25519
 
@@ -294,6 +296,7 @@ And now after a tedious setup let's reap the benefits. We'll store the current
 version of your scripts in ``unix-advanced`` project, ignoring the data.
 
 .. code-block:: bash
+
   # make sure we're in ~/projects/unix-advanced
   pwd
 
@@ -322,11 +325,22 @@ a **remote** to your local repo and `push`. You don't have to be shy, GitHub all
 you to create a private repo.
 
 .. code-block:: bash
+
   # use the commands suggested by GitHub to add a remote
   # ...
 
   # then push
   git push
+
+When using git, you can gradually learn about more concepts and commands, as
+you find the need for them. To give you a head start:
+
+ - ``git pull`` updates your local repo if the remote is newer
+ - by pulling other's changes over yours, you'll soon encouter **merge**
+ - ``git stash`` can be used to "hide" local changes during ``pull``
+   to avoid a commit and following merge, ``git stash pop`` brings them back
+ - ``git checkout -b new-name`` and ``git branch some-name`` allow you to
+   keep more simultaneous versions in one repo and switch between them
 
 Multi-file, multi-core processing
 ---------------------------------
