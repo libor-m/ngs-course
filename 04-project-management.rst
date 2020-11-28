@@ -336,7 +336,7 @@ When using git, you can gradually learn about more concepts and commands, as
 you find the need for them. To give you a head start:
 
  - ``git pull`` updates your local repo if the remote is newer
- - by pulling other's changes over yours, you'll soon encouter **merge**
+ - by pulling other's changes over yours, you'll soon encounter **merge**
  - ``git stash`` can be used to "hide" local changes during ``pull``
    to avoid a commit and following merge, ``git stash pop`` brings them back
  - ``git checkout -b new-name`` and ``git branch some-name`` allow you to
