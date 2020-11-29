@@ -62,7 +62,7 @@ on filtering quality and number of genes used at different stages of the pipelin
 	# Filtering parameters
 	quality=50
 	readdepth=10
-	minnumgenes=9
+	minnumgenes=30
 
 	# Working directories (removed from the git in .gitignore)
 	wd_source=data/00-source-data
@@ -178,10 +178,20 @@ Resulting ggplot graph
 Run the whole pipeline at once
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now we can try to run the whole pipeline at once using ``pipeline.sh`` shell script.
+Now we can try to run the whole pipeline at once using ``pipeline.sh`` shell script
+using different set of parameters.
 
 .. code-block:: bash
 	
+	# Filtering parameters
+	quality=50
+	readdepth=10
+	minnumgenes=30
+
+	# GO enrichment by high and low divergence regions
+	div_go=$wd_go/divergence_by_go-ver2.txt
+
+	# Run the pipeline
 	./pipeline.sh \
 	$quality \
 	$readdepth \
