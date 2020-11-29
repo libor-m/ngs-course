@@ -11,4 +11,4 @@ Slide decks
 
 :download:`Graphics session <_static/graphics-2019-02.pdf>` (Libor)
 
-:download:`Genomic tools <_static/gtools.pdf>` (Vasek)
+:download:`Bioinformatic pipelines <_static/bioinfor-pipelines-2020-2021.pdf>` (Vasek)

@@ -185,8 +185,8 @@ Resulting ggplot graph
 .. image:: _static/go-enrichment.jpg
 
 
-Run the pipeline
-^^^^^^^^^^^^^^^^
+Run the whole pipeline at once
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now we can try to run the whole pipeline at once using ``pipeline.sh`` shell script.
 
