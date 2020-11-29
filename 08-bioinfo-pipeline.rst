@@ -15,10 +15,25 @@ domesticus* subspecies, respectively.
 The aim is to identify genes with high relative divergence between the two strains 
 and carry Gene Ontology enrichment analysis for genes according to the divergence.
 
-Test & install required software
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+First, you have to clone the repository from the GitHub:
 
-If `bedtools`, `vcftools` or `bcftools` are not installed, the script below will 
+.. code-block:: bash
+
+	# Go to you project directory
+	cd ~/projects
+
+	# Clone repository
+	git clone https://github.com/vjanousk/mouse-go-analysis.git
+
+	# Go to the local repository
+	cd mouse-go-analysis
+
+
+Install required software
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For the mouse Gene Ontology pipeline three specialized genomic tools are necessary:
+`bedtools`, `vcftools` or `bcftools`. If they are not installed, the script below will 
 install these tools.
 
 .. code-block:: bash
@@ -28,13 +43,16 @@ install these tools.
 	./install.sh
 
 
-Prepare data directories
-^^^^^^^^^^^^^^^^^^^^^^^^
+Prepare directories
+^^^^^^^^^^^^^^^^^^^
+
+We are going to prepare directories that are use to store source data as well as 
+intermediate steps and final resulting data. We will create a new ``data`` directory
+in your project directory
 
 .. code-block:: bash
 	
 	mkdir -p data/00-source-data data/01-divergence data/02-go
-
 
 Define variables
 ^^^^^^^^^^^^^^^^
@@ -55,10 +73,10 @@ on filtering quality and number of genes used at different stages of the pipelin
 	wd_go=data/02-go
 
 	# Source files
-	sourcevcf=$wd_source/mgp.v5.snps.dbSNP142.clean.X.vcf.gz
-	sourcegenes=$wd_source/MGI.gff3.gz
-	go2genes=$wd_source/gene_association.mgi.gz
-	goterms=$wd_source/go_terms.mgi.gz
+	sourcevcf=/data-shared/mouse_go/mgp.v5.snps.dbSNP142.clean.X.vcf.gz data/00-source-data/.
+	sourcegenes=/data-shared/mouse_go/MGI.gff3.gz
+	go2genes=/data-shared/mouse_go/gene_association.mgi.gz
+	goterms=/data-shared/mouse_go/go_terms.mgi.gz
 
 	# Helping datasets
 	cds_db=$wd_source/mgi-cds.bed
@@ -70,33 +88,112 @@ on filtering quality and number of genes used at different stages of the pipelin
 	divergence=$wd_divergence/divergence.bed
 	div_go=$wd_go/divergence_by_go.txt
 
-Make scripts executable
-^^^^^^^^^^^^^^^^^^^^^^^
+Prepare CDS & GO databases
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`MGI.gff3.gz` represents a full report containing detailed information on genes, 
+mRNAs, exons and CDS. For the divergence analysis only CDS are needed. CDS database 
+is prepared in this step and `gff3` is converted to `bed` to work more easily with 
+the CDS data.
 
 .. code-block:: bash
 	
-	chmod +x src/make_cds_database.sh src/make_go_dataset.sh
+	chmod +x src/make_cds_database.sh
 
-	chmod +x src/calculate_per_gene_divergence.sh src/divergence_by_go.sh src/get_divergent_variants.sh
-
-	chmod +x pipeline.sh
-
-Prepare data
-^^^^^^^^^^^^
-
-.. code-block:: bash
-	
-	# Prepare CDS database
 	src/make_cds_database.sh $sourcegenes $cds_db
 
-	# Prepare GO database
+`go_terms.mgi.gz` and `gene_association.mgi.gz` represents GO terms and association 
+between genes and GO terms IDs provided by Mouse Genome Informatics 
+(`Mouse Genome Informatics <http://www.informatics.jax.org>`_) and Gene Ontology 
+Consortium (`Gene Ontology <http://geneontology.org>`_). In the command below joined 
+dataset of list of genes with GO term enrichment is prepared.
+
+.. code-block:: bash
+	
+	chmod +x src/make_go_dataset.sh
+
 	src/make_go_database.sh $go2genes $goterms $go_db
+
+
+Run the pipeline step-by-step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**1. Selecting SNPs that are divergent between the two strains**
+
+Other criteria used for selection is the PHRED quality and read depth (DP). 
+Divergent SNPs are identified using Fst function built in the `vcftools`. SNPs 
+are considered to be divergent when Fst equals 1.
+
+.. code-block:: bash
+	
+	chmod +x src/get_divergent_variants.sh
+
+	src/get_divergent_variants.sh \
+	$quality \
+	$readdepth \
+	$sourcevcf \
+	$annotation \
+	$divergencevcf
+
+**2. Calculate the per gene divergence**
+
+Once the list of divergent SNPs between the two strains and the CDS database are created, 
+the divergence per gene can be calculated. Combination of `bedtools` tools and `awk` 
+commands is used to find SNPs overlapping CDS parts of the genes and calculate sums 
+and relative divergence by genes.
+
+.. code-block:: bash
+	
+	chmod +x src/calculate_per_gene_divergence.sh
+
+	src/calculate_per_gene_divergence.sh \
+	$divergencevcf.gz \
+	$cds_db \
+	$divergence
+
+**3. Calculate the average relative divergence by Gene Ontology category**
+
+Per-gene relative divergences are used to calculate the average relative divergence 
+for individual GO terms. Combinatino of the built-in Unix `join` and `sort` commands 
+is used along with `groupby` that is part of the `bedtools` tools suite. GO dataset 
+is joined to dataset on with gene relative divergences. The average for every GO term 
+is then calculated omitting low prevalence GO terms.
+
+.. code-block:: bash
+	
+	chmod +x divergence_by_go.sh
+
+	src/divergence_by_go.sh \
+	$divergence \
+	$go_db \
+	$minnumgenes \
+	$div_go
+
+**4. Prepare a barplot showing results of the GO enrichment analysis**
+
+To plot the results of the GO enrichment analysis `Rscript` is used. Library `ggplot2` 
+is the most suitable tool to provide fast and efficient plot.
+
+.. code-block:: bash
+	
+	Rscript src/plot.R
+
+
+Resulting ggplot graph
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: _static/go-enrichment.jpg
+
 
 Run the pipeline
 ^^^^^^^^^^^^^^^^
 
+Now we can try to run the whole pipeline at once using ``pipeline.sh`` shell script.
+
 .. code-block:: bash
 	
+	chmod +x pipeline.sh
+
 	./pipeline.sh \
 	$quality \
 	$readdepth \
@@ -110,85 +207,3 @@ Run the pipeline
 	$div_go
 
 
-Resulting ggplot graph
-^^^^^^^^^^^^^^^^^^^^^^
-
-.. image:: _static/go-enrichment.jpg
-
-Run the pipeline step-by-step
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**1. Prepare CDS & GO databases**
-
-`MGI.gff3.gz` represents a full report containing detailed information on genes, 
-mRNAs, exons and CDS. For the divergence analysis only CDS are needed. CDS database 
-is prepared in this step and `gff3` is converted to `bed` to work more easily with 
-the CDS data.
-
-.. code-block:: bash
-	
-	src/make_cds_database.sh $sourcegenes $cds_db
-
-`go_terms.mgi.gz` and `gene_association.mgi.gz` represents GO terms and association 
-between genes and GO terms IDs provided by Mouse Genome Informatics 
-(`Mouse Genome Informatics <http://www.informatics.jax.org>`_) and Gene Ontology 
-Consortium (`Gene Ontology <http://geneontology.org>`_). In the command below joined 
-dataset of list of genes with GO term enrichment is prepared.
-
-.. code-block:: bash
-	
-	src/make_go_database.sh $go2genes $goterms $go_db
-
-**2. Selecting SNPs that are divergent between the two strains**
-
-Other criteria used for selection is the PHRED quality and read depth (DP). 
-Divergent SNPs are identified using Fst function built in the `vcftools`. SNPs 
-are considered to be divergent when Fst equals 1.
-
-.. code-block:: bash
-	
-	src/get_divergent_variants.sh \
-	$quality \
-	$readdepth \
-	$sourcevcf \
-	$annotation \
-	$divergencevcf
-
-**3. Calculate the per gene divergence**
-
-Once the list of divergent SNPs between the two strains and the CDS database are created, 
-the divergence per gene can be calculated. Combination of `bedtools` tools and `awk` 
-commands is used to find SNPs overlapping CDS parts of the genes and calculate sums 
-and relative divergence by genes.
-
-.. code-block:: bash
-	
-	src/calculate_per_gene_divergence.sh \
-	$divergencevcf.gz \
-	$cds_db \
-	$divergence
-
-**4. Calculate the average relative divergence by Gene Ontology category**
-
-Per-gene relative divergences are used to calculate the average relative divergence 
-for individual GO terms. Combinatino of the built-in Unix `join` and `sort` commands 
-is used along with `groupby` that is part of the `bedtools` tools suite. GO dataset 
-is joined to dataset on with gene relative divergences. The average for every GO term 
-is then calculated omitting low prevalence GO terms.
-
-.. code-block:: bash
-	
-	src/divergence_by_go.sh \
-	$divergence \
-	$go_db \
-	$minnumgenes \
-	$div_go
-
-**5. Prepare a barplot showing results of the GO enrichment analysis**
-
-To plot the results of the GO enrichment analysis `Rscript` is used. Library `ggplot2` 
-is the most suitable tool to provide fast and efficient plot.
-
-.. code-block:: bash
-	
-	Rscript src/plot.R
