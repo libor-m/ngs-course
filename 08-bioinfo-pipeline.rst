@@ -70,7 +70,7 @@ on filtering quality and number of genes used at different stages of the pipelin
 	wd_go=data/02-go
 
 	# Source files
-	sourcevcf=/data-shared/mouse_go/mgp.v5.snps.dbSNP142.clean.X.vcf.gz data/00-source-data/.
+	sourcevcf=/data-shared/mouse_go/mgp.v5.snps.dbSNP142.clean.X.vcf.gz
 	sourcegenes=/data-shared/mouse_go/MGI.gff3.gz
 	go2genes=/data-shared/mouse_go/gene_association.mgi.gz
 	goterms=/data-shared/mouse_go/go_terms.mgi.gz
