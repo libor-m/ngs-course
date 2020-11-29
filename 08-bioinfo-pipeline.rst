@@ -22,6 +22,7 @@ If `bedtools`, `vcftools` or `bcftools` are not installed, the script below will
 install these tools.
 
 .. code-block:: bash
+	
 	chmod +x install.sh
 
 	./install.sh
@@ -31,6 +32,7 @@ Prepare data directories
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	
 	mkdir -p data/00-source-data data/01-divergence data/02-go
 
 
@@ -41,6 +43,7 @@ Several types of variables defined. Filtering parameters provide thresholds
 on filtering quality and number of genes used at different stages of the pipeline.
 
 .. code-block:: bash
+	
 	# Filtering parameters
 	quality=50
 	readdepth=10
@@ -67,11 +70,11 @@ on filtering quality and number of genes used at different stages of the pipelin
 	divergence=$wd_divergence/divergence.bed
 	div_go=$wd_go/divergence_by_go.txt
 
-
 Make scripts executable
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	
 	chmod +x src/make_cds_database.sh src/make_go_dataset.sh
 
 	chmod +x src/calculate_per_gene_divergence.sh src/divergence_by_go.sh src/get_divergent_variants.sh
@@ -82,6 +85,7 @@ Prepare data
 ^^^^^^^^^^^^
 
 .. code-block:: bash
+	
 	# Prepare CDS database
 	src/make_cds_database.sh $sourcegenes $cds_db
 
@@ -92,6 +96,7 @@ Run the pipeline
 ^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	
 	./pipeline.sh \
 	$quality \
 	$readdepth \
@@ -121,6 +126,7 @@ is prepared in this step and `gff3` is converted to `bed` to work more easily wi
 the CDS data.
 
 .. code-block:: bash
+	
 	src/make_cds_database.sh $sourcegenes $cds_db
 
 `go_terms.mgi.gz` and `gene_association.mgi.gz` represents GO terms and association 
@@ -130,6 +136,7 @@ Consortium (`Gene Ontology <http://geneontology.org>`_). In the command below jo
 dataset of list of genes with GO term enrichment is prepared.
 
 .. code-block:: bash
+	
 	src/make_go_database.sh $go2genes $goterms $go_db
 
 **2. Selecting SNPs that are divergent between the two strains**
@@ -139,6 +146,7 @@ Divergent SNPs are identified using Fst function built in the `vcftools`. SNPs
 are considered to be divergent when Fst equals 1.
 
 .. code-block:: bash
+	
 	src/get_divergent_variants.sh \
 	$quality \
 	$readdepth \
@@ -154,6 +162,7 @@ commands is used to find SNPs overlapping CDS parts of the genes and calculate s
 and relative divergence by genes.
 
 .. code-block:: bash
+	
 	src/calculate_per_gene_divergence.sh \
 	$divergencevcf.gz \
 	$cds_db \
@@ -168,6 +177,7 @@ is joined to dataset on with gene relative divergences. The average for every GO
 is then calculated omitting low prevalence GO terms.
 
 .. code-block:: bash
+	
 	src/divergence_by_go.sh \
 	$divergence \
 	$go_db \
@@ -180,4 +190,5 @@ To plot the results of the GO enrichment analysis `Rscript` is used. Library `gg
 is the most suitable tool to provide fast and efficient plot.
 
 .. code-block:: bash
+	
 	Rscript src/plot.R
