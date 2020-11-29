@@ -3,23 +3,29 @@ Additional exercises
 These are tasks that do not fit any particular session, but we still
 consider them interesting enough to share them with you.
 
+FizzBuzz
+^^^^^^^^
+The most classical of all programmer interview tasks. Print the numbers form
+``1`` to ``100``, but replace numbers divisible by ``3`` with ``Fizz``, numbers divisible
+by ``5`` with ``Buzz`` and numbers divisible by both ``3`` and ``5`` by ``FizzBuzz``.
+
 Counting heads
 ^^^^^^^^^^^^^^
-This is a nice example where bash can be used to solve a combinatorial 
+This is a nice example where bash can be used to solve a combinatorial
 problem by enumerating all the possibilities. And it is a long pipeline,
 so you have a lot of code to examine;)
 
-.. pull-quote:: 
+.. pull-quote::
 
    Eight people are sitting around a circular table. Each has a coin.
    They all flip their coins. What is the probability that no two adjacent
    people will get heads?
 
 The basic idea is that there is not much possibilities (only 2 to the power of 8,
-that is 256). We can just enumerate all the combinations and check if there is 
+that is 256). We can just enumerate all the combinations and check if there is
 two adjacent heads.
 
-This is the final solution, take your time to take it apart to see what each 
+This is the final solution, take your time to take it apart to see what each
 piece does.
 
 .. code-block:: bash
@@ -31,7 +37,7 @@ piece does.
       wc -l                                           # count the rest
 
 
-To get a more understandable code, we can split it to functional parts. Then 
+To get a more understandable code, we can split it to functional parts. Then
 we can just play and try different implementations of the parts:
 
 .. code-block:: bash
@@ -39,10 +45,10 @@ we can just play and try different implementations of the parts:
    generate () { (echo "obase=2;"; printf "%d\n" {0..255}) | bc ;}
    pad () { sed 's/^/0000000/' | egrep -o '.{8}$' ;}
    ring () { sed p | paste - - | tr -d "\t" ;}
-   
+
    generate | pad | ring | grep -v 11 | wc -l
 
-These are alternative solutions - you can paste them one by one, 
+These are alternative solutions - you can paste them one by one,
 and check if the pipe is still working.
 
 .. code-block:: bash
@@ -72,7 +78,7 @@ anything that does not look like binary. Few variants follow:
 
 .. code-block:: bash
 
-  seq -w 0 11111111 | grep ^[01]*$ | awk '!/11/ && !/^1.*1$/' | wc -l  
+  seq -w 0 11111111 | grep ^[01]*$ | awk '!/11/ && !/^1.*1$/' | wc -l
   seq -w 0 11111111 | grep ^[01]*$ | grep -v -e 11 -e ^1.*1$ | wc -l
   seq -w 0 11111111 | awk '/^[01]*$/ && !/11/ && !/^1.*1$/' | wc -l
   seq -w 0 11111111 | awk '!/[2-9]/ && !/11/ && !/^1.*1$/' | wc -l
@@ -84,7 +90,7 @@ Dimensionality reduction
 ^^^^^^^^^^^^^^^^^^^^^^^^
 Methods like PCA and MDS (sometimes called PCoA to increase the confusion)
 are usually regarded as black box by many. Here we try to present a simple example
-that should help with getting a better idea on what are these magic boxes 
+that should help with getting a better idea on what are these magic boxes
 actually doing.
 
 Load and visualize your data set
@@ -128,7 +134,7 @@ in your R session:
       res
     }
 
-Now try to rotate the object a bit, so we can see it better. Try to find good values 
+Now try to rotate the object a bit, so we can see it better. Try to find good values
 for the rotation yourself (numbers are in radians, 0..2*PI makes sense):
 
 .. code-block:: r
@@ -136,7 +142,7 @@ for the rotation yourself (numbers are in radians, 0..2*PI makes sense):
     dr <- rot3d_df(d, .9, .1, 2)
     ggplot(dr, aes(x, y)) + geom_point() + coord_equal()
 
-Enter PCA. It actually finds the best rotation for you. Even in a way that the 
+Enter PCA. It actually finds the best rotation for you. Even in a way that the
 first axis has the most variability (longest side of the object), the second axis
 has the maximum of the remaining variability etc.
 
@@ -149,8 +155,8 @@ has the maximum of the remaining variability etc.
 
 MDS
 ---
-Metric MDS (multidimensional scaling) with `euclidean` distance equals to PCA. We will 
-use the non-metric variant here, which tries to keep only the order of pairwise 
+Metric MDS (multidimensional scaling) with `euclidean` distance equals to PCA. We will
+use the non-metric variant here, which tries to keep only the order of pairwise
 distances, not the distances themselves. You prefer MDS when you want to use a different
 distance than `euclidean` - we're using `manhattan` (`taxicab`) distance here:
 
@@ -163,10 +169,10 @@ distance than `euclidean` - we're using `manhattan` (`taxicab`) distance here:
 
 Shiny
 -----
-And now there is something you definitely wanted, while you were trying to find 
+And now there is something you definitely wanted, while you were trying to find
 the good values for rotation of your object::
 
   setwd('webapp')
 
-Now ``File > Open``, and open ``server.R``. There should be a green ``Run App`` 
+Now ``File > Open``, and open ``server.R``. There should be a green ``Run App``
 button at the top right of the editor window. Click that button!
