@@ -38,8 +38,6 @@ install these tools.
 
 .. code-block:: bash
 	
-	chmod +x install.sh
-
 	./install.sh
 
 Prepare directories
@@ -99,8 +97,6 @@ the CDS data.
 
 .. code-block:: bash
 	
-	chmod +x src/make_cds_database.sh
-
 	src/make_cds_database.sh $sourcegenes $cds_db
 
 ``go_terms.mgi.gz`` and ``gene_association.mgi.gz`` represents GO terms and association 
@@ -111,8 +107,6 @@ dataset of list of genes with GO term enrichment is prepared.
 
 .. code-block:: bash
 	
-	chmod +x src/make_go_dataset.sh
-
 	src/make_go_database.sh $go2genes $goterms $go_db
 
 
@@ -127,8 +121,6 @@ are considered to be divergent when Fst equals 1.
 
 .. code-block:: bash
 	
-	chmod +x src/get_divergent_variants.sh
-
 	src/get_divergent_variants.sh \
 	$quality \
 	$readdepth \
@@ -145,8 +137,6 @@ and relative divergence by genes.
 
 .. code-block:: bash
 	
-	chmod +x src/calculate_per_gene_divergence.sh
-
 	src/calculate_per_gene_divergence.sh \
 	$divergencevcf.gz \
 	$cds_db \
@@ -161,8 +151,6 @@ is joined to dataset on with gene relative divergences. The average for every GO
 is then calculated omitting low prevalence GO terms.
 
 .. code-block:: bash
-	
-	chmod +x divergence_by_go.sh
 
 	src/divergence_by_go.sh \
 	$divergence \
@@ -194,8 +182,6 @@ Now we can try to run the whole pipeline at once using ``pipeline.sh`` shell scr
 
 .. code-block:: bash
 	
-	chmod +x pipeline.sh
-
 	./pipeline.sh \
 	$quality \
 	$readdepth \
