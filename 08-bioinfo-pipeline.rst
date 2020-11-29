@@ -1,244 +1,183 @@
 Session 8: Bioinformatic pipelines
 ==================================
 
-Exercise
---------
+Mouse Gene Ontology enrichment analysis pipeline
+------------------------------------------------
 
-Get a population differentiation calculated as Fst between *M. m. musculus*
-and *M. m. domesticus* within a given sliding window and find candidate
-genes within highly differentiated regions:
+Bioinformatic pipeline to carry Gene Ontology enrichment analysis for low 
+and high divergence genes among two house mouse subspecies.
 
- 1. use ``vcftools`` to filter data and calculate Fst for individual SNPs
- 2. calculate Fst for each SNP (``vcftools``)
- 3. write a function that will create sliding windows for windows of different sizes and steps (``bedtools makewindows``) and calculate average Fst for each window (``groupBy``) and calculate average Fst for sliding windows of these sizes and steps
+SNP variants for two mouse strains (PWD/PhJ, WSB/EiJ) were downloaded from 
+the Mouse Genome Project FTP site (`Mouse Genome Project <https://www.sanger.ac.uk/data/mouse-genomes-project/>`_). 
+PWD/PhJ and WSB/EiJ represent *Mus musculus musculus* and *Mus musculus 
+domesticus* subspecies, respectively.
 
-   a) 100 kb + 10 kb step
-   b) 500 kb + 50 kb step
-   c) 1 Mb + 100 kb step
+The aim is to identify genes with high relative divergence between the two strains 
+and carry Gene Ontology enrichment analysis for genes according to the divergence.
 
- 4. use R-Studio and ggplot2 to plot Fst values across the genome
- 5. use R or ``tabtk`` to obtain the 99th percentile and use it to obtain a set of candidate genomic regions
- 6. use ``bedtools intersect`` to get a list of candidate genes
+Test & install required software
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Extract genotype data for European mouse individuals and filter out
-variants having more than one missing genotype and minor allele frequency 0.2
-(we have already started - you should have prepared VCF file with European samples
-and filtered out variants with missing genomes and low minor allele frequency).
+If `bedtools`, `vcftools` or `bcftools` are not installed, the script below will 
+install these tools.
 
 .. code-block:: bash
+	chmod +x install.sh
 
-    mkdir -p ~/projects/fst
+	./install.sh
 
-    cd ~/projects/fst
 
-    IN=/data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
-    SAMPLES=/data-shared/mus_mda/00-popdata/euro_samps.txt
-
-    vcftools --gzvcf $IN \
-	   --keep $SAMPLES \
-	   --recode --stdout |
-    vcftools --vcf - \
-	   --max-missing 1 \
-	   --maf 0.2 \
-	   --recode \
-	   --stdout \
-	> popdata_mda_euro.vcf
-
-Calculate Fst values for variants between *M. m. musculus*
-and *M. m. domesticus* populations (populations specified in
-``musculus_samps.txt`` and ``domesticus_samps.txt``):
+Prepare data directories
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	mkdir -p data/00-source-data data/01-divergence data/02-go
 
-    MUS=/data-shared/mus_mda/00-popdata/musculus_samps.txt
-    DOM=/data-shared/mus_mda/00-popdata/domesticus_samps.txt
-    IN=popdata_mda_euro.vcf
 
-	vcftools --vcf $IN \
-	   --weir-fst-pop $MUS \
-	   --weir-fst-pop $DOM \
-	   --stdout |
-	tail -n +2 |
-	awk -F $'\t' 'BEGIN{OFS=FS}{print $1,$2-1,$2,$1":"$2,$3}' \
-	> popdata_mda_euro_fst.bed
+Define variables
+^^^^^^^^^^^^^^^^
 
-Build function that calculates average Fst for sliding windows
+Several types of variables defined. Filtering parameters provide thresholds 
+on filtering quality and number of genes used at different stages of the pipeline.
 
 .. code-block:: bash
+	# Filtering parameters
+	quality=50
+	readdepth=10
+	minnumgenes=9
 
-    # Set file name with Fst values by SNP
+	# Working directories (removed from the git in .gitignore)
+	wd_source=data/00-source-data
+	wd_divergence=data/01-divergence
+	wd_go=data/02-go
 
-    IN=popdata_mda_euro_fst.bed
+	# Source files
+	sourcevcf=$wd_source/mgp.v5.snps.dbSNP142.clean.X.vcf.gz
+	sourcegenes=$wd_source/MGI.gff3.gz
+	go2genes=$wd_source/gene_association.mgi.gz
+	goterms=$wd_source/go_terms.mgi.gz
 
-    # Make sliding windows (genome file containing info about size of chromosome has to be specified)
+	# Helping datasets
+	cds_db=$wd_source/mgi-cds.bed
+	go_db=$wd_source/go2genes.txt
 
-    grep -E '^2|^11' /data-shared/mus_mda/02-windows/genome.fa.fai > genome-fst.fa.fai
+	# Output files
+	annotation=$wd_divergence/annotation.tab
+	divergencevcf=$wd_divergence/out-vars.vcf
+	divergence=$wd_divergence/divergence.bed
+	div_go=$wd_go/divergence_by_go.txt
 
-    GENOME=genome-fst.fa.fai
 
-    WIN=1000000
-    STEP=100000
-    NAME="1Mb"
-
-    bedtools makewindows \
-	       -g $GENOME \
-	       -w $WIN \
-	       -s $STEP |
-    awk -v win=$NAME '{ print $0"\t"win }' | less
-
-    # Intersect windows with list of SNPs
-
-    bedtools makewindows \
-	       -g $GENOME \
-	       -w $WIN \
-	       -s $STEP | \
-    awk -v win=$NAME '{ print $0"\t"win }' |
-    bedtools intersect \
-	       -a - \
-	       -b $IN \
-           -wa -wb | less
-
-    # Calculate the average Fst by windows
-
-    bedtools makewindows \
-	       -g $GENOME \
-	       -w $WIN \
-	       -s $STEP | \
-    awk -v win=$NAME '{ print $0"\t"win }' |
-    bedtools intersect \
-	       -a - \
-	       -b $IN \
-           -wa -wb |
-    sort -k4,4 -k1,1 -k2,2n |
-    groupBy -i - \
-	       -g 4,1,2,3 \
-	       -c 9 \
-	       -o mean
-
-    # We can put everything together to write a function that can be re-used for different window sizes
-
-    average_fst() {
-
-        bedtools makewindows \
-	       -g $1 \
-	       -w $2 \
-	       -s $3 |
-        awk -v win=$4 '{ print $0"\t"win }' |
-        bedtools intersect \
-	       -a - \
-	       -b $5 \
-           -wa -wb |
-        sort -k4,4 -k1,1 -k2,2n |
-        groupBy -i - \
-	       -g 4,1,2,3 \
-	       -c 9 \
-	       -o mean
-
-    }
-
-Make three sets of sliding windows (100 kb, 500 kb, 1 Mb)
-and concatenate them into a single file:
+Make scripts executable
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	chmod +x src/make_cds_database.sh src/make_go_dataset.sh
 
-    IN=popdata_mda_euro_fst.bed
-    GENOME=genome-fst.fa.fai
+	chmod +x src/calculate_per_gene_divergence.sh src/divergence_by_go.sh src/get_divergent_variants.sh
 
-    # 1 Mb sliding windows with 100 kb step
+	chmod +x pipeline.sh
 
-    average_fst $GENOME 1000000 100000 "1Mb" $IN > fst_1000kb.bed
-
-    # 500 kb sliding windows with 50 kb step
-
-    average_fst $GENOME 500000 50000 "500kb" $IN > fst_500kb.bed
-
-    # 100 kb sliding windows with 10 kb step
-
-    average_fst $GENOME 100000 10000 "100kb" $IN > fst_100kb.bed
-
-    cat fst*.bed > windows_mean_fst.tsv
-
-Visualize the average Fst values within the sliding windows of the three sizes
-between the two house mouse subspecies in `R-Studio <http://localhost:8787>`_.
-Plot the distribution of the Fst values for the three window sizes and
-also plot the average Fst values along the chromosomes.
-
-.. note:: R ggplot2 commands to plot population differentiation
-
-	.. code-block:: bash
-
-		library(tidyverse)
-
-		setwd("~/projects/fst")
-
-		## Read Fst file and rename names in header
-		read_tsv('windows_mean_fst.tsv', col_names=F) -> fst
-
-		names(fst) <- c("win_size", "chrom", "start", "end", "avg_fst" )
-
-		# Reorder levels for window size
-		fst %>%
-		  mutate(win_size = factor(win_size, levels=c("100kb", "500kb", "1Mb"))) ->
-		  fst
-
-		# Plot density distribution for average Fst values across windows
-		ggplot(fst, aes(avg_fst)) +
-			geom_density(fill=I("blue")) +
-			facet_wrap(~win_size)
-
-	.. image:: _static/fst_dist.png
-			:align: center
-
-	.. code-block:: bash
-
-		## Plot Fst values along physical position
-		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
-			geom_line() +
-			facet_wrap(~chrom, nrow=2) +
-			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
-
-		## Retrieve 99% quantiles
-		fst %>%
-			group_by(win_size) %>%
-			summarize(p=quantile(avg_fst,probs=0.99)) -> fst_quantiles
-
-		## Add 99% quantiles for 500kb window
-		ggplot(fst, aes(y=avg_fst, x=start, colour=win_size)) +
-			geom_line() +
-			facet_wrap(~chrom, nrow=2) +
-			geom_hline(yintercept=as.numeric(fst_quantiles[2,2]), colour="black") +
-			scale_colour_manual(name="Window size", values=c("green", "blue","red"))
-
-	.. image:: _static/fst_on_chroms.png
-			:align: center
-
-Find the 99th percentile of genome-wide distribution of Fst values
-in order to guess possible outlier genome regions. 99th percentile
-can be obtained running R as command line or by using ``tabtk``.
-The output would be a list of windows having Fst higher
-than or equal to 99% of the data.
+Prepare data
+^^^^^^^^^^^^
 
 .. code-block:: bash
+	# Prepare CDS database
+	src/make_cds_database.sh $sourcegenes $cds_db
 
-	## Calculate the 99 % quantile for average Fst for 500 kb windows
-	Q=$( grep '500kb' windows_mean_fst.tsv | tabtk num -c5 -q0.99 )
+	# Prepare GO database
+	src/make_go_database.sh $go2genes $goterms $go_db
 
-	## Use of variables in AWK: -v q=value
-
-	grep 500kb windows_mean_fst.tsv |
-	  awk -v q=$Q -F $'\t' 'BEGIN{OFS=FS}$5>=q{print $2,$3,$4}' |
-	  sortBed |
-	  bedtools merge -i stdin \
-		> signif_500kb.bed
-
-Use the mouse gene annotation file to retrieve genes within
-the windows of high Fst (i.e. putative reproductive isolation loci).
+Run the pipeline
+^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
+	./pipeline.sh \
+	$quality \
+	$readdepth \
+	$minnumgenes \
+	$sourcevcf \
+	$annotation \
+	$divergencevcf \
+	$cds_db \
+	$divergence \
+	$go_db \
+	$div_go
 
-    GENES=/data-shared/bed_examples/Ensembl.NCBIM37.67.bed
 
-	bedtools intersect \
-		-a $GENES \
-		-b signif_500kb.bed -wa | \
-		column -t | less
+Resulting ggplot graph
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. image:: _static/go-enrichment.jpg
+
+Run the pipeline step-by-step
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**1. Prepare CDS & GO databases**
+
+`MGI.gff3.gz` represents a full report containing detailed information on genes, 
+mRNAs, exons and CDS. For the divergence analysis only CDS are needed. CDS database 
+is prepared in this step and `gff3` is converted to `bed` to work more easily with 
+the CDS data.
+
+.. code-block:: bash
+	src/make_cds_database.sh $sourcegenes $cds_db
+
+`go_terms.mgi.gz` and `gene_association.mgi.gz` represents GO terms and association 
+between genes and GO terms IDs provided by Mouse Genome Informatics 
+(`Mouse Genome Informatics <http://www.informatics.jax.org>`_) and Gene Ontology 
+Consortium (`Gene Ontology <http://geneontology.org>`_). In the command below joined 
+dataset of list of genes with GO term enrichment is prepared.
+
+.. code-block:: bash
+	src/make_go_database.sh $go2genes $goterms $go_db
+
+**2. Selecting SNPs that are divergent between the two strains**
+
+Other criteria used for selection is the PHRED quality and read depth (DP). 
+Divergent SNPs are identified using Fst function built in the `vcftools`. SNPs 
+are considered to be divergent when Fst equals 1.
+
+.. code-block:: bash
+	src/get_divergent_variants.sh \
+	$quality \
+	$readdepth \
+	$sourcevcf \
+	$annotation \
+	$divergencevcf
+
+**3. Calculate the per gene divergence**
+
+Once the list of divergent SNPs between the two strains and the CDS database are created, 
+the divergence per gene can be calculated. Combination of `bedtools` tools and `awk` 
+commands is used to find SNPs overlapping CDS parts of the genes and calculate sums 
+and relative divergence by genes.
+
+.. code-block:: bash
+	src/calculate_per_gene_divergence.sh \
+	$divergencevcf.gz \
+	$cds_db \
+	$divergence
+
+**4. Calculate the average relative divergence by Gene Ontology category**
+
+Per-gene relative divergences are used to calculate the average relative divergence 
+for individual GO terms. Combinatino of the built-in Unix `join` and `sort` commands 
+is used along with `groupby` that is part of the `bedtools` tools suite. GO dataset 
+is joined to dataset on with gene relative divergences. The average for every GO term 
+is then calculated omitting low prevalence GO terms.
+
+.. code-block:: bash
+	src/divergence_by_go.sh \
+	$divergence \
+	$go_db \
+	$minnumgenes \
+	$div_go
+
+**5. Prepare a barplot showing results of the GO enrichment analysis**
+
+To plot the results of the GO enrichment analysis `Rscript` is used. Library `ggplot2` 
+is the most suitable tool to provide fast and efficient plot.
+
+.. code-block:: bash
+	Rscript src/plot.R
