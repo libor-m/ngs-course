@@ -33,7 +33,7 @@ Install required software
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For the mouse Gene Ontology pipeline three specialized genomic tools are necessary:
-`bedtools`, `vcftools` or `bcftools`. If they are not installed, the script below will 
+``bedtools``, ``vcftools`` or ``bcftools``. If they are not installed, the script below will 
 install these tools.
 
 .. code-block:: bash
@@ -41,7 +41,6 @@ install these tools.
 	chmod +x install.sh
 
 	./install.sh
-
 
 Prepare directories
 ^^^^^^^^^^^^^^^^^^^
@@ -78,22 +77,24 @@ on filtering quality and number of genes used at different stages of the pipelin
 	go2genes=/data-shared/mouse_go/gene_association.mgi.gz
 	goterms=/data-shared/mouse_go/go_terms.mgi.gz
 
-	# Helping datasets
+	# Processed source files
 	cds_db=$wd_source/mgi-cds.bed
 	go_db=$wd_source/go2genes.txt
 
-	# Output files
+	# Divergence analysis output files:
 	annotation=$wd_divergence/annotation.tab
 	divergencevcf=$wd_divergence/out-vars.vcf
 	divergence=$wd_divergence/divergence.bed
+
+	# GO enrichment by high and low divergence regions
 	div_go=$wd_go/divergence_by_go.txt
 
 Prepare CDS & GO databases
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`MGI.gff3.gz` represents a full report containing detailed information on genes, 
+``MGI.gff3.gz`` represents a full report containing detailed information on genes, 
 mRNAs, exons and CDS. For the divergence analysis only CDS are needed. CDS database 
-is prepared in this step and `gff3` is converted to `bed` to work more easily with 
+is prepared in this step and ``.gff3`` is converted to ``.bed`` to work more easily with 
 the CDS data.
 
 .. code-block:: bash
@@ -102,7 +103,7 @@ the CDS data.
 
 	src/make_cds_database.sh $sourcegenes $cds_db
 
-`go_terms.mgi.gz` and `gene_association.mgi.gz` represents GO terms and association 
+``go_terms.mgi.gz`` and ``gene_association.mgi.gz`` represents GO terms and association 
 between genes and GO terms IDs provided by Mouse Genome Informatics 
 (`Mouse Genome Informatics <http://www.informatics.jax.org>`_) and Gene Ontology 
 Consortium (`Gene Ontology <http://geneontology.org>`_). In the command below joined 
@@ -121,7 +122,7 @@ Run the pipeline step-by-step
 **1. Selecting SNPs that are divergent between the two strains**
 
 Other criteria used for selection is the PHRED quality and read depth (DP). 
-Divergent SNPs are identified using Fst function built in the `vcftools`. SNPs 
+Divergent SNPs are identified using Fst function built in the ``vcftools``. SNPs 
 are considered to be divergent when Fst equals 1.
 
 .. code-block:: bash
@@ -138,7 +139,7 @@ are considered to be divergent when Fst equals 1.
 **2. Calculate the per gene divergence**
 
 Once the list of divergent SNPs between the two strains and the CDS database are created, 
-the divergence per gene can be calculated. Combination of `bedtools` tools and `awk` 
+the divergence per gene can be calculated. Combination of ``bedtools`` tools and ``awk`` 
 commands is used to find SNPs overlapping CDS parts of the genes and calculate sums 
 and relative divergence by genes.
 
@@ -154,8 +155,8 @@ and relative divergence by genes.
 **3. Calculate the average relative divergence by Gene Ontology category**
 
 Per-gene relative divergences are used to calculate the average relative divergence 
-for individual GO terms. Combinatino of the built-in Unix `join` and `sort` commands 
-is used along with `groupby` that is part of the `bedtools` tools suite. GO dataset 
+for individual GO terms. Combinatino of the built-in Unix ``join`` and ``sort`` commands 
+is used along with `groupby` that is part of the ``bedtools`` tools suite. GO dataset 
 is joined to dataset on with gene relative divergences. The average for every GO term 
 is then calculated omitting low prevalence GO terms.
 
@@ -171,13 +172,14 @@ is then calculated omitting low prevalence GO terms.
 
 **4. Prepare a barplot showing results of the GO enrichment analysis**
 
-To plot the results of the GO enrichment analysis `Rscript` is used. Library `ggplot2` 
+To plot the results of the GO enrichment analysis ``Rscript`` is used. Library ``ggplot2`` 
 is the most suitable tool to provide fast and efficient plot.
 
 .. code-block:: bash
 	
 	Rscript src/plot.R
 
+Alternatively, we can open the ``.R`` file in R Studio and plot the graph there.
 
 Resulting ggplot graph
 ^^^^^^^^^^^^^^^^^^^^^^
