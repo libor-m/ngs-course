@@ -107,10 +107,12 @@ Briefly:
     - 160 GB HDD as system drive (need space for basic system, gcc, rstudio and produced data * N participants)
 
 - more rules in security group
+
   - HTTP to set up let's encrypt cert
   - 443 for secured RStudio
   - 60k-61k for mosh
   - 5690 rstudio + shiny
+
 
 
 Debian conifg
@@ -569,6 +571,41 @@ Cleanup
 
   # ctrl-d
   history -cw
+
+Update the machine
+^^^^^^^^^^^^^^^^^^
+When Debian + RStudio are reasonably updatable, we can keep the previous image.
+Hostname is derived from instance name via `cloud-init`, so renaming the instance in
+OpenStack should do the trick. Still `/etc/hosts` need to be edited to make `sudo` happy.
+
+.. code-block:: bash
+
+  # as root
+  sudo su
+
+  # general update
+  # (add new CRAN key)
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+
+  apt update
+  apt upgrade
+
+  # update certificates
+  snap refresh
+  certbot certonly --nginx
+  systemctl restart nginx
+
+  # update R packages
+  R
+  > update.packages(lib.loc=.libPaths()[1], ask=F, checkBuilt=T, Ncpus=15)
+
+  # update rstudio as normal user
+  cd ~/sw
+  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2021.09.1-372-amd64.deb
+  sudo rstudio-server active-sessions
+  sudo rstudio-server offline
+  sudo gdebi rstudio-server-2021.09.1-372-amd64.deb
+  sudo rstudio-server online
 
 
 Slide deck
