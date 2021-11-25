@@ -1,4 +1,4 @@
-Course on Unix and work with genomic data - Prague, November 2020
+Course on Unix and work with genomic data - Prague, November 2021
 =================================================================
 
 This course is taught regularly as a subject in the winter term at the Department of Zoology, Faculty of Science,
@@ -19,13 +19,13 @@ your login credentials and further info - use (`this link to join
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday 27/11/2020 (14:00-18:00)**                       |
+| **Friday 26/11/2020 (14:00-18:00)**                       |
 +--------------+--------------------------------------------+
 | Afternoon    | - Course Intro                             |
 |              | - Introduction to Unix                     |
 |              | - Basics of Unix                           |
 +--------------+--------------------------------------------+
-| **Saturday 28/11/2020 (10:00-18:00)**                     |
+| **Saturday 27/11/2020 (10:00-18:00)**                     |
 +--------------+--------------------------------------------+
 | Morning      | - Genomic data                             |
 |              | - Processing of plain text files in Unix   |
@@ -35,7 +35,7 @@ your login credentials and further info - use (`this link to join
 | Afternoon    | - Project management in Unix               |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
-| **Sunday 29/11/2020 (10:00-18:00)**                       |
+| **Sunday 28/11/2020 (10:00-18:00)**                       |
 +--------------+--------------------------------------------+
 | Morning      | - Read Quality                             |
 |              | - Assembly                                 |
