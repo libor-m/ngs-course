@@ -28,7 +28,7 @@ name, flag, flag value, path to input file and path to output file.
   head -n10 file.txt > out.txt
 
 How do I know which flags to use for individual commands? There is several ways. You can
-you command documentation using ``man``, or most of commands have help option ``-h`` 
+you command documentation using ``man``, or most of commands have help option ``-h``
 or ``--help``. Below is way to call manual and help.
 
 .. code-block:: bash
@@ -36,8 +36,7 @@ or ``--help``. Below is way to call manual and help.
   # using manual
   man head
 
-  # help
-  head -h
+  # brief help summary
   head --help
 
 Check your keyboard
@@ -89,9 +88,9 @@ To attach again type::
 
 screen -r
 
-You can have simultaneously multiple sessions. In that case you have to select 
-to which session to reattach. ``-ls`` command can be used to list all 
-existing sessions and then re-attach to a specific session using ``-r`` 
+You can have simultaneously multiple sessions. In that case you have to select
+to which session to reattach. ``-ls`` command can be used to list all
+existing sessions and then re-attach to a specific session using ``-r``
 and specifying the name of the session:
 
 .. code-block:: bash
@@ -197,11 +196,11 @@ Work with compressed files
 .. code-block:: bash
 
   # Go to home directory
-  cd 
+  cd
 
   # Make a new directory 'fastq'
   mkdir projects/fastq && cd projects/fastq
-  
+
   # Copy a fastq archive to the new directory
   cp /data-shared/fastq/fastq.tar.gz .
   tar -zxvf fastq.tar.gz
@@ -219,7 +218,7 @@ can be readily combined with ``head`` to show the second sequence in the file.
 .. code-block:: bash
 
   cd ~/projects/fastq
-  
+
   head -8 HRTMUOC01.RL12.00.fastq | tail -4 | less
 
   # Neater way to write pipelines
