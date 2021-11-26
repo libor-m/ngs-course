@@ -10,10 +10,15 @@ We will be all connecting to a single remote server hosted by
 
 Windows
 ^^^^^^^
-Install `Git for Windows <https://git-scm.com/download/win>`_. We'll use it to
-control the remote computer.
+We need to install two packages:
 
-When installing Git Bash, go with the default settings, just
+  - `Git for Windows <https://git-scm.com/download/win>`_
+  - `WinSCP <http://winscp.net/eng/download.php>`_
+
+We'll use **Git Bash** from the Git for Windows package to control the remote
+computer.
+
+When installing Git for Windows, keep the default settings, just
 make sure you check ``Git Bash Here``. Keep in mind that the images are from an
 older version of the installer.
 
@@ -26,9 +31,14 @@ run this and exit the terminal (``exit``)::
 
   curl -sL https://owncloud.cesnet.cz/index.php/s/1B1NnrI4lqQtY9Q/download > ~/.minttyrc
 
-Install `WinSCP <http://winscp.net/eng/download.php>`_ (look for
-``Installation package``). WinSCP will be used to transfer files between your
-computer and the remote computer.
+**WinSCP** will be used to transfer files between your computer and the remote
+computer. Look for ``Installation package`` on the
+`WinSCP download<http://winscp.net/eng/download.php>`_ page.
+
+.. note::
+    Microsoft recently developed an app called `Windows Terminal`, which seems
+    superior in functionality to `mintty`, but it is still more difficult to set
+    up. That's why we stick with `Git Bash`.
 
 macOS and Linux
 ^^^^^^^^^^^^^^^
@@ -42,6 +52,14 @@ Mac users that prefer grapical clients can use something like `CyberDuck`. Check
 the `answers here
 <http://apple.stackexchange.com/questions/25661/whats-a-good-graphical-sftp-utility-for-os-x>`_.
 
+
+Chromebook
+^^^^^^^^^^
+On Chromebook, you need to install the
+`Secure Shell App <https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo?hl=en>`_.
+
+Another option is to install the `full blown Linux <https://chromeos.dev/en/linux>`_, if your device allows it.
+
 Time to log in!
----------------
+^^^^^^^^^^^^^^^
 Try to log in following the instructions in :ref:`ssh_connect`.

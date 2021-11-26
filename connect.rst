@@ -32,7 +32,7 @@ how many characters your password has.
 In **macOS** your terminal program is called 'Terminal', in **Linux** you have
 several options like 'Konsole', 'xterm' etc.
 
-On Chromebook, you need to install the
+On **Chromebook**, you need to run the
 `Secure Shell App <https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo?hl=en>`_.
 
 Connect to copy files
@@ -50,4 +50,3 @@ Connect to RStudio
 ------------------
 This is the easiest one, just click this link: `Open RStudio <https://ngs-course.duckdns.org>`_.
 Login with the same credentials you got on Slack.
-
