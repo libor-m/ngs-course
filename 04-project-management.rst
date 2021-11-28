@@ -3,7 +3,7 @@ Session 4: Unix - "Real" Project
 
 Here you will learn several concepts needed for running real projects:
 
-- use one screen sessions per project (if you're juggling more projects)
+- use one screen session per project (if you're juggling more projects)
 - keep your code in a text file
 - keep your data files separate from your code
 - make your intent more legible by wrapping code in functions and script files
