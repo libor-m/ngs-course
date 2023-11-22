@@ -14,7 +14,7 @@ the mundane tasks, which can all be handled by combining basic Unix tools.
 
 We'll be using `Slack 'UNIX and NGS' <https://ngs-course.slack.com>`_ to share
 your login credentials and further info - use (`this link to join
-<https://join.slack.com/t/ngs-course/shared_invite/zt-jfrs3pyd-n6pzUCosxXqvh4gcAIjpuw>`_).
+<https://join.slack.com/t/ngs-course/shared_invite/zt-27vwj2nu8-l4wc0XzICdaeO2PU9XIv8g>`_).
 
 **Schedule:**
 
@@ -25,7 +25,7 @@ your login credentials and further info - use (`this link to join
 |              | - Introduction to Unix                     |
 |              | - Basics of Unix                           |
 +--------------+--------------------------------------------+
-| **Saturday 27.11.2021 (10.00-18.00)**                     |
+| **Saturday 27.11.2021 (9.00-17.00)**                     |
 +--------------+--------------------------------------------+
 | Morning      | - Genomic data                             |
 |              | - Processing of plain text files in Unix   |
@@ -35,7 +35,7 @@ your login credentials and further info - use (`this link to join
 | Afternoon    | - Project management in Unix               |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
-| **Sunday 28.11.2021 (10.00-18.00)**                       |
+| **Sunday 28.11.2021 (9.00-17.00)**                       |
 +--------------+--------------------------------------------+
 | Morning      | - Read Quality                             |
 |              | - Assembly                                 |
