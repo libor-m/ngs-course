@@ -1,7 +1,7 @@
-Course on Unix and work with genomic data - Prague, November 2021
+Course on Unix and work with genomic data - Prague, November 2023
 =================================================================
 
-This course is taught regularly as a subject in the winter term at the Department of Zoology, Faculty of Science,
+This course takes place regularly in the winter term at the Department of Zoology, Faculty of Science,
 Charles University in Prague (`MB170C47 <https://is.cuni.cz/studium/eng/predmety/index.php?do=predmet&kod=MB170C47>`_).
 
 The aim of the course is to introduce the participants to Unix - an interface that is
@@ -19,31 +19,31 @@ your login credentials and further info - use (`this link to join
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday 26.11.2021 (14.00-18.00)**                       |
+| **Friday 24.11.2023 (14.00-18.00)**                       |
 +--------------+--------------------------------------------+
 | Afternoon    | - Course Intro                             |
 |              | - Introduction to Unix                     |
 |              | - Basics of Unix                           |
 +--------------+--------------------------------------------+
-| **Saturday 27.11.2021 (9.00-17.00)**                     |
+| **Saturday 25.11.2023 (9.00-17.00)**                      |
 +--------------+--------------------------------------------+
-| Morning      | - Genomic data                             |
+| Morning      | - Genomics data                            |
 |              | - Processing of plain text files in Unix   |
 +--------------+--------------------------------------------+
-| *Lunch Break (~ 1h)*                                      |
+| *Lunch Break (1.5h)*                                      |
 +--------------+--------------------------------------------+
 | Afternoon    | - Project management in Unix               |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
-| **Sunday 28.11.2021 (9.00-17.00)**                       |
+| **Sunday 26.11.2023 (9.00-17.00)**                        |
 +--------------+--------------------------------------------+
-| Morning      | - Read Quality                             |
-|              | - Assembly                                 |
+| Morning      | - Introduction to Git                      |
+|              | - Variant quality                          |
 +--------------+--------------------------------------------+
-| *Lunch Break (~ 1h)*                                      |
+| *Lunch Break (1.5h)*                                      |
 +--------------+--------------------------------------------+
 | Afternoon    | - Bioinformatic pipelines                  |
-|              | - Variant quality exercise                 |
+|              | - Working remotely in the cloud            |
 +--------------+--------------------------------------------+
 
 Initial instructions:
