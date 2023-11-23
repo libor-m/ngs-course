@@ -62,13 +62,11 @@ Check out the version which will serve as starting material, create and publish 
 .. code-block:: bash
 
   git pull
-  git checkout praha-january-2016
-  git checkout -b praha-january-2017
-  git push -u origin praha-january-2017:praha-january-2017
+  git checkout praha-january-2019
+  git checkout -b praha-january-2023
+  git push -u origin praha-january-2023
 
-Log in to `Read the Docs`, go to `Admin > Versions
-<https://readthedocs.org/dashboard/ngs-course/versions/>`_,
-make the new version 'Active', set as the default version in `Admin > Advanced
+Log in to `Read the Docs`, set the new branch as the default version in `Admin > Advanced
 <https://readthedocs.org/dashboard/ngs-course/advanced/>`_.
 
 If the version (branch) is not visible yet, do a force build of some previous
@@ -304,7 +302,7 @@ R is best used in RStudio - server version can be used in web browser.
 
   # install latest R
   # https://cran.r-project.org/bin/linux/debian/
-  sudo bash -c "echo 'deb http://cloud.r-project.org/bin/linux/debian buster-cran40/' > /etc/apt/sources.list.d/cran.list"
+  sudo bash -c "echo 'deb http://cloud.r-project.org/bin/linux/debian bookworm-cran40/' > /etc/apt/sources.list.d/cran.list"
   sudo apt install dirmngr
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
   sudo apt update
@@ -383,8 +381,9 @@ there is not much dependencies.
 
   # install a tar with the most common method
   inst-tar() {
+    TAR_EXTRACT="${2:-xj}"
     cd ~/sw
-    wget -O - "$1" | tar xj
+    wget -O - "$1" | tar $TAR_EXTRACT || return 1
     # extract possible dir name from the tar path
     cd $( echo "$1" | egrep -o '/[^-/]+-' |  sed 's/^.//;s/$/*/' )
     ./configure
@@ -392,7 +391,7 @@ there is not much dependencies.
   }
 
   # pipe viewer
-  inst-tar http://www.ivarch.com/programs/sources/pv-1.6.6.tar.bz2
+  inst-tar http://www.ivarch.com/programs/sources/pv-1.8.5.tar.gz xz
 
   # parallel
   inst-tar http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
@@ -409,7 +408,7 @@ there is not much dependencies.
 
   # fastqc
   cd ~/sw
-  wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip
+  wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip
   unzip fastqc_*.zip
   rm fastqc_*.zip
   chmod +x FastQC/fastqc
@@ -423,13 +422,13 @@ there is not much dependencies.
   make && sudo make install
 
   # samtools
-  inst-tar https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2
+  inst-tar https://github.com/samtools/samtools/releases/download/1.18/samtools-1.18.tar.bz2
 
   # bcftools
-  inst-tar https://github.com/samtools/bcftools/releases/download/1.11/bcftools-1.11.tar.bz2
+  inst-tar https://github.com/samtools/bcftools/releases/download/1.18/bcftools-1.18.tar.bz2
 
   # htslib (tabix)
-  inst-tar https://github.com/samtools/htslib/releases/download/1.11/htslib-1.11.tar.bz2
+  inst-tar https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2
 
   # bwa
   cd ~/sw
@@ -449,7 +448,7 @@ there is not much dependencies.
 
   # bedtools
   cd ~/sw
-  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.29.2/bedtools-2.29.2.tar.gz | tar xz
+  wget -O - https://github.com/arq5x/bedtools2/releases/download/v2.31.1/bedtools-2.31.1.tar.gz | tar xz
   cd bedtools2/
   make && sudo make install
 
@@ -497,6 +496,8 @@ Name the accounts `user01` to `user22`:
   usermod -a -G sudo janouse1
 
   # normal users
+  # for user update
+  # prepared in sheet, copy-paste via cat > users.tsv
   <users.tsv cut -f1 | xargs -n1 adduser --gecos '' --disabled-password
 
   # use chpasswd to update the passwords
@@ -515,6 +516,28 @@ Name the accounts `user01` to `user22`:
   # copy-paste users.tsv to shared google sheet
   # delete on disk
   rm users.tsv
+
+Refresh user home dirs
+^^^^^^^^^^^^^^^^^^^^^^
+For the next course, when the machine is not freshly created, remove the old mess
+and copy the new skeleton.
+
+.. code-block:: bash
+
+  sudo su
+
+  # which user accounts will be handled
+  seq 2 22 | xargs printf "/home/user%02d\n" > user-homes
+
+  # move old home dirs to _bak
+  mkdir -p /home/_bak2
+
+  # move selected user homes
+  <user-homes xargs mv -t /home/_bak2
+
+  # create skeleton dirs
+  <user-homes cut -d/ -f3 | xargs -I{} mkhomedir_helper {}
+
 
 Sample datasets
 ^^^^^^^^^^^^^^^
@@ -585,7 +608,9 @@ OpenStack should do the trick. Still `/etc/hosts` need to be edited to make `sud
 
   # general update
   # (add new CRAN key)
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-key '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+  KEYID='95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'
+  gpg --keyserver keyserver.ubuntu.com --recv-key $KEYID
+  gpg --armor --export $KEYID > /etc/apt/trusted.gpg.d/cran_debian_key.asc
 
   apt update
   apt upgrade
