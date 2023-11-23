@@ -56,7 +56,9 @@ the `answers here
 Chromebook
 ^^^^^^^^^^
 On Chromebook, you need to install the
-`Secure Shell App <https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo?hl=en>`_.
+`Secure Shell App <https://chrome.google.com/webstore/detail/secure-shell-app/pnhechapfaindjhompbnflcldabbghjo?hl=en>`_
+or `Secure Shell <https://chromewebstore.google.com/detail/secure-shell/iodihamcpbpeioajjeobimgagajmlibd>`_ extension.
+Did not try myself, the App is deprecated, and the extension has comments that it does not work well 🤷‍♂️.
 
 Another option is to install the `full blown Linux <https://chromeos.dev/en/linux>`_, if your device allows it.
 
