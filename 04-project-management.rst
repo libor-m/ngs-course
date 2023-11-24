@@ -258,12 +258,9 @@ parts - otherwise your script will spoil it's output with some useless chatter.
     # when the final code is there, you need to give it input (and maybe save the output):
     <data/HRTMUOC01.RL12.01.fastq ./fastq-filter-length.sh 90 > data/filtered.fastq
 
-Multi-file, multi-core processing
----------------------------------
-Multi-file processing is best done with ``find`` and ``xargs``. That's basic
-Unix. If you install ``parallel``, it substitutes ``xargs`` and does much
-better job, having 'nicer' syntax, and makes multi-file multi-core processing
-a breeze.
+Process multiple files
+----------------------
+Multi-file processing is best done with ``find`` and ``xargs``.
 
 Let's check the basic concepts - ``find`` converts directory structure to
 'data' (stdout), ``xargs`` converts stdin to command line(s).
@@ -274,14 +271,66 @@ Let's check the basic concepts - ``find`` converts directory structure to
 
   find data -type f
 
+  # here xargs appends all the lines from stdin to the command
   find data -type f | xargs echo
 
+  # here xargs replaces the {} with the line from stdin
+  # and when there are more lines, it runs the command multiple times
   find data -type f | xargs -I{} echo File: {} found!
 
-``parallel`` runs one instance of the command per each CPU in your machine.
-Regrettably your **virtual** machine has only one CPU, so this won't help
-much. But modern machines do have  four and more CPUs, and then it really
-helps.
+
+There is a lot of filtering options built-in to ``find``. You can filter
+files, directories, by name, size, modification time, and more. Check
+``man find`` for details.
+
+If there are spaces or more 'weird' characters in the file names, you have to
+add ``-print0`` to the end of the ``find`` command and use ``xargs -0`` to read
+the ``\0`` separated arguments.
+
+.. topic:: Hands on!
+
+  .. code-block:: bash
+
+    # we won't see the problem by using echo, let's use cat to display the data instead
+
+    # create a problematic file
+    mkdir data2
+    echo 'Contents of my data file' > 'data2/problematic file name.txt'
+
+    # this won't work!
+    # Explain why?
+    find data2 -type f | xargs cat
+
+    # improve the above command to work with spaces in file names
+
+    # your_code_here
+
+    # the output has to be the same as
+    cat 'data2/problematic file name.txt'
+
+
+You can also replace basic bash loops with ``xargs``:
+
+.. code-block:: bash
+
+  # Investigate!
+
+  for i in {1..10}; do echo $i; done
+
+  # here xargs replaces the {} with the line from stdin
+  # and when there are more lines, it runs the command multiple times
+  seq 1 10 | xargs -I{} echo {}
+
+  # here xargs appends all the lines from stdin to the command
+  seq 1 10 | xargs echo
+
+Scale up to multiple cores
+--------------------------
+``parallel`` is a substitute to ``xargs``. The primary difference is that by
+default ``parallel`` runs one instance of the command per each CPU core on your
+machine. Modern machines do have four and more CPU cores.
+
+Additional ``parallel`` has a 'nicer' and more powerful syntax.
 
 Do control the number of jobs (``-j``) only when sharing the machine with
 someone, or when you're sure that your task is IO bound. Otherwise
