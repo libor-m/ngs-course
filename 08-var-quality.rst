@@ -1,4 +1,4 @@
-Session 9: Variant quality
+Session 8: Variant quality
 ==========================
 
 In this part you will be working on your own. You're already familiar with the

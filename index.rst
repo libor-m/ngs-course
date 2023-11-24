@@ -66,8 +66,8 @@ Course outline:
    05-graphics
    06-quality
    07-git
-   08-bioinfo-pipeline
-   09-var-quality
+   08-var-quality
+   09-bioinfo-pipeline
 
 Additional reference materials:
 
