@@ -9,6 +9,6 @@ Slide decks
 
 :download:`Plain text file processing <_static/text-processing-2023-2024.pptx.pdf>` (Vasek)
 
-:download:`Graphics session <_static/graphics-2019-02.pdf>` (Libor)
+:download:`Graphics session <_static/graphics-2023-11.pdf>` (Libor)
 
 :download:`Bioinformatic pipelines <_static/bioinfor-pipelines-2023-2024.pptx.pdf>` (Vasek)
