@@ -32,13 +32,13 @@ your login credentials and further info - use (`this link to join
 +--------------+--------------------------------------------+
 | *Lunch Break (1.5h)*                                      |
 +--------------+--------------------------------------------+
-| Afternoon    | - Project management in Unix               |
+| Afternoon    | - Running a project in Unix                |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
 | **Sunday 26.11.2023 (9.00-17.00)**                        |
 +--------------+--------------------------------------------+
 | Morning      | - Introduction to Git                      |
-|              | - Variant quality                          |
+|              | - Variant quality exercise                 |
 +--------------+--------------------------------------------+
 | *Lunch Break (1.5h)*                                      |
 +--------------+--------------------------------------------+
@@ -65,7 +65,7 @@ Course outline:
    04-project-management
    05-graphics
    06-quality
-   07-assembly
+   07-git
    08-bioinfo-pipeline
    09-var-quality
 
