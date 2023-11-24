@@ -78,15 +78,19 @@ Be safe when the network fails
 
 When you are disconnected from the machine due to any technical problems,
 all your running programs are killed. To prevent this, we suggest to use
-the ``screen`` tool for all your work::
+the ``screen`` tool for all your work.
 
-screen
+.. code-block:: bash
+
+  screen
 
 To safely disconnect from a running screen press ``ctrl+a d`` (d for detach).
 
-To attach again type::
+To attach again type:
 
-screen -r
+.. code-block:: bash
+
+  screen -r
 
 You can have simultaneously multiple sessions. In that case you have to select
 to which session to reattach. ``-ls`` command can be used to list all
@@ -98,6 +102,9 @@ and specifying the name of the session:
   screen -ls
 
   screen -r XXXX.NNNNNN.XXXX
+
+  # or just the beginning of the session name, if that is unique enough
+  screen -r NN
 
 To kill ``screen`` session we can use:
 
