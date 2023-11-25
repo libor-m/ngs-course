@@ -4,26 +4,26 @@ Session 5: Graphics session
 .. pull-quote:: A picture is worth a thousand words.
 
 Especially when your data is big. We'll try to show you one of the easiest
-ways to get nice pictures from your Unix. We'll be using R, but we're not
-trying to teach you R. R Project is huge, and mostly a huge mess. We're cherry
-picking just the best bits;)
+ways to get nice pictures from your unix. We'll be using R, but we're not
+trying to teach you R. There is a lot of packages in R Project, and most
+of them are not that godo. We tried to cherry pick the best bits;)
 
 Summarization
 ^^^^^^^^^^^^^
-R is best for working with 'tables'. That means data, where each line
-contains the same amount of 'fields', delimited by some special character
-like ``;`` or ``<tab>``. The first row can contain column names. VCF is
-almost a nice tabular file. The delimiter is ``<tab>``, but there is some mess
-in the beginning of the file::
+R is best for working with 'tables'. That means data, where each line contains
+the same amount of 'fields', delimited by some special character like ``;`` or
+``\t`` (tab character). The first row can contain column names. VCF is almost a
+nice tabular file. The delimiter is ``\t``, but there is some mess in the
+beginning of the file::
 
   </data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz zcat | less -S
 
 Prepare the input file
 ----------------------
 Our input dataset is huge, and we want to use only some subset of the animals.
-Let's choose few  european individuals. They have ``RDS, KCT, MWN`` and
+Let's choose few  european individuals. They have ``RDS``, ``KCT``, ``MWN`` and
 ``BAG`` in their names. Each programmer is lazy and prefers to avoid mistakes
-by letting the machine do the work - let's find the right  columns with Unix
+by letting the machine do the work - let's find the column numbers with unix
 tools.
 
 .. code-block:: bash
@@ -101,16 +101,20 @@ Visualize data in RStudio
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.duckdns.org>`_.
 
-In R Studio choose ``File > New project ...```. Then ``File > New file > R Script``.
-R has it's own ``working directory``, opening a project will set automatically for you.
+In R Studio choose :menuselection:`File --> New project ...`. Locate your
+project folder ``plotvcf`` in the dialog. Then
+:menuselection:`File --> New file --> R Script`. R has it's own *working
+directory*, opening/creating a project will set it automatically for you.
 
 Load and check the input
 ------------------------
-We'll be using a specifc subset of R, recently packaged into `Tidyverse <http://tidyverse.org/>`_::
+We'll be using a specifc subset of R known as `Tidyverse <http://tidyverse.org/>`_::
 
   library(tidyverse)
 
-..note:: You can run the command by placing your caret in it and pressing ``ctrl+enter``.
+.. note::
+
+  You can run the command by placing your caret in it and pressing ``ctrl+enter``.
 
 Now press ``ctrl+s``, and save your script as ``plots.R``. It is a better
 practice to write all your commands in the script window, and execute with
@@ -278,7 +282,6 @@ again:
 
 Tidy data
 ^^^^^^^^^
-
 To create plots in such a smooth way like in the previous example the data has
 to loosely conform to some simple rules. In short - each column is a variable,
 each row is an observation. You can find more details in the
