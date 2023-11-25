@@ -90,21 +90,14 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
    # skip the very first character with tail
    <$IN grep -v '##' | tail -c +2 > data/popdata_mda_euro.tsv
 
-Now open RStudio
-^^^^^^^^^^^^^^^^
+
+Visualize data in RStudio
+^^^^^^^^^^^^^^^^^^^^^^^^^
 Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.duckdns.org>`_.
 
-In R Studio choose ``File > New file > R Script``. R has a working directory
-as well. You can change it with ``setwd``. Type this code into the newly
-created file::
-
-  setwd('~/projects/plotvcf')
-
-With the cursor still in the ``setwd`` line, press ``ctrl+enter``. This copies
-the command to the console and executes it. Now press ``ctrl+s``, and save
-your script as ``plots.R``. It is a better practice to write all your commands
-in the script window, and execute with  ``ctrl+enter``. You can comment them
-easily, you'll find them faster than in ``.Rhistory``...
+In R Studio choose ``File > New project ...```. Then ``File > New file > R Script``.
+R has a working directory as well, it will be set automatically for you when you
+to the directory of yout project.
 
 Load and check the input
 ------------------------
@@ -112,10 +105,15 @@ We'll be using a specifc subset of R, recently packaged into `Tidyverse <http://
 
   library(tidyverse)
 
+..note:: You can run the command by placing your caret in it and pressing ``ctrl+enter``.
+
+Now press ``ctrl+s``, and save your script as ``plots.R``. It is a better
+practice to write all your commands in the script window, and execute with
+``ctrl+enter``. You can comment them easily, you'll find them faster than in
+``.Rhistory``.
+
 Tabular data is loaded by ``read_tsv``. On a new line,
-type ``read_tsv`` and press ``F1``. Help should pop up. We'll be using the
-``read.delim``  shorthand, that is preset for loading ``<tab>`` separated data
-with US decimal separator::
+type ``read_tsv`` and press ``F1``. Help should pop up::
 
   read_tsv('data/popdata_mda_euro.tsv') -> d
 
@@ -283,15 +281,15 @@ is not 'wrong' per se, this format is more concise. But it does not work well
 with ``ggplot``.
 
 Now if we want to look at genotypes per individual, we need the genotype as a
-single  variable, not 18. ``gather`` takes the values from multiple columns
+single  variable, not 18. ``pivot_longer`` takes the values from multiple columns
 and gathers them into one column. It creates another column where it stores
 the originating column name for each value.
 
 .. code-block:: r
 
-   d %>%
-     gather(individual, genotype, 10:28 ) ->
-     dm
+  d %>%
+    pivot_longer(10:28, names_to = "individual", values_to = "genotype") ->
+    dm
 
 Look at the data. Now we can plot the counts of reference/heterozygous/alternative
 alleles easily.
@@ -327,13 +325,8 @@ individual:
   # transitions are AG, GA, CT, TC
   # transversions is the rest
   transitions <- c("A G", "G A", "C T", "T C")
-  dm %>%
-    mutate(vartype = paste(REF, ALT) %in% transitions %>% ifelse("Transition", "Transversion")) %>%
-    ggplot(aes(individual, fill=vartype)) +
-    geom_bar()
 
-  # works a bit, but not what we expected
-  # now count each homozygous ref as 0,
+  # count each homozygous ref as 0,
   # heterozygous as 1 and homozygous alt as 2
   # filter out uncalled
   dm %>%
@@ -342,7 +335,7 @@ individual:
            score = ifelse(genotype == '0/0', 0, ifelse(genotype == '0/1', 1, 2))) %>%
     group_by(individual, vartype) %>%
     summarise(score = sum(score)) %>%
-    spread(vartype, score) %>%
+    pivot_wider(names_from = "vartype", values_from = "score") %>%
     mutate(TiTv = Transition / Transversion) %>%
     ggplot(aes(individual, TiTv)) +
     geom_point() +
