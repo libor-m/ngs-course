@@ -1,4 +1,4 @@
-Session 7: Git and GitHub
+Session 6: Git and GitHub
 =========================
 
 Once you start writing your scripts, you'll soon find yourself handling files

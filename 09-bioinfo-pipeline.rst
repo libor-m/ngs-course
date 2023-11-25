@@ -1,4 +1,4 @@
-Session 9: Bioinformatic pipelines
+Session 8: Bioinformatic pipelines
 ==================================
 
 Mouse Gene Ontology enrichment analysis pipeline
