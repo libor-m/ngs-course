@@ -64,7 +64,6 @@ Course outline:
    03-file-processing
    04-project-management
    05-graphics
-   06-quality
    07-git
    08-var-quality
    09-bioinfo-pipeline
