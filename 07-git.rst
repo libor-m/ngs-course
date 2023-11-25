@@ -107,6 +107,9 @@ git commands: Basics
   ``git status``
     check the working copy for changes versus last commit
 
+  ``git diff``
+    show the changes in the working copy
+
   ``git add {file}``
     add file to the next commit
 
@@ -157,14 +160,15 @@ git commands: Merge
     if the remote branch has new commits and your local brach has some other commits
     ``pull`` will do a merge for you
 
-  ``git checkout --theirs``
+  ``git checkout --theirs {file path}``
     in conflict, choose the version from the remote branch
 
-  ``git checkout --ours``
+  ``git checkout --ours {file path}``
     in conflict, choose the version from the local branch
 
   ``git merge --continue`` or ``git commit``
-    continue the merge after resolving conflicts
+    continue the merge after resolving conflicts (i'm used to ``git commit``, but the newer
+    ``git merge --continue`` should be safer)
 
   ``git merge --abort``
     abort the merge
