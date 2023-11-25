@@ -116,13 +116,13 @@ We'll be using a specifc subset of R known as `Tidyverse <http://tidyverse.org/>
 
   You can run the command by placing your caret in it and pressing ``ctrl+enter``.
 
-Now press ``ctrl+s``, and save your script as ``plots.R``. It is a better
+Now press :kbd:`ctrl+s`, and save your script as ``plots.R``. It is a better
 practice to write all your commands in the script window, and execute with
-``ctrl+enter``. You can comment them easily, you'll find them faster than in
+:kbd:`ctrl+enter`. You can comment them easily, you'll find them faster than in
 ``.Rhistory``.
 
 Tabular data is loaded by ``read_tsv``. On a new line,
-type ``read_tsv`` and press ``F1``. Help should pop up::
+type ``read_tsv`` and press :kbd:`F1`. Help should pop up::
 
   read_tsv('data/popdata_mda_euro.tsv') -> d
 
