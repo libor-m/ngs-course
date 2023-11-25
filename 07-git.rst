@@ -20,6 +20,8 @@ need for all ``_previous_working.sh`` copies of your code.
   selected versions (snapshots) of a whole directory. That makes sense when
   ``script1.sh`` calls ``script2.sh``, and they have to match.
 
+Configure git
+-------------
 You will be using ``git`` to hand in the final exam, so please take care to set
 it up correctly. Once on every new machine you need to tell git who you are,
 because the commits are 'signed' by the author.
@@ -45,8 +47,13 @@ key:
   # show the public key to copy and paste to github
   cat ~/.ssh/id_ed25519.pub
 
-And now after a tedious setup let's reap the benefits. We'll store the current
-version of your scripts in ``unix-advanced`` project, ignoring the data.
+Create a local repository
+-------------------------
+And now after the tedious setup let's enjoy the benefits. You have to do the
+setup only once per machine, and then you use it for all your projects.
+
+Let's store the current version of your scripts in ``unix-advanced`` project.
+Git repo is not a good place for data, we'll ignore the `data` directory.
 
 .. code-block:: bash
 
@@ -68,29 +75,96 @@ version of your scripts in ``unix-advanced`` project, ignoring the data.
 
   # make a commit
   # add some descriptive message
-  git commit -m 'solution to ngs-course exercises"
+  git commit -m "solution to ngs-course exercises"
 
-This is all you need to track your versions locally. If you want to publish your
-creations, make a backup for yourself, or move your code to some shared machine
-which will do bigger computations, you need to **push** it somewhere. If you
-already have the GitHub account, you can create a repo on the website, add it as
-a **remote** to your local repo and `push`. You don't have to be shy, GitHub allows
-you to create a private repo.
+This is all you need to track your versions *locally*. If you want to share your
+creations with others, transfer it to another machine or just make a backup for
+yourself, you need to **push** it somewhere.
+
+Upload repository to GitHub
+---------------------------
+In your GitHub account, create a repository and use the suggested commands to add it as
+a **remote** to your local repo and `push`. Select *Private* if you don't want your code
+to be publicly accessible.
 
 .. code-block:: bash
 
   # use the commands suggested by GitHub to add a remote
-  # ...
-
-  # then push
-  git push
+  git remote add origin git@github.com:{user}/{repo}.git
+  git push -u origin master
 
 When using git, you can gradually learn about more concepts and commands, as
 you find the need for them. To give you a head start:
 
- - ``git pull`` updates your local repo if the remote is newer
- - by pulling other's changes over yours, you'll soon encounter **merge**
- - ``git stash`` can be used to "hide" local changes during ``pull``
-   to avoid a commit and following merge, ``git stash pop`` brings them back
- - ``git checkout -b new-name`` and ``git branch some-name`` allow you to
-   keep more simultaneous versions in one repo and switch between them
+git commands: Basics
+--------------------
+
+.. glossary::
+
+  working copy
+    the directory you're currently working in
+
+  ``git status``
+    check the working copy for changes versus last commit
+
+  ``git add {file}``
+    add file to the next commit
+
+  ``git commit``
+    create a commit from all added files (opens editor for commit message)
+
+  ``git commit -am '{what i did}'``
+    shortcut for adding all changed files (previously in repo) and committing them
+
+  ``git push``
+    upload the commits to a remote repository
+
+  ``git pull``
+    download new commits from a remote repository, merge them into your working copy
+
+  ``git stash``
+    can be used to "hide" local changes during ``pull``
+
+  ``git stash pop``
+    brings the "hidden" changes back
+
+  ``git log``
+    show the previous commits
+
+  ``git checkout -- {filename}``
+    overwrite the file with the version from the last commit
+
+git commands: Branches
+----------------------
+
+.. glossary::
+
+  ``git checkout -b {new-name}``
+    create a new branch from the current one and switch to it
+
+  ``git push -u origin {branch-name}``
+    upload commits on current branch to a remote repository
+
+  ``git checkout {branch-name}``
+    switch to another branch
+
+git commands: Merge
+-------------------
+
+.. glossary::
+
+  ``git pull``
+    if the remote branch has new commits and your local brach has some other commits
+    ``pull`` will do a merge for you
+
+  ``git checkout --theirs``
+    in conflict, choose the version from the remote branch
+
+  ``git checkout --ours``
+    in conflict, choose the version from the local branch
+
+  ``git merge --continue`` or ``git commit``
+    continue the merge after resolving conflicts
+
+  ``git merge --abort``
+    abort the merge
