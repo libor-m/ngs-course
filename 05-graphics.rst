@@ -90,14 +90,19 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
    # skip the very first character with tail
    <$IN grep -v '##' | tail -c +2 > data/popdata_mda_euro.tsv
 
+.. admonition:: What have we learned?
+
+  - unix tools excell at handling very large unstructured data
+  - R is awesome at visualizatoin, but it needs smaller, tabular data
+  - to get the best from both worlds, use unix tools to preprocess data for R
+  - ``column -t`` can be used to preview tabular data in unix
 
 Visualize data in RStudio
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.duckdns.org>`_.
 
 In R Studio choose ``File > New project ...```. Then ``File > New file > R Script``.
-R has a working directory as well, it will be set automatically for you when you
-to the directory of yout project.
+R has it's own ``working directory``, opening a project will set automatically for you.
 
 Load and check the input
 ------------------------
@@ -265,6 +270,12 @@ again:
 .. image:: _static/snp_density.png
    :align: center
 
+.. admonition:: What have we learned?
+
+  - there is a nice way to produce graphics directly on the remote machine
+  - it's easy to visualize data when you prepare the right inputs ;)
+  - you can use the 'pipe ordering' of commands familiar from unix also in R
+
 Tidy data
 ^^^^^^^^^
 
@@ -346,3 +357,8 @@ individual:
   Take your time to look at the `wonderful cheat sheets
   <https://www.rstudio.com/resources/cheatsheets/>`_ compiled by the company
   behind RStudio!
+
+.. admonition:: What have we learned?
+
+  - to visualize different aspects of your dataset with ggplot, reshape the data before visualization
+  - there is a particular way of reshaping that works well with ``ggplot``
