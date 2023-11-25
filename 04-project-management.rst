@@ -59,8 +59,9 @@ awk (pronounced [auk])
 ----------------------
 
 ``awk`` is most often used instead of ``cut``, when the fields are separated
-by spaces and padded to a fixed width ``awk`` can ignore the whitespace -
-and where ``cut`` also falls short, ``awk`` can reorder the columns:
+by spaces (not tabulators) and padded to a fixed width. ``awk`` can ignore the whitespace.
+
+``awk`` also allows you to reorder the columns. ``cut`` can't do this:
 
 .. topic:: Hands on!
 
@@ -144,12 +145,19 @@ We'd like to output a valid fastq file (that means reversing the ``paste`` opera
 
     #  if we replaced all the \t with \n (hint: tr)
 
+
+.. admonition:: What have we learned?
+
+  - use ``awk`` when ``cut`` falls short
+  - use ``awk`` to filter rows based on field values
+  - use ``awk`` to create summary tables
+
 Functions in the Shell
 ----------------------
 
 This creates a command called ``uniqt`` that will behave as ``uniq -c``, but
 there will be no padding (spaces) in front of the numbers, and numbers will be
-separated by <tab>, so you can use it with ``cut`` will work.
+separated by <tab>, so you can use it with ``cut``.
 
 .. code-block:: bash
 
@@ -165,6 +173,9 @@ If you want to pass some arguments into the function, use ``$1``, ``$2`` etc.::
   test-function() { echo First argument: $1 ;}
   test-function my-argument
 
+When not given any inputs, the command behaves in the 'unix way' - it reads
+from stdin and writes to stdout.
+
 Now create a function called ``fastq-min-length``, with one argument
 (use ``$1`` in the body of the function) giving the minimal length:
 
@@ -177,11 +188,10 @@ Now create a function called ``fastq-min-length``, with one argument
     # which will be used like this:
     <data/HRTMUOC01.RL12.01.fastq fastq-min-length 90 > data/filtered.fastq
 
-We'll go through the 'quoting hell' and some methods to solve it here briefly.
-Awk uses ``$1`` for something else than the shell, we need to protect it with
-single quotes, but we still need to get through shell's ``$1`` somehow...
-Awk's ``-v`` argument helps in this case - use it like ``awk -v min_len=$1
-'(length($2) > min_len)'``.
+There is a problem with quoting. Awk uses ``$1`` for something else than the
+shell, we need to protect ``$1`` with single quotes, but we still need to access
+shell's ``$1`` somehow... Awk's ``-v`` argument helps in this case - use
+it like ``awk -v min_len=$1 '(length($2) > min_len)'``.
 
 .. note::
 
@@ -198,6 +208,12 @@ Awk's ``-v`` argument helps in this case - use it like ``awk -v min_len=$1
    ``bash`` now, sometimes you can meet the simpler cousin ``sh``, and the kool
    kids are doing ``zsh``. To recap, Bash is to shell what Firefox is to
    browser.
+
+.. admonition:: What have we learned?
+
+  - use ``function_name() { your_code_here ;}`` to create a function
+  - use ``$1``, ``$2`` etc. to access arguments you pass on the command line
+  - use ``-v`` to pass arguments to ``awk`` to resolve quoting issues
 
 Shell Scripts
 -------------
@@ -257,6 +273,12 @@ parts - otherwise your script will spoil it's output with some useless chatter.
 
     # when the final code is there, you need to give it input (and maybe save the output):
     <data/HRTMUOC01.RL12.01.fastq ./fastq-filter-length.sh 90 > data/filtered.fastq
+
+.. admonition:: What have we learned?
+
+  - save your code in a reusable file that you can run from the command line
+  - use shebang line and ``chmod +x`` to make your script executable
+  - use ``$1``, ``$2`` etc. to access arguments you pass on the command line
 
 Process multiple files
 ----------------------
@@ -324,6 +346,14 @@ You can also replace basic bash loops with ``xargs``:
   # here xargs appends all the lines from stdin to the command
   seq 1 10 | xargs echo
 
+.. admonition:: What have we learned?
+
+  - use ``find`` to list files in a directory tree
+  - use ``xargs`` to convert stdin to command line arguments
+  - if your filenames contain spaces, use ``-print0`` and ``-0`` to use ``\0`` as separator
+  - use ``-I{}`` to run the command multiple times with different arguments
+  - use ``seq`` to replace bash loops
+
 Scale up to multiple cores
 --------------------------
 ``parallel`` is a substitute to ``xargs``. The primary difference is that by
@@ -380,3 +410,10 @@ The most powerful thing about parallel is it's substitution strings like
   If your data is a single file, but the processing of one line is not
   dependent on the other lines, you can use the ``split`` command to create
   several files each with defined number of lines from the original file.
+
+.. admonition:: What have we learned?
+
+  - use ``parallel`` to run the same command for multiple files
+  - use ``-j`` to control the number of simultaneous jobs
+  - use ``{}`` to access the input arguments
+  - use ``{.}``, ``{/}``, ``{#}`` to access parts of the input arguments
