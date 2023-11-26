@@ -11,4 +11,6 @@ Slide decks
 
 :download:`Graphics session <_static/graphics-2023-11.pdf>` (Libor)
 
+:download:`Git and GitHub <_static/git.pdf>` (Libor)
+
 :download:`Bioinformatic pipelines <_static/bioinfor-pipelines-2023-2024.pptx.pdf>` (Vasek)
