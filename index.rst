@@ -1,5 +1,5 @@
-Course on Unix and work with genomic data - Prague, November 2023
-=================================================================
+Course on Unix and work with genomic data - Prague, October 2024
+================================================================
 
 This course takes place regularly in the winter term at the Department of Zoology, Faculty of Science,
 Charles University in Prague (`MB170C47 <https://is.cuni.cz/studium/eng/predmety/index.php?do=predmet&kod=MB170C47>`_).
