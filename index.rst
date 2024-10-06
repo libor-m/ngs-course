@@ -14,7 +14,7 @@ the mundane tasks, which can all be handled by combining basic Unix tools.
 
 We'll be using `Slack 'UNIX and NGS' <https://ngs-course.slack.com>`_ to share
 your login credentials and further info - use (`this link to join
-<https://join.slack.com/t/ngs-course/shared_invite/zt-27vwj2nu8-l4wc0XzICdaeO2PU9XIv8g>`_).
+<https://join.slack.com/t/ngs-course/shared_invite/zt-2s63mzmsh-CDGKLJj5Mnqp3zol4byaIw>`_).
 
 **Schedule:**
 
