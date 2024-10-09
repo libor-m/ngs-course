@@ -316,7 +316,7 @@ R is best used in RStudio - server version can be used in web browser.
 
   # RStudio with prerequisities
   sudo apt install gdebi-core
-  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.1093-amd64.deb
+  wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2024.09.0-375-amd64.deb
   sudo gdebi rstudio-server-*.deb
 
   # and fix upstart config
@@ -391,7 +391,7 @@ there is not much dependencies.
   }
 
   # pipe viewer
-  inst-tar http://www.ivarch.com/programs/sources/pv-1.8.5.tar.gz xz
+  inst-tar http://www.ivarch.com/programs/sources/pv-1.8.14.tar.gz xz
 
   # parallel
   inst-tar http://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2
@@ -422,17 +422,17 @@ there is not much dependencies.
   make && sudo make install
 
   # samtools
-  inst-tar https://github.com/samtools/samtools/releases/download/1.18/samtools-1.18.tar.bz2
+  inst-tar https://github.com/samtools/samtools/releases/download/1.21/samtools-1.21.tar.bz2
 
   # bcftools
-  inst-tar https://github.com/samtools/bcftools/releases/download/1.18/bcftools-1.18.tar.bz2
+  inst-tar https://github.com/samtools/bcftools/releases/download/1.21/bcftools-1.21.tar.bz2
 
   # htslib (tabix)
-  inst-tar https://github.com/samtools/htslib/releases/download/1.18/htslib-1.18.tar.bz2
+  inst-tar https://github.com/samtools/htslib/releases/download/1.21/htslib-1.21.tar.bz2
 
   # bwa
   cd ~/sw
-  wget -O - https://github.com/lh3/bwa/releases/download/v0.7.17/bwa-0.7.17.tar.bz2 | tar xj
+  wget -O - https://github.com/lh3/bwa/archive/refs/tags/v0.7.18.tar.gz | tar xz
   cd bwa*
   make
   sudo cp bwa /usr/local/bin
@@ -527,10 +527,10 @@ and copy the new skeleton.
   sudo su
 
   # which user accounts will be handled
-  seq 2 22 | xargs printf "/home/user%02d\n" > user-homes
+  seq 2 31 | xargs printf "/home/user%02d\n" > user-homes
 
   # move old home dirs to _bak
-  mkdir -p /home/_bak2
+  mkdir -p /home/_bak3
 
   # move selected user homes
   <user-homes xargs mv -t /home/_bak2
@@ -620,16 +620,22 @@ OpenStack should do the trick. Still `/etc/hosts` need to be edited to make `sud
   certbot certonly --nginx
   systemctl restart nginx
 
+  # create a reusable update script
+  cat > update-packages.R <<EOF
+  update.packages(lib.loc=.libPaths()[1], ask=F, checkBuilt=T, Ncpus=parallel::detectCores())
+  EOF
+
   # update R packages
   R
-  > update.packages(lib.loc=.libPaths()[1], ask=F, checkBuilt=T, Ncpus=15)
+  > source('update-packages.R')
 
   # update rstudio as normal user
+  exit
   cd ~/sw
-  wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2021.09.1-372-amd64.deb
+  wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2024.09.0-375-amd64.deb
   sudo rstudio-server active-sessions
   sudo rstudio-server offline
-  sudo gdebi rstudio-server-2021.09.1-372-amd64.deb
+  sudo gdebi rstudio-server-*-amd64.deb
   sudo rstudio-server online
 
 
