@@ -19,13 +19,13 @@ your login credentials and further info - use (`this link to join
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday 24.11.2023 (14.00-18.00)**                       |
+| **Friday 11.10.2024 (14.00-18.00)**                       |
 +--------------+--------------------------------------------+
 | Afternoon    | - Course Intro                             |
 |              | - Introduction to Unix                     |
 |              | - Basics of Unix                           |
 +--------------+--------------------------------------------+
-| **Saturday 25.11.2023 (9.00-17.00)**                      |
+| **Saturday 12.10.2024 (9.00-17.00)**                      |
 +--------------+--------------------------------------------+
 | Morning      | - Genomics data                            |
 |              | - Processing of plain text files in Unix   |
@@ -35,7 +35,7 @@ your login credentials and further info - use (`this link to join
 | Afternoon    | - Running a project in Unix                |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
-| **Sunday 26.11.2023 (9.00-17.00)**                        |
+| **Sunday 13.10.2024 (9.00-17.00)**                        |
 +--------------+--------------------------------------------+
 | Morning      | - Introduction to Git                      |
 |              | - Variant quality exercise                 |
