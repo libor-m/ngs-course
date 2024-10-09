@@ -49,6 +49,14 @@ bioinformatician;). You have to use the full path to the tool to run it:
 
 .. code-block:: bash
 
+  cd ~/sw
+  wget https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.12.1.zip
+  unzip fastqc_*.zip
+  rm fastqc_*.zip
+  chmod +x FastQC/fastqc
+
+.. code-block:: bash
+
    # make a project directory for the qualities
    cd
    mkdir -p projects/quality
