@@ -25,7 +25,7 @@ your login credentials and further info - use (`this link to join
 |              | - Introduction to Unix                     |
 |              | - Basics of Unix                           |
 +--------------+--------------------------------------------+
-| **Saturday 12.10.2024 (9.00-17.00)**                      |
+| **Saturday 12.10.2024 (9.00-18.00)**                      |
 +--------------+--------------------------------------------+
 | Morning      | - Genomics data                            |
 |              | - Processing of plain text files in Unix   |
@@ -35,7 +35,7 @@ your login credentials and further info - use (`this link to join
 | Afternoon    | - Running a project in Unix                |
 |              | - Graphics Session                         |
 +--------------+--------------------------------------------+
-| **Sunday 13.10.2024 (9.00-17.00)**                        |
+| **Sunday 13.10.2024 (9.00-18.00)**                        |
 +--------------+--------------------------------------------+
 | Morning      | - Introduction to Git                      |
 |              | - Variant quality exercise                 |
