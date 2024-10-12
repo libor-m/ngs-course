@@ -11,22 +11,18 @@ Pattern search & regular expressions
 
 .. code-block:: bash
 
-  grep pattern file.txt # Returns lines matching a pattern
+  grep pattern file.txt # Print lines matching a regexp pattern
 
-  grep -v pattern file.txt # Returns lines not matching a pattern
+  grep -v pattern file.txt # Print lines not matching a regexp pattern
 
-  grep -E regex file.txt # Returns lines not matching a regex
+  grep -c pattern file.txt # Print the number of lines matching a regexp pattern
 
-  grep -c pattern file.txt # Returns number of lines matching a pattern
-
-  grep -B pattern file.txt # Returns number of lines before a line matching a pattern
-
-  grep -o pattern file.txt # Returns only matching part of lines
+  grep -o pattern file.txt # Print only the part matching the regexp
 
   man grep # For other options
 
-But what if we want match a variable pattern, e.g. differing length or content?
-**Regular expressions** are exactly the tool that we need.
+What if we want match a variable pattern, e.g. differing length or content?
+**Regular expression** "mini-language" is exactly the tool that we need.
 
 .. code-block:: bash
 
@@ -43,10 +39,6 @@ But what if we want match a variable pattern, e.g. differing length or content?
   A{1,3}   # match A letter at least 1 times but no more than 3 times
   AATT|TTAA # match AATT or TTAA
   \s         # match whitespace (also TAB)
-
-
-``grep -E`` is a useful tool to search for patterns using a mini-language called
-**regular expressions**. You can use the ``egrep`` shorthand, which means the same.
 
 Word and line count
 -------------------
