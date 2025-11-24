@@ -66,13 +66,13 @@ Check out the version which will serve as starting material, create and publish 
   git checkout -b praha-january-2023
   git push -u origin praha-january-2023
 
-Log in to `Read the Docs`, set the new branch as the default version in `Admin > Advanced
-<https://readthedocs.org/dashboard/ngs-course/advanced/>`_.
+Log in to `Read the Docs`, set the new branch as the **default version** in `Settings
+<https://app.readthedocs.org/dashboard/ngs-course/edit/>`_.
 
 If the version (branch) is not visible yet, do a force build of some previous
 version to get a fresh checkout.
 
-Check if webhooks are set up both in `ReadTheDocs > Project > Admin > Integratinos`
+Check if webhooks are set up both in `Building > Integrations`
 and in `GitHub > Settings > Webhooks`.
 
 Slack
@@ -83,7 +83,8 @@ Add a new channel every year. Add the channel to
 `defaults <https://ngs-course.slack.com/admin/settings#default_channels>`_
 in slack Admin.
 
-Update invite link in `index.rst` (30 day validity).
+Update invite link in `index.rst` (30 day validity). `Admin > Manage members`
+-> `People > Invite people > Copy invite link`.
 
 Cloud image
 -----------
