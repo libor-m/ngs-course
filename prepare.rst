@@ -86,6 +86,11 @@ in slack Admin.
 Update invite link in `index.rst` (30 day validity). `Admin > Manage members`
 -> `People > Invite people > Copy invite link`.
 
+Docs
+^^^^
+- Update dates in the schedule in `index.rst`
+- Update the verion in `conf.py` (count years taught).
+
 Cloud image
 -----------
 Create new machine
@@ -111,8 +116,6 @@ Briefly:
   - 443 for secured RStudio
   - 60k-61k for mosh
   - 5690 rstudio + shiny
-
-
 
 Debian conifg
 ^^^^^^^^^^^^^
