@@ -114,7 +114,7 @@ Briefly:
 
   - HTTP to set up let's encrypt cert
   - 443 for secured RStudio
-  - 60k-61k for mosh
+  - udp 60k-61k for mosh
   - 5690 rstudio + shiny
 
 Debian conifg
