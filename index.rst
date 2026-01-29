@@ -19,7 +19,7 @@ your login credentials and further info - use (`this link to join
 **Schedule:**
 
 +-----------------------------------------------------------+
-| **Friday 6.2.2026 (14.00-18.00)**                       |
+| **Friday 6.2.2026 (14.00-18.00)**                         |
 +--------------+--------------------------------------------+
 | Afternoon    | - Course Intro                             |
 |              | - Introduction to Unix                     |
