@@ -1,0 +1,65 @@
+---
+# Core settings
+hostname: ngs-course-2026
+timezone: Europe/Prague
+rstudio_server_host: ngs-course.behavio.dev
+certbot_email: morkovsk@natur.cuni.cz
+
+# Azure data disk
+home_disk_device: /dev/disk/azure/scsi1/lun0
+home_disk_partition: /dev/disk/azure/scsi1/lun0-part1
+home_fs_type: ext4
+
+# Users
+admin_users:
+  - liborm
+  - janouse1
+dotfiles_repo: "git@github.com:libor-m/dotfiles.git"
+user_prefix: user
+user_count: 30
+users_tsv_path: "{{ playbook_dir }}/../secrets/users.tsv"
+user_quota_soft: 5G
+user_quota_hard: 10G
+
+# Data
+data_shared_src: "{{ playbook_dir }}/../../cloud-image/data-shared"
+
+# R / RStudio
+cran_key_id: "95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7"
+r_packages:
+  - tidyverse
+  - shiny
+  - reshape2
+  - vegan
+
+rstudio_version: "2026.01.0-392"
+rstudio_deb_url: "https://download2.rstudio.org/server/jammy/amd64/rstudio-server-{{ rstudio_version }}-amd64.deb"
+
+# Software (extra)
+pv_version: "1.10.3"
+pv_url: "http://www.ivarch.com/s/pv-{{ pv_version }}.tar.gz"
+parallel_url: "https://ftp.gnu.org/gnu/parallel/parallel-latest.tar.bz2"
+
+# Software (bio)
+fastqc_version: "0.12.0"
+fastqc_url: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v{{ fastqc_version }}.zip"
+vcftools_version: "0.1.17"
+vcftools_url: "https://github.com/vcftools/vcftools/releases/download/v{{ vcftools_version }}/vcftools-{{ vcftools_version }}.tar.gz"
+
+htslib_version: "1.23"
+htslib_url: "https://github.com/samtools/htslib/releases/download/{{ htslib_version }}/htslib-{{ htslib_version }}.tar.bz2"
+
+samtools_version: "1.23"
+samtools_url: "https://github.com/samtools/samtools/releases/download/{{ samtools_version }}/samtools-{{ samtools_version }}.tar.bz2"
+
+bcftools_version: "1.23"
+bcftools_url: "https://github.com/samtools/bcftools/releases/download/{{ bcftools_version }}/bcftools-{{ bcftools_version }}.tar.bz2"
+
+bwa_version: "0.7.19"
+bwa_url: "https://github.com/lh3/bwa/archive/refs/tags/v{{ bwa_version }}.tar.gz"
+
+bedtools_version: "2.31.1"
+bedtools_url: "https://github.com/arq5x/bedtools2/releases/download/v{{ bedtools_version }}/bedtools-{{ bedtools_version }}.tar.gz"
+
+# Paths
+build_dir: "/home/{{ admin_users[0] }}/sw"

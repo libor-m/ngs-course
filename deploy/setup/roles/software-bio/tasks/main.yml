@@ -1,0 +1,331 @@
+---
+- name: Install bioinformatics build dependencies
+  ansible.builtin.apt:
+    name:
+      - zlib1g-dev
+      - libbz2-dev
+      - liblzma-dev
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - libncurses-dev
+      - libncurses5-dev
+      - unzip
+      - default-jre-headless
+      - perl
+    state: present
+    update_cache: true
+
+- name: Ensure build directory exists
+  ansible.builtin.file:
+    path: "{{ build_dir }}"
+    state: directory
+    owner: "{{ admin_users[0] }}"
+    group: "{{ admin_users[0] }}"
+    mode: "0755"
+
+- name: Check for FastQC
+  ansible.builtin.stat:
+    path: /usr/local/bin/fastqc
+  register: fastqc_stat
+
+- name: Download FastQC
+  ansible.builtin.get_url:
+    url: "{{ fastqc_url }}"
+    dest: "{{ build_dir }}/fastqc-{{ fastqc_version }}.zip"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not fastqc_stat.stat.exists
+
+- name: Extract FastQC
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/fastqc-{{ fastqc_version }}.zip"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not fastqc_stat.stat.exists
+
+- name: Ensure FastQC is executable
+  ansible.builtin.file:
+    path: "{{ build_dir }}/FastQC/fastqc"
+    state: file
+    mode: "0755"
+  become_user: "{{ admin_users[0] }}"
+  when: not fastqc_stat.stat.exists
+
+- name: Install FastQC to /opt
+  ansible.builtin.copy:
+    src: "{{ build_dir }}/FastQC"
+    dest: /opt/
+    mode: "0755"
+    remote_src: true
+  when: not fastqc_stat.stat.exists
+
+- name: Link FastQC
+  ansible.builtin.file:
+    src: /opt/FastQC/fastqc
+    dest: /usr/local/bin/fastqc
+    state: link
+    force: true
+  when: not fastqc_stat.stat.exists
+
+- name: Check for tabtk
+  ansible.builtin.stat:
+    path: /usr/local/bin/tabtk
+  register: tabtk_stat
+
+- name: Clone tabtk
+  ansible.builtin.git:
+    repo: https://github.com/lh3/tabtk.git
+    dest: "{{ build_dir }}/tabtk"
+    update: false
+  become_user: "{{ admin_users[0] }}"
+  when: not tabtk_stat.stat.exists
+
+- name: Build tabtk
+  ansible.builtin.command: make
+  args:
+    chdir: "{{ build_dir }}/tabtk"
+  become_user: "{{ admin_users[0] }}"
+  when: not tabtk_stat.stat.exists
+
+- name: Install tabtk
+  ansible.builtin.copy:
+    src: "{{ build_dir }}/tabtk/tabtk"
+    dest: /usr/local/bin/tabtk
+    mode: "0755"
+    remote_src: true
+  when: not tabtk_stat.stat.exists
+
+- name: Check for vcftools
+  ansible.builtin.stat:
+    path: /usr/local/bin/vcftools
+  register: vcftools_stat
+
+- name: Download vcftools
+  ansible.builtin.get_url:
+    url: "{{ vcftools_url }}"
+    dest: "{{ build_dir }}/vcftools-{{ vcftools_version }}.tar.gz"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not vcftools_stat.stat.exists
+
+- name: Extract vcftools
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/vcftools-{{ vcftools_version }}.tar.gz"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not vcftools_stat.stat.exists
+
+- name: Build and install vcftools
+  ansible.builtin.shell: |
+    ./autogen.sh
+    ./configure
+    make
+  args:
+    chdir: "{{ build_dir }}/vcftools-{{ vcftools_version }}"
+    creates: /usr/local/bin/vcftools
+  become_user: "{{ admin_users[0] }}"
+  when: not vcftools_stat.stat.exists
+
+- name: Install vcftools
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ build_dir }}/vcftools-{{ vcftools_version }}"
+    creates: /usr/local/bin/vcftools
+  when: not vcftools_stat.stat.exists
+
+- name: Check for htslib (bgzip)
+  ansible.builtin.stat:
+    path: /usr/local/bin/bgzip
+  register: htslib_stat
+
+- name: Download htslib
+  ansible.builtin.get_url:
+    url: "{{ htslib_url }}"
+    dest: "{{ build_dir }}/htslib-{{ htslib_version }}.tar.bz2"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not htslib_stat.stat.exists
+
+- name: Extract htslib
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/htslib-{{ htslib_version }}.tar.bz2"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not htslib_stat.stat.exists
+
+- name: Build and install htslib
+  ansible.builtin.shell: |
+    ./configure --prefix=/usr/local
+    make
+  args:
+    chdir: "{{ build_dir }}/htslib-{{ htslib_version }}"
+    creates: /usr/local/bin/bgzip
+  become_user: "{{ admin_users[0] }}"
+  when: not htslib_stat.stat.exists
+
+- name: Install htslib
+  ansible.builtin.shell: |
+    make install
+    ldconfig
+  args:
+    chdir: "{{ build_dir }}/htslib-{{ htslib_version }}"
+    creates: /usr/local/bin/bgzip
+  when: not htslib_stat.stat.exists
+
+- name: Check for samtools
+  ansible.builtin.stat:
+    path: /usr/local/bin/samtools
+  register: samtools_stat
+
+- name: Download samtools
+  ansible.builtin.get_url:
+    url: "{{ samtools_url }}"
+    dest: "{{ build_dir }}/samtools-{{ samtools_version }}.tar.bz2"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not samtools_stat.stat.exists
+
+- name: Extract samtools
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/samtools-{{ samtools_version }}.tar.bz2"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not samtools_stat.stat.exists
+
+- name: Build and install samtools
+  ansible.builtin.shell: |
+    ./configure --prefix=/usr/local
+    make
+  args:
+    chdir: "{{ build_dir }}/samtools-{{ samtools_version }}"
+    creates: /usr/local/bin/samtools
+  become_user: "{{ admin_users[0] }}"
+  when: not samtools_stat.stat.exists
+
+- name: Install samtools
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ build_dir }}/samtools-{{ samtools_version }}"
+    creates: /usr/local/bin/samtools
+  when: not samtools_stat.stat.exists
+
+- name: Check for bcftools
+  ansible.builtin.stat:
+    path: /usr/local/bin/bcftools
+  register: bcftools_stat
+
+- name: Download bcftools
+  ansible.builtin.get_url:
+    url: "{{ bcftools_url }}"
+    dest: "{{ build_dir }}/bcftools-{{ bcftools_version }}.tar.bz2"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not bcftools_stat.stat.exists
+
+- name: Extract bcftools
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/bcftools-{{ bcftools_version }}.tar.bz2"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not bcftools_stat.stat.exists
+
+- name: Build and install bcftools
+  ansible.builtin.shell: |
+    ./configure --prefix=/usr/local
+    make
+  args:
+    chdir: "{{ build_dir }}/bcftools-{{ bcftools_version }}"
+    creates: /usr/local/bin/bcftools
+  become_user: "{{ admin_users[0] }}"
+  when: not bcftools_stat.stat.exists
+
+- name: Install bcftools
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ build_dir }}/bcftools-{{ bcftools_version }}"
+    creates: /usr/local/bin/bcftools
+  when: not bcftools_stat.stat.exists
+
+- name: Check for bwa
+  ansible.builtin.stat:
+    path: /usr/local/bin/bwa
+  register: bwa_stat
+
+- name: Download bwa
+  ansible.builtin.get_url:
+    url: "{{ bwa_url }}"
+    dest: "{{ build_dir }}/bwa-{{ bwa_version }}.tar.gz"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not bwa_stat.stat.exists
+
+- name: Extract bwa
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/bwa-{{ bwa_version }}.tar.gz"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not bwa_stat.stat.exists
+
+- name: Build bwa
+  ansible.builtin.command: make
+  args:
+    chdir: "{{ build_dir }}/bwa-{{ bwa_version }}"
+  become_user: "{{ admin_users[0] }}"
+  when: not bwa_stat.stat.exists
+
+- name: Install bwa
+  ansible.builtin.copy:
+    src: "{{ build_dir }}/bwa-{{ bwa_version }}/bwa"
+    dest: /usr/local/bin/bwa
+    mode: "0755"
+    remote_src: true
+  when: not bwa_stat.stat.exists
+
+- name: Check for bedtools
+  ansible.builtin.stat:
+    path: /usr/local/bin/bedtools
+  register: bedtools_stat
+
+- name: Download bedtools
+  ansible.builtin.get_url:
+    url: "{{ bedtools_url }}"
+    dest: "{{ build_dir }}/bedtools-{{ bedtools_version }}.tar.gz"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not bedtools_stat.stat.exists
+
+- name: Extract bedtools
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/bedtools-{{ bedtools_version }}.tar.gz"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not bedtools_stat.stat.exists
+
+- name: Find bedtools source directory
+  ansible.builtin.shell: "ls -dt {{ build_dir }}/bedtools*/ | head -1"
+  register: bedtools_src
+  changed_when: false
+  when: not bedtools_stat.stat.exists
+
+- name: Build and install bedtools
+  ansible.builtin.shell: |
+    make
+  args:
+    chdir: "{{ bedtools_src.stdout }}"
+    creates: /usr/local/bin/bedtools
+  become_user: "{{ admin_users[0] }}"
+  when: not bedtools_stat.stat.exists
+
+- name: Install bedtools
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ bedtools_src.stdout }}"
+    creates: /usr/local/bin/bedtools
+  when: not bedtools_stat.stat.exists

@@ -1,0 +1,131 @@
+---
+- name: Install RStudio server dependencies
+  ansible.builtin.apt:
+    name:
+      - gdebi-core
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+    state: present
+    update_cache: true
+
+- name: Ensure build directory exists
+  ansible.builtin.file:
+    path: "{{ build_dir }}"
+    state: directory
+    owner: "{{ admin_users[0] }}"
+    group: "{{ admin_users[0] }}"
+    mode: "0755"
+
+- name: Check installed RStudio Server version
+  ansible.builtin.command: "dpkg -l rstudio-server | awk 'NR>5 {print $3; exit}'"
+  register: rstudio_installed
+  changed_when: false
+  failed_when: false
+
+- name: Normalize desired RStudio version for dpkg
+  ansible.builtin.set_fact:
+    rstudio_version_dpkg: "{{ rstudio_version | replace('-', '+') }}"
+
+- name: Download RStudio Server
+  ansible.builtin.get_url:
+    url: "{{ rstudio_deb_url }}"
+    dest: "{{ build_dir }}/rstudio-server-{{ rstudio_version }}.deb"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: rstudio_installed.stdout != rstudio_version_dpkg
+
+- name: Install RStudio Server
+  ansible.builtin.apt:
+    deb: "{{ build_dir }}/rstudio-server-{{ rstudio_version }}.deb"
+    state: present
+  when: rstudio_installed.stdout != rstudio_version_dpkg
+
+- name: Check for legacy upstart config
+  ansible.builtin.stat:
+    path: /usr/lib/rstudio-server/extras/upstart/rstudio-server.conf
+  register: rstudio_upstart_conf
+
+- name: Update upstart runlevel if present
+  ansible.builtin.lineinfile:
+    path: /usr/lib/rstudio-server/extras/upstart/rstudio-server.conf
+    regexp: '^start on runlevel \[.*\]'
+    line: 'start on runlevel [345]'
+  when: rstudio_upstart_conf.stat.exists
+
+- name: Ensure RStudio skeleton directory exists
+  ansible.builtin.file:
+    path: /etc/skel/.config/rstudio
+    state: directory
+    mode: "0755"
+
+- name: Install RStudio default preferences
+  ansible.builtin.copy:
+    src: rstudio-prefs.json
+    dest: /etc/skel/.config/rstudio/rstudio-prefs.json
+    mode: "0644"
+
+- name: Ensure RStudio config directory exists
+  ansible.builtin.file:
+    path: /etc/rstudio
+    state: directory
+    mode: "0755"
+
+- name: Install RStudio server configuration
+  ansible.builtin.copy:
+    src: rserver.conf
+    dest: /etc/rstudio/rserver.conf
+    mode: "0644"
+
+- name: Install RStudio session configuration
+  ansible.builtin.copy:
+    src: rsession.conf
+    dest: /etc/rstudio/rsession.conf
+    mode: "0644"
+
+- name: Check for existing TLS certificate
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ rstudio_server_host }}/fullchain.pem"
+  register: rstudio_cert
+
+- name: Configure nginx reverse proxy
+  ansible.builtin.template:
+    src: nginx-rstudio.conf.j2
+    dest: "/etc/nginx/sites-available/{{ rstudio_server_host }}"
+    mode: "0644"
+  when: not rstudio_cert.stat.exists
+
+- name: Enable nginx site
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ rstudio_server_host }}"
+    dest: "/etc/nginx/sites-enabled/{{ rstudio_server_host }}"
+    state: link
+    force: true
+
+- name: Remove default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Validate nginx configuration
+  ansible.builtin.command: nginx -t
+  changed_when: false
+
+- name: Reload nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
+
+- name: Validate certbot email is set
+  ansible.builtin.assert:
+    that:
+      - certbot_email is defined
+      - certbot_email != 'CHANGE_ME@example.org'
+    fail_msg: "Set certbot_email in deploy/setup/group_vars/all.yml"
+
+- name: Obtain TLS certificate
+  ansible.builtin.command: >-
+    certbot --nginx -d {{ rstudio_server_host }}
+    --non-interactive --agree-tos -m {{ certbot_email }}
+  args:
+    creates: "/etc/letsencrypt/live/{{ rstudio_server_host }}/fullchain.pem"

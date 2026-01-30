@@ -1,0 +1,39 @@
+---
+- name: Read current timezone
+  ansible.builtin.command: timedatectl show -p Timezone --value
+  register: tz_current
+  changed_when: false
+
+- name: Set timezone
+  ansible.builtin.command: timedatectl set-timezone "{{ timezone }}"
+  when: tz_current.stdout != timezone
+
+- name: Update apt cache and upgrade
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name:
+      - vim
+      - screen
+      - mosh
+      - git
+      - curl
+      - wget
+      - jq
+      - locate
+      - rsync
+      - build-essential
+      - pkg-config
+      - autoconf
+      - automake
+      - libtool
+      - quota
+      - gnupg
+      - dirmngr
+      - ca-certificates
+      - lsb-release
+      - unzip
+    state: present

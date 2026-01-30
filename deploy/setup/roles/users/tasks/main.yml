@@ -1,0 +1,43 @@
+---
+- name: Ensure admin users exist
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: sudo
+    append: true
+    shell: /bin/bash
+    create_home: true
+    skeleton: /etc/skel
+  loop: "{{ admin_users }}"
+
+- name: Create student users
+  ansible.builtin.user:
+    name: "{{ user_prefix }}{{ '%02d' | format(item) }}"
+    shell: /bin/bash
+    create_home: true
+    skeleton: /etc/skel
+  loop: "{{ range(1, user_count + 1) | list }}"
+
+- name: Check for users TSV on control host
+  ansible.builtin.stat:
+    path: "{{ users_tsv_path }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
+  register: users_tsv_stat
+
+- name: Copy users TSV
+  ansible.builtin.copy:
+    src: "{{ users_tsv_path }}"
+    dest: /root/users.tsv
+    mode: "0600"
+  when: users_tsv_stat.stat.exists
+
+- name: Apply passwords from TSV
+  ansible.builtin.shell: "cat /root/users.tsv | tr '\t' ':' | chpasswd"
+  when: users_tsv_stat.stat.exists
+
+- name: Remove users TSV from server
+  ansible.builtin.file:
+    path: /root/users.tsv
+    state: absent
+  when: users_tsv_stat.stat.exists

@@ -1,0 +1,32 @@
+{
+    "save_workspace": "never",
+    "font_size_points": 11,
+    "editor_theme": "Solarized Dark",
+    "panes": {
+        "quadrants": [
+            "TabSet1",
+            "TabSet2",
+            "Source",
+            "Console"
+        ],
+        "tabSet1": [
+            "Environment",
+            "History",
+            "Files",
+            "Connections",
+            "Build",
+            "VCS",
+            "Tutorial",
+            "Presentation"
+        ],
+        "tabSet2": [
+            "Plots",
+            "Packages",
+            "Help",
+            "Viewer"
+        ],
+        "console_left_on_top": false,
+        "console_right_on_top": false
+    },
+    "posix_terminal_shell": "bash"
+}

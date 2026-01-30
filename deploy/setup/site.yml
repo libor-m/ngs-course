@@ -1,0 +1,19 @@
+---
+- name: Configure ngs-course VM
+  hosts: ngs_course
+  become: true
+  roles:
+    - disk-home
+    - set-hostname
+    - base
+    - ssh-password-auth
+    - dotfiles
+    - user-skel
+    - r-install
+    - rstudio-server
+    - software-extra
+    - software-bio
+    - users
+    - quota
+    - data-shared
+    - cleanup

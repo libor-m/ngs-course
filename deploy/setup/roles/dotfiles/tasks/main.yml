@@ -1,0 +1,22 @@
+---
+- name: Ensure dotfiles repository is present
+  ansible.builtin.git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "/home/{{ admin_users[0] }}/dotfiles"
+    update: true
+    accept_hostkey: true
+  become_user: "{{ admin_users[0] }}"
+
+- name: Link vim config for primary admin
+  ansible.builtin.file:
+    src: "/home/{{ admin_users[0] }}/dotfiles/vim/.vimrc"
+    dest: "/home/{{ admin_users[0] }}/.vimrc"
+    state: link
+    force: true
+
+- name: Link vim config for root
+  ansible.builtin.file:
+    src: "/home/{{ admin_users[0] }}/dotfiles/vim/.vimrc"
+    dest: /root/.vimrc
+    state: link
+    force: true

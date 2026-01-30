@@ -1,0 +1,28 @@
+---
+- name: Ensure /home is mounted with usrquota
+  ansible.builtin.mount:
+    path: /home
+    src: "{{ home_disk_partition }}"
+    fstype: "{{ home_fs_type }}"
+    opts: defaults,usrquota
+    state: mounted
+
+- name: Remount /home to apply quota options
+  ansible.builtin.command: mount -o remount /home
+  changed_when: false
+
+- name: Create quota files
+  ansible.builtin.command: quotacheck -ugm /home
+  args:
+    creates: /home/aquota.user
+
+- name: Enable quotas
+  ansible.builtin.command: quotaon -v /home
+  changed_when: false
+
+- name: Set quotas for student users
+  ansible.builtin.command: >-
+    setquota -u {{ user_prefix }}{{ '%02d' | format(item) }}
+    {{ user_quota_soft | default('8G') }} {{ user_quota_hard | default('10G') }} 0 0 /home
+  loop: "{{ range(1, user_count + 1) | list }}"
+  changed_when: false

@@ -1,0 +1,36 @@
+---
+- name: Install R build dependencies
+  ansible.builtin.apt:
+    name:
+      - libxml2-dev
+      - libcurl4-openssl-dev
+      - libssl-dev
+    state: present
+
+- name: Install CRAN apt key
+  ansible.builtin.shell: |
+    set -e
+    gpg --keyserver keyserver.ubuntu.com --recv-key "{{ cran_key_id }}"
+    gpg --armor --export "{{ cran_key_id }}" > /etc/apt/trusted.gpg.d/cran_debian_key.asc
+  args:
+    creates: /etc/apt/trusted.gpg.d/cran_debian_key.asc
+
+- name: Add CRAN repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/cran_debian_key.asc] http://cloud.r-project.org/bin/linux/debian trixie-cran40/"
+    filename: cran
+    state: present
+
+- name: Install R
+  ansible.builtin.apt:
+    name:
+      - r-base
+      - r-base-dev
+    state: present
+    update_cache: true
+
+- name: Install CRAN packages
+  ansible.builtin.command: >-
+    Rscript -e "install.packages(c('{{ r_packages | join("','") }}'), repos='https://cloud.r-project.org, Ncpus=parallel::detectCores()')"
+  args:
+    creates: /usr/local/lib/R/site-library/tidyverse

@@ -1,0 +1,86 @@
+---
+- name: Ensure build directory exists
+  ansible.builtin.file:
+    path: "{{ build_dir }}"
+    state: directory
+    owner: "{{ admin_users[0] }}"
+    group: "{{ admin_users[0] }}"
+    mode: "0755"
+
+- name: Check for pv
+  ansible.builtin.stat:
+    path: /usr/local/bin/pv
+  register: pv_stat
+
+- name: Download pv source
+  ansible.builtin.get_url:
+    url: "{{ pv_url }}"
+    dest: "{{ build_dir }}/pv-{{ pv_version }}.tar.gz"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not pv_stat.stat.exists
+
+- name: Extract pv
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/pv-{{ pv_version }}.tar.gz"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not pv_stat.stat.exists
+
+- name: Build and install pv
+  ansible.builtin.shell: |
+    ./configure
+    make
+  args:
+    chdir: "{{ build_dir }}/pv-{{ pv_version }}"
+  when: not pv_stat.stat.exists
+  become_user: "{{ admin_users[0] }}"
+
+- name: Install pv
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ build_dir }}/pv-{{ pv_version }}"
+  when: not pv_stat.stat.exists
+
+- name: Check for GNU parallel
+  ansible.builtin.stat:
+    path: /usr/local/bin/parallel
+  register: parallel_stat
+
+- name: Download GNU parallel source
+  ansible.builtin.get_url:
+    url: "{{ parallel_url }}"
+    dest: "{{ build_dir }}/parallel-latest.tar.bz2"
+    mode: "0644"
+  become_user: "{{ admin_users[0] }}"
+  when: not parallel_stat.stat.exists
+
+- name: Extract GNU parallel
+  ansible.builtin.unarchive:
+    src: "{{ build_dir }}/parallel-latest.tar.bz2"
+    dest: "{{ build_dir }}"
+    remote_src: true
+  become_user: "{{ admin_users[0] }}"
+  when: not parallel_stat.stat.exists
+
+- name: Find parallel source directory
+  ansible.builtin.shell: "ls -dt {{ build_dir }}/parallel-*/ | head -1"
+  register: parallel_src
+  changed_when: false
+  when: not parallel_stat.stat.exists
+
+- name: Build and install GNU parallel
+  ansible.builtin.shell: |
+    ./configure
+    make
+  args:
+    chdir: "{{ parallel_src.stdout }}"
+  when: not parallel_stat.stat.exists
+  become_user: "{{ admin_users[0] }}"
+
+- name: Install GNU parallel
+  ansible.builtin.command: make install
+  args:
+    chdir: "{{ parallel_src.stdout }}"
+  when: not parallel_stat.stat.exists

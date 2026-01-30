@@ -1,0 +1,15 @@
+---
+- name: Update file database
+  ansible.builtin.command: updatedb
+  changed_when: false
+
+- name: Remove bash history for admin users
+  ansible.builtin.file:
+    path: "/home/{{ item }}/.bash_history"
+    state: absent
+  loop: "{{ admin_users }}"
+
+- name: Remove bash history for root
+  ansible.builtin.file:
+    path: /root/.bash_history
+    state: absent

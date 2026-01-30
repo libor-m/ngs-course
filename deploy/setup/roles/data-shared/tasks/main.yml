@@ -1,0 +1,29 @@
+---
+- name: Check for data-shared directory on control host
+  ansible.builtin.stat:
+    path: "{{ data_shared_src }}"
+  delegate_to: localhost
+  become: false
+  run_once: true
+  register: data_shared_stat
+
+- name: Fail if data-shared is missing
+  ansible.builtin.fail:
+    msg: "Missing data-shared directory at {{ data_shared_src }}"
+  when: not data_shared_stat.stat.exists
+
+- name: Create /data-shared
+  ansible.builtin.file:
+    path: /data-shared
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Copy data-shared to server
+  ansible.builtin.copy:
+    src: "{{ data_shared_src }}/"
+    dest: /data-shared/
+    owner: root
+    group: root
+    mode: preserve

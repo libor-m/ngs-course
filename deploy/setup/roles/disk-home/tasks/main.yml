@@ -1,0 +1,94 @@
+---
+- name: Ensure disk device exists
+  ansible.builtin.stat:
+    path: "{{ home_disk_device }}"
+  register: home_disk_stat
+
+- name: Fail if disk device is missing
+  ansible.builtin.fail:
+    msg: "Azure data disk not found at {{ home_disk_device }}"
+  when: not home_disk_stat.stat.exists
+
+- name: Install disk utilities
+  ansible.builtin.apt:
+    name:
+      - parted
+      - rsync
+    state: present
+    update_cache: true
+
+- name: Check if /home is already a separate mount
+  ansible.builtin.command: findmnt -n -o TARGET /home
+  register: home_mounted
+  changed_when: false
+  failed_when: false
+
+- name: Create GPT partition
+  ansible.builtin.parted:
+    device: "{{ home_disk_device }}"
+    number: 1
+    label: gpt
+    state: present
+    part_start: 1MiB
+    part_end: 100%
+
+- name: Create filesystem
+  ansible.builtin.filesystem:
+    fstype: "{{ home_fs_type }}"
+    dev: "{{ home_disk_partition }}"
+
+- name: Create staging mount point
+  ansible.builtin.file:
+    path: /mnt/home-new
+    state: directory
+    mode: "0755"
+  when: home_mounted.rc != 0
+
+- name: Mount staging home
+  ansible.builtin.mount:
+    src: "{{ home_disk_partition }}"
+    path: /mnt/home-new
+    fstype: "{{ home_fs_type }}"
+    state: mounted
+  when: home_mounted.rc != 0
+
+- name: Copy existing home contents
+  ansible.builtin.command: rsync -a /home/ /mnt/home-new/
+  args:
+    creates: /mnt/home-new/.home_copied
+  register: rsync_home
+  changed_when: rsync_home.rc == 0
+  when: home_mounted.rc != 0
+
+- name: Mark home copy complete
+  ansible.builtin.file:
+    path: /mnt/home-new/.home_copied
+    state: touch
+  when: home_mounted.rc != 0
+
+- name: Unmount staging home
+  ansible.builtin.mount:
+    path: /mnt/home-new
+    state: unmounted
+  when: home_mounted.rc != 0
+
+- name: Ensure /home exists
+  ansible.builtin.file:
+    path: /home
+    state: directory
+    mode: "0755"
+
+- name: Mount /home
+  ansible.builtin.mount:
+    src: "{{ home_disk_partition }}"
+    path: /home
+    fstype: "{{ home_fs_type }}"
+    opts: defaults
+    state: mounted
+  when: home_mounted.rc != 0
+
+- name: Remove staging mount point
+  ansible.builtin.file:
+    path: /mnt/home-new
+    state: absent
+  when: home_mounted.rc != 0
