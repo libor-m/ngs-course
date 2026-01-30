@@ -28,7 +28,7 @@ name, flag, flag value, path to input file and path to output file.
   head -n10 file.txt > out.txt
 
 How do I know which flags to use for individual commands? There is several ways. You can
-you command documentation using ``man``, or most of commands have help option ``-h``
+use command documentation using ``man``, or most of commands have help option ``-h``
 or ``--help``. Below is way to call manual and help.
 
 .. code-block:: bash
