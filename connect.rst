@@ -15,15 +15,15 @@ package. When you run it, you get a so-called `terminal window`. Use your user
 name given in Slack (substitute the ``##`` with the number you got),
 type the following command and press ``Enter``::
 
-  ssh user##@ngs-course.duckdns.org
+  ssh user##@ngs-course.behavio.dev
 
   # when asked about the 'authenticity', type yes
-  The authenticity of host 'ngs-course.duckdns.org (147.251.21.151)' can't be established.
+  The authenticity of host 'ngs-course.behavio.dev (147.251.21.151)' can't be established.
   ECDSA key fingerprint is SHA256:r44ZKJC8HuqKP9T3irEs8h/4ZEWJU8Eym41VcTfOk1I.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 
 
-Type in your password when prompted with ``user##@ngs-course.duckdns.org's password:``.
+Type in your password when prompted with ``user##@ngs-course.behavio.dev's password:``.
 The password entry is 'silent', nothing appears as you type - so no one can see
 how many characters your password has.
 
@@ -44,9 +44,9 @@ In Windows, WinSCP can be used to copy files to Linux machines.
 In Mac OS X or Linux, the most simple command to copy a file into
 a home directory of ``user##`` on a remote machine is::
 
-  scp myfile user##@ngs-course.duckdns.org:~
+  scp myfile user##@ngs-course.behavio.dev:~
 
 Connect to RStudio
 ------------------
-This is the easiest one, just click this link: `Open RStudio <https://ngs-course.duckdns.org>`_.
+This is the easiest one, just click this link: `Open RStudio <https://ngs-course.behavio.dev>`_.
 Login with the same credentials you got on Slack.

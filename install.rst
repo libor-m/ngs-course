@@ -2,7 +2,7 @@ Installation instructions
 =========================
 
 We will be all connecting to a single remote server hosted by
-`MetaCentrum <https://www.metacentrum.cz/>`_.
+**Microsoft Azure** in Vienna.
 
 .. note::
     You will connect to the machine differently, depending on what
@@ -27,9 +27,11 @@ older version of the installer.
 .. image:: _static/git-for-win-2.png
 
 To set up your terminal run the ``Git Bash`` from Start menu,
-run this and exit the terminal (``exit``)::
+run this (copy here and paste via Shift-Insert)::
 
   curl -sL https://owncloud.cesnet.cz/index.php/s/1B1NnrI4lqQtY9Q/download > ~/.minttyrc
+
+Then exit the terminal (type ``exit`` <enter>).
 
 **WinSCP** will be used to transfer files between your computer and the remote
 computer. Look for ``Installation package`` on the

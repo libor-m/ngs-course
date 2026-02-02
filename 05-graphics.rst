@@ -99,7 +99,7 @@ line starting with ``#`` as column names (getting rid of the ``#`` itself):
 
 Visualize data in RStudio
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.duckdns.org>`_.
+Just click this link (ctrl-click to keep this manual open): `Open RStudio <https://ngs-course.behavio.dev>`_.
 
 In R Studio choose :menuselection:`File --> New project ...`. Locate your
 project folder ``plotvcf`` in the dialog. Then
