@@ -34,8 +34,8 @@ run this (copy here and paste via Shift-Insert)::
 Then exit the terminal (type ``exit`` <enter>).
 
 **WinSCP** will be used to transfer files between your computer and the remote
-computer. Look for ``Installation package`` on the
-`WinSCP download<http://winscp.net/eng/download.php>`_ page.
+computer. Look for ``Installation package`` on
+the `WinSCP download <http://winscp.net/eng/download.php>`_ page.
 
 .. note::
     Microsoft recently developed an app called `Windows Terminal`, which seems

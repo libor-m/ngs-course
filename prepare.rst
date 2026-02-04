@@ -51,6 +51,13 @@ Now write the docs, commit and push. Rinse and repeat. Try to keep the commits s
   git commit -m '_your meaningful description of what you did here_'
   git push
 
+
+To build the docs locally:
+
+.. code-block:: bash
+
+  sphinx-build -b html -d _build/doctrees . _build/html
+
 References that may come handy:
 
 - `Thomas Cokelaer's cheat sheet <http://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_
