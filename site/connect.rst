@@ -7,7 +7,7 @@ This is also referred to as 'logging in'.
 
 .. note::
     You will need a user name and a password to log in. `Join our Slack
-    <https://join.slack.com/t/ngs-course/shared_invite/zt-jfrs3pyd-n6pzUCosxXqvh4gcAIjpuw>`_
+    <https://ngs-course.slack.com>`_
     so we can send the credentials to everyone during the course introduction.
 
 In **Windows** this is done with ``Git Bash`` from the ``Git for Windows``
