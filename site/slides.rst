@@ -1,7 +1,7 @@
 Slide decks
 ===========
 
-:download:`Unix - Introduction <_static/unix-2019-11.pdf>` (Libor)
+:download:`Unix - Introduction <_static/unix-2026-02.pdf>` (Libor)
 
 :download:`Basics of Unix <_static/unix-basics-2023-2024.pptx.pdf>` (Vasek)
 
