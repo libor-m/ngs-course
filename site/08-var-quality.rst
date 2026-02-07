@@ -35,8 +35,10 @@ Extra R task
 
 - load the data into R
 - explore graphically
-  - barchart of variant types
+  - barchart of variant types, how many variant are INDELs and how many SNPs
+
   - boxplot of qualities for INDELs and SNPs (use ``scale_y_log10()`` if you don't like the outliers)
+  
   - histogram of qualities for INDELs and SNPs (use ``scale_x_log10()``, ``facet_wrap()``) - what is the problem?
 
 Hints:
