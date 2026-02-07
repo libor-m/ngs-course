@@ -95,6 +95,11 @@ actually doing.
 
 Load and visualize your data set
 --------------------------------
+Copy the shared exercise:
+
+.. code-block:: bash
+
+  cp -r /data-shared/banana ~/projects
 
 Now you can go to R and load the data:
 
