@@ -25,7 +25,8 @@ And a bit of guidance here:
 - extact the first 6 columns (``cut -f1-6``)
 - extract ``DP`` column (``egrep -o 'DP=[^;]*' | sed 's/DP=//'``)
 - check each line for ``INDEL`` (``awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}'``)
-- merge the data (columns) before loading to R (``paste``)
+- check if all files you are about to merge have the same length ``wc -l data/*.txt``
+- merge the data (columns) before loading to R (``paste file1 file2 file3 > file_combined``)
 
 .. pull-quote:: Good luck! (We will help you;)
 
@@ -39,4 +40,4 @@ Extra R task
   - histogram of qualities for INDELs and SNPs (use ``scale_x_log10()``, ``facet_wrap()``) - what is the problem?
 
 Hints:
-- add column names while loading the data with ``read_tsv(..., col_names=c(...))``
+- add column names while loading the data with ``read_tsv(..., col_names=c('CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'DP', 'TYPE'))``

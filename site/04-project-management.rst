@@ -17,6 +17,8 @@ Let's pretend we're starting to work on something serious, a new project:
 
 .. code-block:: bash
 
+  mkdir ~/projects
+  
   cd ~/projects
 
   # a new project dir, separate dir for data in one shot
