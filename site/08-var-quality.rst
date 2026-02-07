@@ -30,17 +30,18 @@ And a bit of guidance here:
 
 .. pull-quote:: Good luck! (We will help you;)
 
-Extra R task
+Extra R task (if you want to challenge yourself 😉)
 ------------
 
 - load the data into R
 - explore graphically
 
-  - barchart of variant types, how many variant are INDELs and how many SNPs
-
-  - boxplot of qualities for INDELs and SNPs (use ``scale_y_log10()`` if you don't like the outliers)
-
-  - histogram of qualities for INDELs and SNPs (use ``scale_x_log10()``, ``facet_wrap()``) - what is the problem?
+  - barchart of variant types, how many variant are INDELs and how many SNPs (use ``geom_bar()``)
+  - boxplot of qualities for INDELs and SNPs (use ``geom_boxplot()`` and additionally ``scale_y_log10()`` if you don't like the outliers)
+  - histogram of qualities for INDELs and SNPs (use ``geom_histogram()`` and additionally ``scale_x_log10()``, ``facet_wrap()``)
+  - can you spot some problem in teh data
 
 Hints:
+
+- don't forget to load library for data manipulation and plotting (``library(tidyverse)``)
 - add column names while loading the data with ``read_tsv(..., col_names=c('CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'DP', 'TYPE'))``
