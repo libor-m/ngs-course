@@ -8,7 +8,7 @@ It was originally created by Linus Torvalds, the author of the Linux kernel,
 for managing the source code of Linux, it slowly gained popularity in other
 communities.
 
-What ``git`` does is managing versions of a directory tree. The managed subtree
+What ``git`` does is managing versions of a directory tree (set of files). The managed subtree
 is called a **repository**. Each saved version is called a **commit**. You
 usually create a commit when the code you're working on behaves as expected 🙂.
 By allowing you to go back to any committed version, ``git`` effectively removes the
@@ -18,7 +18,8 @@ need for all ``_previous_working.sh`` copies of your code.
   Please note the difference between ``git`` and Google Docs - Google Docs keeps
   track of all versions of a particular file. ``git`` keeps track of manually
   selected versions (snapshots) of a whole directory. That makes sense when
-  ``script1.sh`` calls ``script2.sh``, and they have to match.
+  ``script1.sh`` calls ``script2.sh``, and they have to match. Google version files implicitly, 
+  whereas with git you decide at what stage you want to save your file or multiple files.
 
 Configure git
 -------------
@@ -91,7 +92,15 @@ to be publicly accessible.
 
   # use the commands suggested by GitHub to add a remote
   git remote add origin git@github.com:{user}/{repo}.git
-  git push -u origin master
+  git push -u origin main
+
+.. admonition:: What have we learned?
+
+  - We are using Git to have explicit versioning of directory tree
+  - Git makes snapshot of one or multiple files and saves them as a commit
+  - Repository is a project inside which git tracks changes 
+  - You can use Github to share and store your repository. To do that you push your local branch to remote
+  
 
 When using git, you can gradually learn about more concepts and commands, as
 you find the need for them. To give you a head start:
