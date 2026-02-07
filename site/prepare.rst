@@ -319,7 +319,7 @@ R is best used in RStudio - server version can be used in web browser.
   sudo apt update
   sudo apt install r-base
 
-  sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev
+  sudo apt install libxml2-dev libcurl4-openssl-dev libssl-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libwebp-dev
   sudo R
   > update.packages(.libPaths(), checkBuilt=TRUE, ask=F)
   > install.packages(c("tidyverse", "shiny", "reshape2", "vegan"))
