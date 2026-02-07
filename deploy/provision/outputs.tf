@@ -3,6 +3,11 @@ output "public_ip" {
   value       = azurerm_public_ip.main.ip_address
 }
 
+output "jumphost_ip" {
+  description = "Public IP address of the jumphost."
+  value       = azurerm_public_ip.jumphost.ip_address
+}
+
 output "admin_username" {
   description = "Admin username used for SSH."
   value       = var.admin_username

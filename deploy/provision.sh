@@ -58,13 +58,13 @@ terraform init
 # beware, the file paths are different here
 terraform plan \
   -var "admin_username=$ADMIN_USERNAME" \
-  -var "ssh_public_key_path=../secrets/id_ed25519.pub"
+  -var "ssh_public_key_path=../secrets/id_ed25519.pub" \
+  -out tfplan
 
-terraform apply \
-  -var "admin_username=$ADMIN_USERNAME" \
-  -var "ssh_public_key_path=../secrets/id_ed25519.pub"
+terraform apply "tfplan"
 
 PUBLIC_IP="$(terraform output -raw public_ip)"
+JUMP_IP="$(terraform output -raw jumphost_ip)"
 
 popd >/dev/null
 

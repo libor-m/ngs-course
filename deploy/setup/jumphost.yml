@@ -1,0 +1,45 @@
+---
+- name: Configure jumphost
+  hosts: jumphost
+  become: true
+  tasks:
+    - name: Install haproxy
+      ansible.builtin.apt:
+        name: haproxy
+        state: present
+        update_cache: true
+
+    - name: Configure haproxy to forward HTTPS to SSH
+      ansible.builtin.copy:
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          global
+            log /dev/log local0
+            log /dev/log local1 notice
+            daemon
+
+          defaults
+            log global
+            mode tcp
+            option tcplog
+            timeout connect 10s
+            timeout client 1m
+            timeout server 1m
+
+          frontend https_in
+            bind *:443
+            default_backend ssh_backend
+
+          backend ssh_backend
+            server ngs-course ngs-course.behavio.dev:22 check
+      notify: Restart haproxy
+
+  handlers:
+    - name: Restart haproxy
+      ansible.builtin.service:
+        name: haproxy
+        state: restarted
+        enabled: true
