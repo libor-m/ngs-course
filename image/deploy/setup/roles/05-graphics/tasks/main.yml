@@ -1,0 +1,123 @@
+---
+- name: Check input VCF exists
+  ansible.builtin.stat:
+    path: /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
+  register: graphics_vcf_stat
+
+- name: Fail when input VCF is missing
+  ansible.builtin.fail:
+    msg: Missing input VCF at /data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz
+  when: not graphics_vcf_stat.stat.exists
+
+- name: Ensure plotvcf project directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: test
+    group: test
+    mode: "0755"
+  loop:
+    - /home/test/projects
+    - /home/test/projects/plotvcf
+    - /home/test/projects/plotvcf/data
+
+- name: Create subset VCF and TSV
+  ansible.builtin.shell: |
+    set -euo pipefail
+    IN="/data-shared/mus_mda/00-popdata/popdata_mda.vcf.gz"
+    OUT_VCF="/home/test/projects/plotvcf/data/popdata_mda_euro.vcf"
+    OUT_TSV="/home/test/projects/plotvcf/data/popdata_mda_euro.tsv"
+
+    if [ ! -s "$OUT_VCF" ]; then
+      zcat "$IN" | cut -f1-9,67-85 > "$OUT_VCF"
+    fi
+
+    grep -v '##' "$OUT_VCF" | tail -c +2 > "$OUT_TSV"
+  args:
+    executable: /bin/bash
+  become: true
+  become_user: test
+
+- name: Ensure Rscript is available
+  ansible.builtin.command: Rscript --version
+  register: rscript_version
+  changed_when: false
+
+- name: Ensure R packages are installed
+  ansible.builtin.command:
+    argv:
+      - Rscript
+      - -e
+      - |
+        packages <- c("tidyverse")
+        missing <- packages[!sapply(packages, requireNamespace, quietly = TRUE)]
+        if (length(missing) > 0) {
+          install.packages(missing, repos = "https://cloud.r-project.org")
+        }
+  changed_when: false
+
+- name: Write plotting script
+  ansible.builtin.copy:
+    dest: /home/test/projects/plotvcf/plots.R
+    owner: test
+    group: test
+    mode: "0644"
+    content: |
+      library(tidyverse)
+
+      d <- read_tsv("data/popdata_mda_euro.tsv", show_col_types = FALSE) %>%
+        mutate(CHROM = as.factor(CHROM))
+
+      p_density <- ggplot(d, aes(POS)) +
+        geom_histogram(binwidth = 1e6) +
+        facet_wrap(~CHROM, ncol = 1) +
+        ggtitle("SNP density per chromosome") +
+        ylab("number of variants") +
+        xlab("chromosome position")
+
+      ggsave("snp_density.png", plot = p_density, width = 8, height = 6, dpi = 150)
+
+      dm <- d %>%
+        pivot_longer(10:28, names_to = "individual", values_to = "genotype")
+
+      transitions <- c("A G", "G A", "C T", "T C")
+
+      p_titv <- dm %>%
+        filter(genotype != "./.") %>%
+        mutate(
+          vartype = ifelse(paste(REF, ALT) %in% transitions, "Transition", "Transversion"),
+          score = ifelse(genotype == "0/0", 0, ifelse(genotype == "0/1", 1, 2))
+        ) %>%
+        group_by(individual, vartype) %>%
+        summarise(score = sum(score), .groups = "drop") %>%
+        pivot_wider(names_from = "vartype", values_from = "score") %>%
+        mutate(TiTv = Transition / Transversion) %>%
+        ggplot(aes(individual, TiTv)) +
+        geom_point() +
+        theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+      ggsave("genotypes.png", plot = p_titv, width = 8, height = 4, dpi = 150)
+
+- name: Run plotting script
+  ansible.builtin.command:
+    argv:
+      - Rscript
+      - /home/test/projects/plotvcf/plots.R
+  args:
+    chdir: /home/test/projects/plotvcf
+  become: true
+  become_user: test
+
+- name: Check plot outputs exist
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop:
+    - /home/test/projects/plotvcf/snp_density.png
+    - /home/test/projects/plotvcf/genotypes.png
+  register: plot_outputs
+
+- name: Fail when a plot output is missing
+  ansible.builtin.fail:
+    msg: "Missing plot output at {{ item.item }}"
+  loop: "{{ plot_outputs.results }}"
+  when: not item.stat.exists

@@ -18,6 +18,11 @@ ansible-playbook \
   -i "image/deploy/setup/hosts.ini" \
   "image/deploy/setup/site.yml"
 
+# run test playbook for session 5 graphics
+ansible-playbook \
+  -i "image/deploy/setup/hosts.ini" \
+  "image/deploy/setup/site-test.yml"
+
 # set up the jumphost only
 ansible-playbook \
   -i "image/deploy/setup/hosts.ini" \

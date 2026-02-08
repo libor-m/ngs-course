@@ -1,0 +1,7 @@
+---
+- name: Ensure test user exists
+  ansible.builtin.user:
+    name: test
+    shell: /bin/bash
+    create_home: true
+    skeleton: /etc/skel

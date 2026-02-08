@@ -1,0 +1,7 @@
+---
+- name: Verify graphics workflow
+  hosts: ngs_course
+  become: true
+  roles:
+    - test-user-create
+    - 05-graphics
