@@ -16,8 +16,8 @@ tech documents (Your mileage may vary).
     
     IN=data/no-headers.vcf
     <$IN cut -f 1-6 > data/cols1-6.tsv
-    <$IN egrep -o 'DP=[^;]*' | sed 's/DP=//' > data/col-dp.tsv
-    <$IN grep -v '^#' | awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}' > data/col-type.tsv
+    <$IN grep -E -o 'DP=([^;]+)' | sed 's/DP=//' > data/col-dp.tsv
+    <$IN awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}' > data/col-type.tsv
 
     # check if all the files are of the same length
     wc -l data/*.tsv
@@ -31,27 +31,30 @@ The data is ready, switch to R to visualize.
 
     setwd("~/projects/qual-exercise")
     read_tsv("cols-all.tsv", 
-             col.names=c("chrom", "pos", "dot", "ref", "alt", "qual", "DP", "TYPE")) ->
+             col.names=c('CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'DP', 'TYPE') ->
              d
     
-    # few plots to try
+    # Barplot of variant types
     d %>%
       ggplot(aes(TYPE)) + 
       geom_bar()
 
+    # Boxplot for genotype quality
     d %>%
       ggplot(aes(TYPE, DP)) + 
       geom_boxplot() +
       scale_y_log10()
 
+    # Histogram for genotype quality
     d %>%
       ggplot(aes(DP)) + 
       geom_histogram() +
       scale_x_log10()
 
+    # Filter out high quality variants
     d %>%
-      filter(qual < 900) %>%
+      filter(QUAL < 900) %>%
       ggplot(aes(qual)) + 
       geom_histogram() +
       scale_x_log10() + 
-      facet_wrap(~TYPE, scales="free_y")
+      facet_wrap(~TYPE, scales="free_y") 
