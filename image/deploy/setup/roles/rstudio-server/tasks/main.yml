@@ -121,7 +121,7 @@
     that:
       - certbot_email is defined
       - certbot_email != 'CHANGE_ME@example.org'
-    fail_msg: "Set certbot_email in deploy/setup/group_vars/all.yml"
+    fail_msg: "Set certbot_email in image/deploy/setup/group_vars/all.yml"
 
 - name: Obtain TLS certificate
   ansible.builtin.command: >-

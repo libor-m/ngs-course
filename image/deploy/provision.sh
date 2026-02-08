@@ -7,16 +7,16 @@ set -euo pipefail
 # - OpenSSH tools: ssh-keygen, ssh
 #
 # Usage (from repo root):
-#   ./deploy/provision.sh
+#   ./image/deploy/provision.sh
 #
 # After provisioning, SSH into the VM with:
-#   ssh -i deploy/secrets/id_ed25519 <admin_username>@<public_ip>
+#   ssh -i image/deploy/secrets/id_ed25519 <admin_username>@<public_ip>
 #
 # The public IP is printed at the end and available via:
-#   terraform -chdir=deploy/provision output -raw public_ip
+#   terraform -chdir=image/deploy/provision output -raw public_ip
 
-PROVISION_DIR="deploy/provision"
-SECRETS_DIR="deploy/secrets"
+PROVISION_DIR="image/deploy/provision"
+SECRETS_DIR="image/deploy/secrets"
 
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then

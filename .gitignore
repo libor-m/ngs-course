@@ -10,4 +10,4 @@ Icon*
 **/terraform.tfstate.*
 
 # Provisioning secrets
-deploy/secrets/
+image/deploy/secrets/

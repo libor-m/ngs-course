@@ -10,21 +10,21 @@ sudo apt install wamerican
   head -30 |
   nl -w2 -n'rz' |
   sed 's/^/user/' \
-> deploy/secrets/users.tsv
+> image/deploy/secrets/users.tsv
 
-export ANSIBLE_CONFIG="deploy/setup/ansible.cfg"
+export ANSIBLE_CONFIG="image/deploy/setup/ansible.cfg"
 
 ansible-playbook \
-  -i "deploy/setup/hosts.ini" \
-  "deploy/setup/site.yml"
+  -i "image/deploy/setup/hosts.ini" \
+  "image/deploy/setup/site.yml"
 
 # set up the jumphost only
 ansible-playbook \
-  -i "deploy/setup/hosts.ini" \
-  "deploy/setup/jumphost.yml"
+  -i "image/deploy/setup/hosts.ini" \
+  "image/deploy/setup/jumphost.yml"
 
 # finish things that are at the end and replaying the whole book
 # takes so looong
 ansible-playbook \
-  -i "deploy/setup/hosts.ini" \
-  "deploy/setup/finish.yml"
+  -i "image/deploy/setup/hosts.ini" \
+  "image/deploy/setup/finish.yml"

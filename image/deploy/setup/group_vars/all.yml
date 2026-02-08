@@ -22,7 +22,7 @@ user_quota_soft: 5G
 user_quota_hard: 10G
 
 # Data
-data_shared_src: "{{ playbook_dir }}/../../cloud-image/data-shared"
+data_shared_src: "{{ playbook_dir }}/../data-shared"
 
 # R / RStudio
 cran_key_id: "95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7"
