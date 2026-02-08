@@ -14,6 +14,7 @@ home_fs_type: ext4
 admin_users:
   - liborm
   - janouse1
+  - nasta
 dotfiles_repo: "git@github.com:libor-m/dotfiles.git"
 user_prefix: user
 user_count: 30
