@@ -70,6 +70,8 @@ popd >/dev/null
 
 ssh $ADMIN_USERNAME@$PUBLIC_IP
 
-# TODO: add DNS A record
+# manual step: add DNS A record
 # and then
+
 ssh liborm@ngs-course.behavio.dev
+ssh liborm@ngs-course-443.behavio.dev

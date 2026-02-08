@@ -26,8 +26,8 @@
             mode tcp
             option tcplog
             timeout connect 10s
-            timeout client 1m
-            timeout server 1m
+            timeout client 30m
+            timeout server 30m
 
           frontend https_in
             bind *:443
