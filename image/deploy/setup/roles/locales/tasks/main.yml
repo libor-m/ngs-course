@@ -1,0 +1,18 @@
+---
+- name: Install locales package
+  ansible.builtin.apt:
+    name: locales
+    state: present
+
+- name: Ensure locales are enabled
+  ansible.builtin.lineinfile:
+    path: /etc/locale.gen
+    regexp: "^#?\\s*{{ item }}\\s+UTF-8"
+    line: "{{ item }} UTF-8"
+  loop: "{{ locales_generate }}"
+  register: locale_gen_lines
+
+- name: Generate locales
+  ansible.builtin.command: locale-gen
+  when: locale_gen_lines is changed
+  changed_when: true
