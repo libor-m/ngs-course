@@ -1,0 +1,6 @@
+hardstatus alwayslastline
+hardstatus string '%{= kG}[%{G}%H%? %1`%?%{g}][%= %{= kw}%-w%{+b yk} %n*%t%?(%u)%? %{-}%+w %=%{g}][%{B}%d.%m. %{W}%c%{g}]'
+
+defscrollback 20000
+
+startup_message off

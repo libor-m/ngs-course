@@ -61,7 +61,7 @@
 
 - name: Install RStudio default preferences
   ansible.builtin.copy:
-    src: rstudio-prefs.json
+    src: "{{ contents_root }}/etc/skel/.config/rstudio/rstudio-prefs.json"
     dest: /etc/skel/.config/rstudio/rstudio-prefs.json
     mode: "0644"
 
@@ -73,13 +73,13 @@
 
 - name: Install RStudio server configuration
   ansible.builtin.copy:
-    src: rserver.conf
+    src: "{{ contents_root }}/etc/rstudio/rserver.conf"
     dest: /etc/rstudio/rserver.conf
     mode: "0644"
 
 - name: Install RStudio session configuration
   ansible.builtin.copy:
-    src: rsession.conf
+    src: "{{ contents_root }}/etc/rstudio/rsession.conf"
     dest: /etc/rstudio/rsession.conf
     mode: "0644"
 
