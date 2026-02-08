@@ -20,12 +20,13 @@ Your task now is:
 And a bit of guidance here:
 
 - create a new project directory in your ``projects``
+- you will create 3 different files (one for teh first 6 columns, one for the read depths and one for the variant type)
 - get rid of the comments (they start with ``#``, that is ``^#`` regular expression)
 - filter lines based on chromosomes (``grep -e 'chr1\s' -e 'chrZ\s'``)
 - extact the first 6 columns (``cut -f1-6``)
 - extract ``DP`` column (``egrep -o 'DP=[^;]*' | sed 's/DP=//'``)
 - check each line for ``INDEL`` (``awk '{if($0 ~ /INDEL/) print "INDEL"; else print "SNP"}'``)
-- check if all files you are about to merge have the same length ``wc -l data/*.txt``
+- check if all files you are about to merge have the same length ``wc -l data/*.tsv``
 - merge the data (columns) before loading to R (``paste file1 file2 file3 > file_combined``)
 
 .. pull-quote:: Good luck! (We will help you;)
@@ -39,7 +40,7 @@ Extra R task (if you want to challenge yourself 😉)
   - barchart of variant types, how many variant are INDELs and how many SNPs (use ``geom_bar()``)
   - boxplot of qualities for INDELs and SNPs (use ``geom_boxplot()`` and additionally ``scale_y_log10()`` if you don't like the outliers)
   - histogram of qualities for INDELs and SNPs (use ``geom_histogram()`` and additionally ``scale_x_log10()``, ``facet_wrap()``)
-  - can you spot some problem in teh data
+  - can you spot some problem in the data
 
 Hints:
 
