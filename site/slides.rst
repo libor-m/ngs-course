@@ -7,7 +7,7 @@ Slide decks
 
 :download:`Genomic data <_static/genomics-2023-2024.pptx.pdf>` (Vasek)
 
-:download:`Plain text file processing <_static/text-processing-2023-2024.pptx.pdf>` (Vasek)
+:download:`Plain text file processing <_static/text-processing-2025-2026.pptx.pdf>` (Vasek)
 
 :download:`Graphics session <_static/graphics-2023-11.pdf>` (Libor)
 
