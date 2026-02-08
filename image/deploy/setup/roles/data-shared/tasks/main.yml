@@ -26,4 +26,33 @@
     dest: /data-shared/
     owner: root
     group: root
-    mode: preserve
+    mode: "0644"
+    directory_mode: "0755"
+
+- name: Find data-shared directories
+  ansible.builtin.find:
+    paths: /data-shared
+    file_type: directory
+  register: data_shared_dirs
+
+- name: Find data-shared files
+  ansible.builtin.find:
+    paths: /data-shared
+    file_type: file
+  register: data_shared_files
+
+- name: Fix permissions on data-shared directories
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ data_shared_dirs.files }}"
+
+- name: Fix permissions on data-shared files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ data_shared_files.files }}"
