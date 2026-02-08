@@ -1,0 +1,21 @@
+---
+- name: Add prompt numbering for tutor users
+  ansible.builtin.blockinfile:
+    path: "/home/{{ item }}/.bashrc"
+    marker: "# {mark} ANSIBLE TUTOR PROMPT NUMBERING"
+    create: true
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0644"
+    block: |
+      __SEQ=0
+      PROMPT_COMMAND='((__SEQ++))'
+      PS1="[\$__SEQ] $PS1"
+
+      reset_seq() {
+        __SEQ=0
+        clear
+      }
+
+      bind -x '"\C-l":reset_seq'
+  loop: "{{ admin_users }}"
